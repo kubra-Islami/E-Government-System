@@ -1,0 +1,26 @@
+<% layout('../layouts/layout') %>
+
+<h2>Apply for Service</h2>
+<form action="/citizen/apply" method="POST" enctype="multipart/form-data" class="w-75">
+    <div class="mb-3">
+        <label>Department</label>
+        <select name="department" class="form-select">
+            <% departments.forEach(d => { %>
+                <option value="<%= d.id %>"><%= d.name %></option>
+            <% }) %>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label>Service</label>
+        <select name="service" class="form-select">
+            <% services.forEach(s => { %>
+                <option value="<%= s.id %>"><%= s.name %></option>
+            <% }) %>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label>Upload Documents</label>
+        <input type="file" name="documents" multiple class="form-control">
+    </div>
+    <button class="btn btn-success">Submit Application</button>
+</form>

@@ -1,0 +1,24 @@
+
+<h2>Reports</h2>
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>Department</th>
+        <th>Total Requests</th>
+        <th>Approved</th>
+        <th>Rejected</th>
+        <th>Collected Fees</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% reports.forEach(r => { %>
+        <tr>
+            <td><%= r.department %></td>
+            <td><%= r.total %></td>
+            <td><%= r.approved %></td>
+            <td><%= r.rejected %></td>
+            <td>$<%= r.fees %></td>
+        </tr>
+    <% }) %>
+    </tbody>
+</table>

@@ -1,0 +1,26 @@
+
+<h2>Review Request #<%= request.id %></h2>
+<p><strong>Citizen:</strong> <%= request.citizen_name %></p>
+<p><strong>Service:</strong> <%= request.service_name %></p>
+
+<h4>Documents</h4>
+<ul>
+    <% request.documents.forEach(d => { %>
+        <li><a href="<%= d.url %>" target="_blank"><%= d.filename %></a></li>
+    <% }) %>
+</ul>
+
+<form action="/officer/requests/<%= request.id %>/decision" method="POST">
+    <div class="mb-3">
+        <label>Decision</label>
+        <select name="status" class="form-select">
+            <option value="Approved">Approve</option>
+            <option value="Rejected">Reject</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label>Comments</label>
+        <textarea name="comments" class="form-control"></textarea>
+    </div>
+    <button class="btn btn-success">Submit Decision</button>
+</form>

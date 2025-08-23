@@ -1,0 +1,11 @@
+
+<h2>Officer Dashboard</h2>
+<p>Pending requests in your department:</p>
+<ul class="list-group">
+    <% requests.forEach(r => { %>
+        <li class="list-group-item d-flex justify-content-between">
+            <span><%= r.citizen_name %> - <%= r.service_name %></span>
+            <a href="/officer/requests/<%= r.id %>" class="btn btn-sm btn-primary">Review</a>
+        </li>
+    <% }) %>
+</ul>

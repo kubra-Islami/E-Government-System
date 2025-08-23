@@ -1,0 +1,71 @@
+
+<div class="container d-flex align-items-center justify-content-center min-vh-100">
+  <div class="col-md-6">
+    <div class="card shadow-sm rounded-3">
+      <div class="card-body p-4">
+        <h3 class="text-center mb-4">Register</h3>
+
+        <% if (typeof error !== 'undefined') { %>
+          <div class="alert alert-danger"><%= error %></div>
+        <% } %>
+
+        <form action="/api/users/register" method="POST">
+          <!-- Name -->
+          <div class="mb-3">
+            <label for="name" class="form-label">Full Name</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+          </div>
+
+          <!-- Email -->
+          <div class="mb-3">
+            <label for="email" class="form-label">Email address</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+          </div>
+
+          <!-- Password -->
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+          </div>
+
+          <!-- National ID -->
+          <div class="mb-3">
+            <label for="national_id" class="form-label">National ID</label>
+            <input type="text" class="form-control" id="national_id" name="national_id" required>
+          </div>
+
+          <!-- Date of Birth -->
+          <div class="mb-3">
+            <label for="date_of_birth" class="form-label">Date of Birth</label>
+            <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" required>
+          </div>
+
+          <!-- Contact Info -->
+          <div class="mb-3">
+            <label for="contact_info" class="form-label">Contact Info</label>
+            <input type="text" class="form-control" id="contact_info" name="contact_info" required>
+          </div>
+
+          <!-- Role -->
+          <div class="mb-3">
+            <label for="role" class="form-label">Role</label>
+            <select class="form-select" id="role" name="role">
+              <option value="citizen" selected>Citizen</option>
+              <option value="officer">Officer</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary">Register</button>
+          </div>
+        </form>
+
+
+        <p class="text-center mt-3">
+          Already have an account? <a href="/auth/login">Login</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

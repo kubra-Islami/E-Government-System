@@ -1,0 +1,16 @@
+<div class="d-flex flex-column flex-shrink-0 p-3 bg-light h-100">
+    <ul class="nav nav-pills flex-column mb-auto">
+        <% if (user && user.role === 'citizen') { %>
+            <li><a href="/citizen/dashboard" class="nav-link">Dashboard</a></li>
+            <li><a href="/citizen/apply" class="nav-link">Apply for Service</a></li>
+            <li><a href="/citizen/requests" class="nav-link">My Requests</a></li>
+        <% } else if (user && user.role === 'officer') { %>
+            <li><a href="/officer/dashboard" class="nav-link">Dashboard</a></li>
+            <li><a href="/officer/requests" class="nav-link">Review Requests</a></li>
+        <% } else if (user && user.role === 'admin') { %>
+            <li><a href="/admin/dashboard" class="nav-link">Dashboard</a></li>
+            <li><a href="/admin/users" class="nav-link">Manage Users</a></li>
+            <li><a href="/admin/reports" class="nav-link">Reports</a></li>
+        <% } %>
+    </ul>
+</div>

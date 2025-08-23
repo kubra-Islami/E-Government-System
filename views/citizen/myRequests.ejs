@@ -1,0 +1,23 @@
+<% layout('../layouts/layout') %>
+
+<h2>My Requests</h2>
+<table class="table table-bordered">
+    <thead class="table-light">
+    <tr>
+        <th>ID</th>
+        <th>Service</th>
+        <th>Status</th>
+        <th>Submitted On</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% requests.forEach(r => { %>
+        <tr>
+            <td><%= r.id %></td>
+            <td><%= r.service_name %></td>
+            <td><span class="badge bg-<%= r.status === 'Approved' ? 'success' : r.status === 'Rejected' ? 'danger' : 'warning' %>"><%= r.status %></span></td>
+            <td><%= r.created_at %></td>
+        </tr>
+    <% }) %>
+    </tbody>
+</table>

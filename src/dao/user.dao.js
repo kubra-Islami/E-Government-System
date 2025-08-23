@@ -18,9 +18,7 @@ export async function createUser(data) {
 
 export async function findByEmail(email) {
     const { rows } = await pool.query("SELECT * FROM users WHERE email=$1", [email]);
-    console.log("user.dao")
-    console.log(rows[0]);
-    return rows[0] || null;
+    return rows[0] ? new User(rows[0]) : null;
     // return rows[0] ? new User(rows[0]) : null;
 }
 

@@ -1,0 +1,21 @@
+
+<h1 class="text-center">Welcome, Admin!</h1>
+<p class="text-center">Manage users, services, and view reports here.</p>
+<div class="row">
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5>Total Requests</h5>
+                <p class="display-6"><%= stats.total_requests %></p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <h5>Approved</h5>
+                <p class="display-6 text-success"><%= stats.approved %></p>
+            </div>
+        </div>
+    </div>
+</div>

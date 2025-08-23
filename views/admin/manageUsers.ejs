@@ -1,0 +1,25 @@
+
+<h2>Manage Users</h2>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% users.forEach(u => { %>
+        <tr>
+            <td><%= u.name %></td>
+            <td><%= u.email %></td>
+            <td><%= u.role %></td>
+            <td>
+                <a href="/admin/users/<%= u.id %>/edit" class="btn btn-sm btn-warning">Edit</a>
+                <a href="/admin/users/<%= u.id %>/delete" class="btn btn-sm btn-danger">Delete</a>
+            </td>
+        </tr>
+    <% }) %>
+    </tbody>
+</table>
