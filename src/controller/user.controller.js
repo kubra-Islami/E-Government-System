@@ -9,6 +9,7 @@ export const showRegisterPage = async (req, res) => {
             user: null,
             error: undefined,
             departments: result.rows,
+            hideSidebar: true,
         });
     } catch (err) {
         res.status(500).render("error", {
@@ -20,7 +21,7 @@ export const showRegisterPage = async (req, res) => {
 
 
 export const showLoginPage = (req, res) => {
-    res.render("auth/login", {title: "Login", user: req.user, error: undefined});
+    res.render("auth/login", {title: "Login", user: req.user, error: undefined,hideSidebar:true});
 };
 
 export const register = async (req, res) => {
@@ -55,6 +56,7 @@ export async function login(req, res) {
         const { user, token } = await loginUser({
             email: req.body.email,
             password: req.body.password,
+            hideSidebar: true,
         });
 
         res.cookie("token", token, { httpOnly: true });
