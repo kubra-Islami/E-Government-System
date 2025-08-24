@@ -8,8 +8,8 @@ import { fileURLToPath } from "url";
 import expressLayouts from "express-ejs-layouts";
 import UserRoutes from "./src/routes/user.routes.js";
 import AdminRoutes from "./src/routes/admin.routes.js";
+import CitizenRoutes from "./src/routes/citizen.routes.js";
 import OfficerRoutes from "./src/routes/officer.routes.js";
-import CitizenRoutes from "./src/routes/officer.routes.js";
 
 
 const app = express();
@@ -29,6 +29,9 @@ app.set("layout", "layouts/layout");
 // Set view engine
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+
+
+// Routes
 app.use("/api/users",UserRoutes)
 app.use("/admin", AdminRoutes);
 app.use("/officer", OfficerRoutes);

@@ -56,6 +56,16 @@
             </select>
           </div>
 
+          <!-- Department (only for officer/admin) -->
+          <div class="mb-3 d-none" id="departmentField">
+            <label for="department_id" class="form-label">Department</label>
+            <select class="form-select" id="department_id" name="department_id">
+              <% departments.forEach(function(dept) { %>
+                <option value="<%= dept.id %>"><%= dept.name %></option>
+              <% }); %>
+            </select>
+          </div>
+
           <div class="d-grid">
             <button type="submit" class="btn btn-primary">Register</button>
           </div>
@@ -63,7 +73,7 @@
 
 
         <p class="text-center mt-3">
-          Already have an account? <a href="/auth/login">Login</a>
+          Already have an account? <a href="/api/users/login">Login</a>
         </p>
       </div>
     </div>

@@ -12,7 +12,6 @@ export async function registerUser(payload) {
 
     if (role === 'citizen' || role === 'admin') payload.department_id = null;
 
-    // const user = await createUser({...payload, password});
     const user = await createUser({
         name: payload.name,
         email: payload.email,

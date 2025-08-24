@@ -2,7 +2,7 @@ import express from "express";
 const router = express.Router();
 
 router.get("/dashboard", (req, res) => {
-    res.render("citizen/dashboard", { title: "Citizen Dashboard", user: req.user });
+    res.render("citizen/dashboard", { title: "Citizen Dashboard", user: req.user,requests :[] });
 });
 
 export default router;

@@ -22,6 +22,7 @@ export const getDashboardStats = async () => {
             approved: approvedResult.rows[0].approved,
             rejected: rejectedResult.rows[0].rejected
         };
+
     } catch (err) {
         console.error("Error fetching dashboard stats:", err);
         throw err;
