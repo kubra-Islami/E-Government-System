@@ -3,18 +3,17 @@ import pool from "../config/db.js";
 
 export const showRegisterPage = async (req, res) => {
     try {
-        const result = await pool.query("SELECT id, name FROM departments");
+        const { rows: departments } = await pool.query("SELECT id, name FROM departments");
         res.render("auth/register", {
             title: "Register",
-            user: null,
-            error: undefined,
-            departments: result.rows,
-            hideSidebar: true,
+            departments,
+            hideSidebar:true
         });
     } catch (err) {
-        res.status(500).render("error", {
-            title: "Error",
-            message: "Failed to load register form.",
+        res.render("auth/register", {
+            title: "Register",
+            departments: [],
+            error: "Could not load departments"
         });
     }
 };
@@ -55,11 +54,12 @@ export async function login(req, res) {
     try {
         const { user, token } = await loginUser({
             email: req.body.email,
-            password: req.body.password,
-            hideSidebar: true,
+            password: req.body.password
         });
 
         res.cookie("token", token, { httpOnly: true });
+        req.user = user;
+
 
         // Redirect based on role
         if (user.role === "citizen") return res.redirect("/citizen/dashboard");
@@ -72,6 +72,7 @@ export async function login(req, res) {
             title: "Login",
             user: null,
             error: e.message,
+            hideSidebar: true,
         });
     }
 }

@@ -30,7 +30,7 @@ export const loginUser = async ({email, password}) => {
     const user = await findByEmail(email);
     if (!user) throw new Error("Invalid credentials.");
 
-    const validPass = comparePassword(password, user.password);
+    const validPass = await comparePassword(password, user.password);
     if (!validPass) throw new Error("Invalid credentials.");
 
     return buildAuthResponse(user);

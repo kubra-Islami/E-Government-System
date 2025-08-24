@@ -1,16 +1,70 @@
-<div class="d-flex flex-column flex-shrink-0 p-3 bg-light">
+<div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="height: 100vh;">
+    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-decoration-none">
+        <span class="fs-5 fw-bold">E-Gov Portal</span>
+    </a>
+    <hr>
     <ul class="nav nav-pills flex-column mb-auto">
-        <% if (user && user.role === 'citizen') { %>
-            <li><a href="/citizen/dashboard" class="nav-link">Dashboard</a></li>
-            <li><a href="/citizen/apply" class="nav-link">Apply for Service</a></li>
-            <li><a href="/citizen/requests" class="nav-link">My Requests</a></li>
-        <% } else if (user && user.role === 'officer') { %>
-            <li><a href="/officer/dashboard" class="nav-link">Dashboard</a></li>
-            <li><a href="/officer/requests" class="nav-link">Review Requests</a></li>
-        <% } else if (user && user.role === 'admin') { %>
-            <li><a href="/admin/dashboard" class="nav-link">Dashboard</a></li>
-            <li><a href="/admin/users" class="nav-link">Manage Users</a></li>
-            <li><a href="/admin/reports" class="nav-link">Reports</a></li>
+
+        <% if (user && user.role === "citizen") { %>
+            <li class="nav-item">
+                <a href="/citizen/dashboard" class="nav-link">Dashboard</a>
+            </li>
+            <li>
+                <a href="/citizen/apply" class="nav-link">Apply for Service</a>
+            </li>
+            <li>
+                <a href="/citizen/requests" class="nav-link">My Applications</a>
+            </li>
+            <li>
+                <a href="/citizen/payments" class="nav-link">Payments</a>
+            </li>
+            <li>
+                <a href="/citizen/profile" class="nav-link">Profile</a>
+            </li>
+            <li>
+                <a href="/citizen/notifications" class="nav-link">Notifications</a>
+            </li>
         <% } %>
+
+        <% if (user && user.role === "officer") { %>
+            <li>
+                <a href="/officer/dashboard" class="nav-link"> Dashboard</a>
+            </li>
+            <li>
+                <a href="/officer/requests" class="nav-link"> Review Requests</a>
+            </li>
+            <li>
+                <a href="/officer/search" class="nav-link"> Search & Filter</a>
+            </li>
+            <li>
+                <a href="/officer/notifications" class="nav-link"> Notifications</a>
+            </li>
+        <% } %>
+
+        <% if (user && user.role === "admin") { %>
+            <li>
+                <a href="/admin/dashboard" class="nav-link"> Dashboard</a>
+            </li>
+            <li>
+                <a href="/admin/users" class="nav-link"> Manage Users</a>
+            </li>
+            <li>
+                <a href="/admin/departments" class="nav-link"> Manage Departments</a>
+            </li>
+            <li>
+                <a href="/admin/services" class="nav-link"> Manage Services</a>
+            </li>
+            <li>
+                <a href="/admin/reports" class="nav-link"> Reports & Stats</a>
+            </li>
+            <li>
+                <a href="/admin/search" class="nav-link"> Global Search</a>
+            </li>
+        <% } %>
+
     </ul>
+    <hr>
+    <div>
+        <a href="/logout" class="btn btn-outline-danger btn-sm w-100"> Logout</a>
+    </div>
 </div>
