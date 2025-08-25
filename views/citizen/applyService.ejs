@@ -1,26 +1,48 @@
-<% layout('../layouts/layout') %>
+<div class="container card shadow-sm border-0 rounded-3 py-5 my-5 w-75">
+    <div class="d-flex align-items-center mb-4">
+        <i class="bi bi-file-earmark-plus-fill text-success fs-2 me-2"></i>
+        <h2 class="fw-bold text-success mb-0">Apply for Service</h2>
+    </div>
 
-<h2>Apply for Service</h2>
-<form action="/citizen/apply" method="POST" enctype="multipart/form-data" class="w-75">
-    <div class="mb-3">
-        <label>Department</label>
-        <select name="department" class="form-select">
-            <% departments.forEach(d => { %>
-                <option value="<%= d.id %>"><%= d.name %></option>
-            <% }) %>
-        </select>
-    </div>
-    <div class="mb-3">
-        <label>Service</label>
-        <select name="service" class="form-select">
-            <% services.forEach(s => { %>
-                <option value="<%= s.id %>"><%= s.name %></option>
-            <% }) %>
-        </select>
-    </div>
-    <div class="mb-3">
-        <label>Upload Documents</label>
-        <input type="file" name="documents" multiple class="form-control">
-    </div>
-    <button class="btn btn-success">Submit Application</button>
-</form>
+    <form action="/citizen/apply" method="POST" enctype="multipart/form-data">
+        <!-- Department -->
+        <div class="py-4">
+            <label class="form-label fw-semibold text-muted">
+                <i class="bi bi-building me-1 text-primary"></i> Department
+            </label>
+            <select name="department" class="form-select form-select-lg rounded-3">
+                <% departments.forEach(d => { %>
+                    <option value="<%= d.id %>"><%= d.name %></option>
+                <% }) %>
+            </select>
+        </div>
+
+        <!-- Service -->
+        <div class="py-4">
+            <label class="form-label fw-semibold text-muted">
+                <i class="bi bi-gear-fill me-1 text-secondary"></i> Service
+            </label>
+            <select name="service" class="form-select form-select-lg rounded-3">
+                <% services.forEach(s => { %>
+                    <option value="<%= s.id %>"><%= s.name %></option>
+                <% }) %>
+            </select>
+        </div>
+
+        <!-- Upload -->
+        <div class="py-4">
+            <label class="form-label fw-semibold text-muted">
+                <i class="bi bi-upload me-1 text-warning"></i> Upload Documents
+            </label>
+            <input type="file" name="documents" multiple class="form-control form-control-lg rounded-3">
+            <div class="form-text">Accepted formats: PDF, JPG, PNG</div>
+        </div>
+
+        <!-- Submit -->
+        <div class="d-grid py-4" >
+            <button class="btn btn-success btn-lg rounded-3 shadow-sm">
+                <i class="bi bi-check-circle-fill me-1"></i> Submit Application
+            </button>
+        </div>
+    </form>
+</div>

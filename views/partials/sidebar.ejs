@@ -1,70 +1,103 @@
-<div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="height: 100vh;">
+<div class="d-flex flex-column flex-shrink-0 p-3 bg-white border-end" style="height: 100vh">
     <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-decoration-none">
-        <span class="fs-5 fw-bold">E-Gov Portal</span>
+        <span class="fs-5 fw-bold text-primary">E-Gov</span>
     </a>
+
     <hr>
     <ul class="nav nav-pills flex-column mb-auto">
-
         <% if (user && user.role === "citizen") { %>
-            <li class="nav-item">
-                <a href="/citizen/dashboard" class="nav-link">Dashboard</a>
+            <li class="nav-item mb-1">
+                <a href="/citizen/dashboard" class="nav-link text-dark d-flex align-items-center rounded">
+                    <i class="bi bi-speedometer2 me-2"></i> Dashboard
+                </a>
             </li>
-            <li>
-                <a href="/citizen/apply" class="nav-link">Apply for Service</a>
+            <li class="nav-item mb-1">
+                <a href="/citizen/apply" class="nav-link text-dark d-flex align-items-center rounded">
+                    <i class="bi bi-pencil-square me-2"></i> Apply for Service
+                </a>
             </li>
-            <li>
-                <a href="/citizen/requests" class="nav-link">My Applications</a>
+            <li class="nav-item mb-1">
+                <a href="/citizen/requests" class="nav-link text-dark d-flex align-items-center rounded">
+                    <i class="bi bi-folder-check me-2"></i> My Applications
+                </a>
             </li>
-            <li>
-                <a href="/citizen/payments" class="nav-link">Payments</a>
+            <li class="nav-item mb-1">
+                <a href="/citizen/payments" class="nav-link text-dark d-flex align-items-center rounded">
+                    <i class="bi bi-credit-card me-2"></i> Payments
+                </a>
             </li>
-            <li>
-                <a href="/citizen/profile" class="nav-link">Profile</a>
+            <li class="nav-item mb-1">
+                <a href="/citizen/profile" class="nav-link text-dark d-flex align-items-center rounded">
+                    <i class="bi bi-person-circle me-2"></i> Profile
+                </a>
             </li>
-            <li>
-                <a href="/citizen/notifications" class="nav-link">Notifications</a>
+            <li class="nav-item mb-1">
+                <a href="/citizen/notifications" class="nav-link text-dark d-flex align-items-center rounded">
+                    <i class="bi bi-bell me-2"></i> Notifications
+                </a>
             </li>
         <% } %>
 
         <% if (user && user.role === "officer") { %>
-            <li>
-                <a href="/officer/dashboard" class="nav-link"> Dashboard</a>
+            <li class="nav-item mb-1">
+                <a href="/officer/dashboard" class="nav-link text-dark d-flex align-items-center rounded">
+                    <i class="bi bi-speedometer2 me-2"></i> Dashboard
+                </a>
             </li>
-            <li>
-                <a href="/officer/requests" class="nav-link"> Review Requests</a>
+            <li class="nav-item mb-1">
+                <a href="/officer/requests" class="nav-link text-dark d-flex align-items-center rounded">
+                    <i class="bi bi-journal-text me-2"></i> Review Requests
+                </a>
             </li>
-            <li>
-                <a href="/officer/search" class="nav-link"> Search & Filter</a>
+            <li class="nav-item mb-1">
+                <a href="/officer/search" class="nav-link text-dark d-flex align-items-center rounded">
+                    <i class="bi bi-search me-2"></i> Search & Filter
+                </a>
             </li>
-            <li>
-                <a href="/officer/notifications" class="nav-link"> Notifications</a>
+            <li class="nav-item mb-1">
+                <a href="/officer/notifications" class="nav-link text-dark d-flex align-items-center rounded">
+                    <i class="bi bi-bell me-2"></i> Notifications
+                </a>
             </li>
         <% } %>
 
         <% if (user && user.role === "admin") { %>
-            <li>
-                <a href="/admin/dashboard" class="nav-link"> Dashboard</a>
+            <li class="nav-item mb-1">
+                <a href="/admin/dashboard" class="nav-link text-dark d-flex align-items-center rounded">
+                    <i class="bi bi-speedometer2 me-2"></i> Dashboard
+                </a>
             </li>
-            <li>
-                <a href="/admin/users" class="nav-link"> Manage Users</a>
+            <li class="nav-item mb-1">
+                <a href="/admin/users" class="nav-link text-dark d-flex align-items-center rounded">
+                    <i class="bi bi-people me-2"></i> Manage Users
+                </a>
             </li>
-            <li>
-                <a href="/admin/departments" class="nav-link"> Manage Departments</a>
+            <li class="nav-item mb-1">
+                <a href="/admin/departments" class="nav-link text-dark d-flex align-items-center rounded">
+                    <i class="bi bi-building me-2"></i> Manage Departments
+                </a>
             </li>
-            <li>
-                <a href="/admin/services" class="nav-link"> Manage Services</a>
+            <li class="nav-item mb-1">
+                <a href="/admin/services" class="nav-link text-dark d-flex align-items-center rounded">
+                    <i class="bi bi-gear me-2"></i> Manage Services
+                </a>
             </li>
-            <li>
-                <a href="/admin/reports" class="nav-link"> Reports & Stats</a>
+            <li class="nav-item mb-1">
+                <a href="/admin/reports" class="nav-link text-dark d-flex align-items-center rounded">
+                    <i class="bi bi-graph-up me-2"></i> Reports & Stats
+                </a>
             </li>
-            <li>
-                <a href="/admin/search" class="nav-link"> Global Search</a>
+            <li class="nav-item mb-1">
+                <a href="/admin/search" class="nav-link text-dark d-flex align-items-center rounded">
+                    <i class="bi bi-search me-2"></i> Global Search
+                </a>
             </li>
         <% } %>
-
     </ul>
     <hr>
     <div>
-        <a href="/logout" class="btn btn-outline-danger btn-sm w-100"> Logout</a>
+        <a href="/logout" class="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center rounded">
+            <i class="bi bi-box-arrow-right me-2"></i> Logout
+        </a>
     </div>
 </div>
