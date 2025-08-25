@@ -1,4 +1,11 @@
-import { fetchReports, getDashboardStats, listUsers, removeUser } from "../services/admin.service.js";
+import {
+    fetchReports,
+    getDashboardStats,
+    getUserById,
+    listUsers,
+    removeUser,
+    updateUser
+} from "../services/admin.service.js";
 import {getAllDepartments} from "../dao/department.dao.js";
 import {getAllServices} from "../dao/service.dao.js";
 
@@ -33,6 +40,31 @@ export async function deleteUserController(req, res) {
         res.redirect("/admin/users");
     } catch (err) {
         res.status(500).send("Error deleting user: " + err.message);
+    }
+}
+
+export async function editUserController(req, res) {
+    try {
+        const user = await getUserById(req.params.id);
+        if (!user) {
+            return res.status(404).send("User not found");
+        }
+        return user;
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Error loading user: " + err.message);
+    }
+}
+
+// Handle update form submission
+export async function updateUserController(req, res) {
+    try {
+        const { name, email, role } = req.body;
+        await updateUser(req.params.id, { name, email, role });
+        res.redirect("/admin/users");
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Error updating user: " + err.message);
     }
 }
 
@@ -72,3 +104,34 @@ export const showServices = async (req, res) => {
         res.status(500).send("Server Error");
     }
 };
+
+// Search all requests, users, and services
+import { globalSearchUsers, globalSearchServices, globalSearchRequests } from "../services/admin.service.js";
+
+export const showGlobalSearch = async (req, res) => {
+    try {
+        const searchQuery = req.query.q ? req.query.q.trim() : "";
+
+        let users = [];
+        let services = [];
+        let requests = [];
+
+        if (searchQuery) {
+            users = await globalSearchUsers(searchQuery);
+            services = await globalSearchServices(searchQuery);
+            requests = await globalSearchRequests(searchQuery);
+        }
+
+        res.render("admin/search", {
+            title: "Global Search",
+            users,
+            services,
+            requests,
+            searchQuery
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Server Error");
+    }
+};
+
