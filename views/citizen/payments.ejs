@@ -1,0 +1,83 @@
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+
+            <!-- Page Title -->
+            <div class="text-center mb-4">
+                <i class="bi bi-credit-card-2-front-fill text-success fs-1"></i>
+                <h2 class="fw-bold text-success mt-2">Secure Payment</h2>
+                <p class="text-muted">Complete your payment to submit your request</p>
+            </div>
+
+            <!-- Payment Card -->
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-body p-4">
+
+                    <!-- Service Summary -->
+                    <h5 class="fw-bold mb-3">Service Summary</h5>
+                    <ul class="list-group mb-4">
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span><i class="bi bi-building text-primary me-2"></i> Department</span>
+                            <span class="fw-semibold"><%= department.name %></span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span><i class="bi bi-gear-fill text-secondary me-2"></i> Service</span>
+                            <span class="fw-semibold"><%= service.name %></span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span><i class="bi bi-cash-stack text-success me-2"></i> Fee</span>
+                            <span class="fw-bold text-success">$<%= service.fee %></span>
+                        </li>
+                    </ul>
+
+                    <!-- Payment Method -->
+                    <h5 class="fw-bold mb-3">Choose Payment Method</h5>
+                    <div class="mb-3">
+                        <div class="form-check border rounded-3 p-3 mb-2">
+                            <input class="form-check-input" type="radio" name="paymentMethod" id="card" value="card" checked>
+                            <label class="form-check-label" for="card">
+                                <i class="bi bi-credit-card-2-front-fill text-primary me-2"></i> Credit / Debit Card
+                            </label>
+                        </div>
+                        <div class="form-check border rounded-3 p-3 mb-2">
+                            <input class="form-check-input" type="radio" name="paymentMethod" id="wallet" value="wallet">
+                            <label class="form-check-label" for="wallet">
+                                <i class="bi bi-phone-fill text-warning me-2"></i> Mobile Wallet
+                            </label>
+                        </div>
+                        <div class="form-check border rounded-3 p-3">
+                            <input class="form-check-input" type="radio" name="paymentMethod" id="bank" value="bank">
+                            <label class="form-check-label" for="bank">
+                                <i class="bi bi-bank text-success me-2"></i> Bank Transfer
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Fake Card Form -->
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Card Number</label>
+                        <input type="text" class="form-control form-control-lg rounded-3" placeholder="1234 5678 9012 3456">
+
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Expiry Date</label>
+                                <input type="text" class="form-control rounded-3" placeholder="MM/YY">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">CVV</label>
+                                <input type="password" class="form-control rounded-3" placeholder="***">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pay Button -->
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success btn-lg rounded-3 shadow-sm">
+                            <i class="bi bi-check-circle-fill me-1"></i> Pay $<%= service.fee %> Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

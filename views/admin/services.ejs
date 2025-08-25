@@ -1,0 +1,35 @@
+<div class="container mt-4">
+    <h2><%= title %></h2>
+
+    <table class="table table-bordered mt-3">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Service Name</th>
+            <th>Department</th>
+            <th>Fee</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% if (services.length > 0) { %>
+            <% services.forEach(s => { %>
+                <tr>
+                    <td><%= s.id %></td>
+                    <td><%= s.name %></td>
+                    <td><%= s.department %></td>
+                    <td>$<%= s.fee %></td>
+                    <td>
+                        <a href="/admin/services/<%= s.id %>/edit" class="btn btn-sm btn-primary">Edit</a>
+                        <a href="/admin/services/<%= s.id %>/delete" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+            <% }) %>
+        <% } else { %>
+            <tr><td colspan="5" class="text-center">No services found</td></tr>
+        <% } %>
+        </tbody>
+    </table>
+
+    <a href="/admin/services/new" class="btn btn-success">Add Service</a>
+</div>

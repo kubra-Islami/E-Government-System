@@ -12,6 +12,7 @@ import UserRoutes from "./src/routes/user.routes.js";
 import AdminRoutes from "./src/routes/admin.routes.js";
 import CitizenRoutes from "./src/routes/citizen.routes.js";
 import OfficerRoutes from "./src/routes/officer.routes.js";
+import {requireAdmin} from "./src/middlewares/auth.requireAdmin.js";
 
 const app = express();
 
@@ -51,7 +52,7 @@ app.set("views", path.join(__dirname, "views"));
 
 // Routes
 app.use("/api/users", UserRoutes);
-app.use("/admin", AdminRoutes);
+app.use("/admin",requireAdmin, AdminRoutes);
 app.use("/officer", OfficerRoutes);
 app.use("/citizen", CitizenRoutes);
 

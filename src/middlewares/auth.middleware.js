@@ -2,20 +2,12 @@ import {verifyToken} from "../utils/token.util.js";
 
 export const authMiddleware = (req, res, next) => {
     const authHeader = req.headers["authorization"];
+    const token = authHeader?.startsWith("Bearer ") ? authHeader.split(" ")[1] : req.cookies?.token;
 
-    if (!authHeader) {
-        return res.status(401).json({ error: "No token provided" });
-    }
-    const token = authHeader.startsWith("Bearer ") ? authHeader.split(" ")[1] : authHeader;
-
-
-    // const authHeader = req.headers.authorization || "";
-    // const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : null;
-    if (!token) return res.status(401).json({ message: "No token" });
+    if (!token) return res.status(401).json({ error: "No token provided" });
 
     try {
         const payload = verifyToken(token);
-
         req.user = payload;
         next();
     } catch (err) {

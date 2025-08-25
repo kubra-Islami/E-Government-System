@@ -1,0 +1,32 @@
+<div class="container mt-4">
+    <h2><%= title %></h2>
+
+    <table class="table table-bordered mt-3">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Department Name</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% if (departments.length > 0) { %>
+            <% departments.forEach(dep => { %>
+                <tr>
+                    <td><%= dep.id %></td>
+                    <td><%= dep.name %></td>
+                    <td>
+                        <a href="/admin/departments/<%= dep.id %>/edit" class="btn btn-sm btn-primary">Edit</a>
+                        <a href="/admin/departments/<%= dep.id %>/delete" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+            <% }) %>
+        <% } else { %>
+            <tr><td colspan="3" class="text-center">No departments found</td></tr>
+        <% } %>
+        </tbody>
+
+    </table>
+
+    <a href="/admin/departments/new" class="btn btn-success">Add Department</a>
+</div>

@@ -1,0 +1,28 @@
+
+<div class="container mt-4">
+    <h2><%= title %></h2>
+    <table class="table table-striped mt-3">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% users.forEach(user => { %>
+            <tr>
+                <td><%= user.id %></td>
+                <td><%= user.name %></td>
+                <td><%= user.email %></td>
+                <td><%= user.role %></td>
+                <td>
+                    <a href="/admin/users/<%= user.id %>/delete" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        <% }) %>
+        </tbody>
+    </table>
+</div>

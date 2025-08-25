@@ -26,14 +26,4 @@ export async function findById(id) {
     return rows[0] ? new User(rows[0]) : null;
 }
 
-export const showRegisterForm = async (req, res) => {
-    try {
-        const result = await pool.query("SELECT id, name FROM departments");
-        res.render("auth/register", {
-            title: "Register",
-            departments: result.rows
-        });
-    } catch (err) {
-        next(err);
-    }
-};
+

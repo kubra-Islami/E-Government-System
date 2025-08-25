@@ -13,11 +13,11 @@ export const showRegisterPage = async (req, res) => {
         res.render("auth/register", {
             title: "Register",
             departments: [],
+            hideSidebar:true,
             error: "Could not load departments"
         });
     }
 };
-
 
 export const showLoginPage = (req, res) => {
     res.render("auth/login", {title: "Login", user: req.user, error: undefined,hideSidebar:true});
@@ -26,29 +26,42 @@ export const showLoginPage = (req, res) => {
 export const register = async (req, res) => {
     try {
         const {role, department_id} = req.body;
-        if ((role === "officer" || role === "admin") && !department_id) {
-            return res
-                .status(400)
-                .render("auth/register", {
-                    title: "Register",
-                    user: null,
-                    error: "Department is required for officers and admins."
-                });
+        if (role === "officer" && !department_id) {
+            const { rows: departments } = await pool.query("SELECT id, name FROM departments");
+            return res.status(400).render("auth/register", {
+                title: "Register",
+                error: "Department is required for officers.",
+                departments,
+            });
         }
 
-        const {user, token} = await registerUser(req.body);
-        res.cookie("token", token, {httpOnly: true});
+        const { user, token } = await registerUser(req.body);
+        res.cookie("token", token, { httpOnly: true });
 
+        console.log('token');
+        console.log(token);
         if (user.role === "citizen") return res.redirect("/citizen/dashboard");
         if (user.role === "officer") return res.redirect("/officer/dashboard");
         if (user.role === "admin") return res.redirect("/admin/dashboard");
         return res.redirect("/");
 
-
     } catch (err) {
-        res.render("auth/register", {title: "Register", user: null, error: err.message});
+        let departments = [];
+        try {
+            const { rows } = await pool.query("SELECT id, name FROM departments");
+            departments = rows;
+        } catch (e) {
+            departments = [];
+        }
+
+        res.render("auth/register", {
+            title: "Register",
+            error: err.message,
+            departments,
+            hideSidebar: true,
+        });
     }
-}
+};
 
 export async function login(req, res) {
     try {
@@ -76,4 +89,3 @@ export async function login(req, res) {
         });
     }
 }
-

@@ -1,6 +1,6 @@
 import {hashPassword, comparePassword} from "../utils/hash.util.js";
-import {generateToken} from "../utils/token.util.js";
 import {createUser, findByEmail} from "../dao/user.dao.js";
+import {generateToken} from "../utils/token.util.js";
 
 export async function registerUser(payload) {
 
@@ -22,8 +22,13 @@ export async function registerUser(payload) {
         role,
         department_id: payload.department_id
     });
-    return buildAuthResponse(user);
 
+    console.log('user in service');
+    console.log(user);
+    // return buildAuthResponse(user);
+    const token = generateToken({ id: user.id, role: user.role });
+
+    return { user, token };
 }
 
 export const loginUser = async ({email, password}) => {
@@ -33,17 +38,19 @@ export const loginUser = async ({email, password}) => {
     const validPass = await comparePassword(password, user.password);
     if (!validPass) throw new Error("Invalid credentials.");
 
-    return buildAuthResponse(user);
-
-}
-
-function buildAuthResponse(user) {
+    // return buildAuthResponse(user);
     const token = generateToken({ id: user.id, role: user.role });
-    const safeUser = {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-    };
-    return { user: safeUser, token };
+
+    return { user, token };
 }
+
+// function buildAuthResponse(user) {
+//     const token = generateToken({ id: user.id, role: user.role });
+//     const safeUser = {
+//         id: user.id,
+//         name: user.name,
+//         email: user.email,
+//         role: user.role,
+//     };
+//     return { user: safeUser, token };
+// }

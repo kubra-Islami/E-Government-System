@@ -1,24 +1,35 @@
+<div class="container mt-4">
+    <h2>Reports & Stats</h2>
 
-<h2>Reports</h2>
-<table class="table table-bordered">
-    <thead>
-    <tr>
-        <th>Department</th>
-        <th>Total Requests</th>
-        <th>Approved</th>
-        <th>Rejected</th>
-        <th>Collected Fees</th>
-    </tr>
-    </thead>
-    <tbody>
-    <% reports.forEach(r => { %>
-        <tr>
-            <td><%= r.department %></td>
-            <td><%= r.total %></td>
-            <td><%= r.approved %></td>
-            <td><%= r.rejected %></td>
-            <td>$<%= r.fees %></td>
-        </tr>
-    <% }) %>
-    </tbody>
-</table>
+    <% if (reports.length > 0) { %>
+        <% reports.forEach(r => { %>
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><%= r.department %></h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Total Requests:</strong> <%= r.total %></p>
+                    <p><strong>Approved:</strong> <%= r.approved %></p>
+                    <p><strong>Rejected:</strong> <%= r.rejected %></p>
+                    <p><strong>Collected Fees:</strong> $<%= r.fees %></p>
+
+                    <% if (r.services && r.services.length > 0) { %>
+                        <h6>Services:</h6>
+                        <ul class="list-group">
+                            <% r.services.forEach(s => { %>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span><%= s.name %></span>
+                                    <span class="badge bg-info text-dark">Requests: <%= s.total %></span>
+                                </li>
+                            <% }) %>
+                        </ul>
+                    <% } else { %>
+                        <p class="text-muted">No services data available</p>
+                    <% } %>
+                </div>
+            </div>
+        <% }) %>
+    <% } else { %>
+        <p class="text-center">No report data available</p>
+    <% } %>
+</div>
