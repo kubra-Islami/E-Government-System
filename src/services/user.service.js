@@ -22,9 +22,6 @@ export async function registerUser(payload) {
         role,
         department_id: payload.department_id
     });
-
-    console.log('user in service');
-    console.log(user);
     // return buildAuthResponse(user);
     const token = generateToken({ id: user.id, role: user.role });
 

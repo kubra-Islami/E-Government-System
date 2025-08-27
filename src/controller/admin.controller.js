@@ -19,7 +19,6 @@ export const getAdminDashboard = async (req, res, next) => {
             stats
         });
     } catch (err) {
-        console.error(err);
         next(err);
     }
 };
@@ -43,7 +42,7 @@ export async function deleteUserController(req, res) {
     }
 }
 
-export async function editUserController(req, res) {
+export async function showUserController(req, res) {
     try {
         const user = await getUserById(req.params.id);
         if (!user) {
@@ -51,7 +50,6 @@ export async function editUserController(req, res) {
         }
         return user;
     } catch (err) {
-        console.error(err);
         res.status(500).send("Error loading user: " + err.message);
     }
 }
@@ -63,7 +61,6 @@ export async function updateUserController(req, res) {
         await updateUser(req.params.id, { name, email, role });
         res.redirect("/admin/users");
     } catch (err) {
-        console.error(err);
         res.status(500).send("Error updating user: " + err.message);
     }
 }

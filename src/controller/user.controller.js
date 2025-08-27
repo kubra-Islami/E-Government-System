@@ -38,8 +38,6 @@ export const register = async (req, res) => {
         const { user, token } = await registerUser(req.body);
         res.cookie("token", token, { httpOnly: true });
 
-        console.log('token');
-        console.log(token);
         if (user.role === "citizen") return res.redirect("/citizen/dashboard");
         if (user.role === "officer") return res.redirect("/officer/dashboard");
         if (user.role === "admin") return res.redirect("/admin/dashboard");
