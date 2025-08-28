@@ -1,4 +1,5 @@
 import pool from "../config/db.js";
+import Report from "../models/Report.js";
 
 export async function getUserList() {
     const { rows } = await pool.query("SELECT id, name, email, role FROM users ORDER BY id ASC");
@@ -52,7 +53,7 @@ export async function getReports() {
         ORDER BY d.name;
     `;
     const { rows } = await pool.query(sql);
-    return rows.map(r => new Report(r));
+    return rows.map(r => new Report(rows));
 }
 
 

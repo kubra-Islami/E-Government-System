@@ -68,8 +68,8 @@ export async function updateUserController(req, res) {
 // Reports
 export async function showReports(req, res) {
     try {
-        const reports = await fetchReports();
-        res.render("admin/reports", { title: "Reports", reports });
+        // const reports = await fetchReports();
+        res.render("admin/reports", { title: "Reports", reports : [] });
     } catch (err) {
         res.status(500).send("Error loading reports: " + err.message);
     }

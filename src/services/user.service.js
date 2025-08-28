@@ -23,7 +23,7 @@ export async function registerUser(payload) {
         department_id: payload.department_id
     });
     // return buildAuthResponse(user);
-    const token = generateToken({ id: user.id, role: user.role });
+    const token = generateToken({ id: user.id, role: user.role ,name: user.name  });
 
     return { user, token };
 }
@@ -36,8 +36,7 @@ export const loginUser = async ({email, password}) => {
     if (!validPass) throw new Error("Invalid credentials.");
 
     // return buildAuthResponse(user);
-    const token = generateToken({ id: user.id, role: user.role });
-
+    const token = generateToken({ id: user.id, role: user.role , name: user.name });
     return { user, token };
 }
 
