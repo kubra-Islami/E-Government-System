@@ -7,8 +7,8 @@ import {
     updateUser
 } from "../services/admin.service.js";
 import {getAllDepartments} from "../dao/department.dao.js";
-import {getAllServices} from "../dao/service.dao.js";
-
+// Search all requests, users, and services
+import { globalSearchUsers, globalSearchServices, globalSearchRequests } from "../services/admin.service.js";
 // Admin Dashboard
 export const getAdminDashboard = async (req, res, next) => {
     try {
@@ -87,23 +87,6 @@ export async function showDepartments (req, res) {
         res.status(500).send("Server Error");
     }
 }
-
-export const showServices = async (req, res) => {
-    try {
-        const services = await getAllServices();
-
-        res.render("admin/services", {
-            title: "Manage Services",
-            services
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("Server Error");
-    }
-};
-
-// Search all requests, users, and services
-import { globalSearchUsers, globalSearchServices, globalSearchRequests } from "../services/admin.service.js";
 
 export const showGlobalSearch = async (req, res) => {
     try {

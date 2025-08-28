@@ -7,8 +7,8 @@ export async function addDepartmentController(req, res) {
             return res.status(400).send({error: 'name is required'});
         }
         await addDepartment(req.body);
-        res.redirect("/admin/department");
+        res.redirect("/admin/departments");
     }catch (err){
-        res.status(500).send("Error adding department user: " + err.message);
+        res.status(500).send("Error adding department : " + err.message);
     }
 }
