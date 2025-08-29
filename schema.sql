@@ -31,7 +31,7 @@ CREATE TABLE services
     name          VARCHAR(100) NOT NULL,
     department_id INT          NOT NULL REFERENCES departments (id) ON DELETE CASCADE,
     fee           DECIMAL(10, 2) DEFAULT 0,
-    created_at    TIMESTAMP DEFAULT NOW()
+    created_at    TIMESTAMP      DEFAULT NOW()
 );
 
 -- 4. Requests   ===>   درخواست ها
@@ -49,10 +49,11 @@ CREATE TABLE requests
 -- 5. Documents    ===> اسناد و مدارک
 CREATE TABLE documents
 (
-    id          SERIAL PRIMARY KEY,
-    request_id  INT  NOT NULL REFERENCES requests (id) ON DELETE CASCADE,
-    file_path   TEXT NOT NULL,
-    uploaded_at TIMESTAMP DEFAULT NOW()
+    id            SERIAL PRIMARY KEY,
+    request_id    INT  NOT NULL REFERENCES requests (id) ON DELETE CASCADE,
+    file_path     TEXT NOT NULL,
+    original_name VARCHAR(255),
+    uploaded_at   TIMESTAMP DEFAULT NOW()
 );
 
 -- 6. Payments   ===> پرداخت ها

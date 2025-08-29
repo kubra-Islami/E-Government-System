@@ -34,11 +34,12 @@
                                 </span>
                             </td>
                             <td class="text-center">
-                                <button class="btn btn-outline-primary btn-sm me-1 shadow-sm" data-bs-toggle="modal"
-                                        data-bs-target="#editModal<%= user.id %>">Edit
+                                <button class="btn btn-outline-primary btn-sm me-1 shadow-sm"
+                                        data-bs-toggle="modal" data-bs-target="#editModal<%= user.id %>">
+                                    Edit
                                 </button>
-                                <button class="btn btn-sm btn-outline-danger shadow-sm" data-bs-toggle="modal"
-                                        data-bs-target="#deleteModal<%= user.id %>">
+                                <button class="btn btn-sm btn-outline-danger shadow-sm"
+                                        data-bs-toggle="modal" data-bs-target="#deleteModal<%= user.id %>">
                                     Delete
                                 </button>
                             </td>
@@ -68,42 +69,42 @@
                             </div>
                         </div>
 
-                        <!-- Edit Modal (unchanged) -->
-                        <div class="modal fade" id="editModal<%= user.id %>" tabindex="-1"
-                             aria-labelledby="editModalLabel<%= user.id %>" aria-hidden="true">
-                            <div class="modal-dialog bg-white">
-                                <form action="/admin/users/<%= user.id %>/edit" method="POST" class="modal-content ">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="editModalLabel<%= user.id %>">Edit User</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="mb-3">
-                                            <label class="form-label">Name</label>
-                                            <input type="text" name="name" class="form-control" value="<%= user.name %>"
-                                                   required>
+                        <!-- Edit Modal -->
+                        <div class="modal fade" id="editModal<%= user.id %>" tabindex="-1" aria-labelledby="editModalLabel<%= user.id %>" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-lg">
+                                <div class="modal-content shadow-lg border-0 rounded-3">
+                                    <form action="/admin/users/<%= user.id %>/edit" method="POST">
+                                        <div class="modal-header border-0 pb-0">
+                                            <h5 class="modal-title fw-bold text-primary" id="editModalLabel<%= user.id %>">
+                                                <i class="bi bi-pencil-square me-2"></i>Edit User
+                                            </h5>
+                                            <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Email</label>
-                                            <input type="email" name="email" class="form-control"
-                                                   value="<%= user.email %>" required>
+                                        <div class="modal-body">
+                                            <div class="mb-3">
+                                                <label for="name<%= user.id %>" class="form-label">Name</label>
+                                                <input type="text" id="name<%= user.id %>" name="name" class="form-control rounded-3 shadow-sm" value="<%= user.name %>" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="email<%= user.id %>" class="form-label">Email</label>
+                                                <input type="email" id="email<%= user.id %>" name="email" class="form-control rounded-3 shadow-sm" value="<%= user.email %>" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="role<%= user.id %>" class="form-label">Role</label>
+                                                <select id="role<%= user.id %>" name="role" class="form-select rounded-3 shadow-sm" required>
+                                                    <option value="citizen" <%= user.role === 'citizen' ? 'selected' : '' %>>Citizen</option>
+                                                    <option value="officer" <%= user.role === 'officer' ? 'selected' : '' %>>Officer</option>
+                                                    <option value="department_head" <%= user.role === 'department_head' ? 'selected' : '' %>>Department Head</option>
+                                                    <option value="admin" <%= user.role === 'admin' ? 'selected' : '' %>>Admin</option>
+                                                </select>
+                                            </div>
                                         </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Role</label>
-                                            <select name="role" class="form-select" required>
-                                                <option value="citizen" <%= user.role === 'citizen' ? 'selected' : '' %>>Citizen</option>
-                                                <option value="officer" <%= user.role === 'officer' ? 'selected' : '' %>>Officer</option>
-                                                <option value="department_head" <%= user.role === 'department_head' ? 'selected' : '' %>>Department Head</option>
-                                                <option value="admin" <%= user.role === 'admin' ? 'selected' : '' %>>Admin</option>
-                                            </select>
+                                        <div class="modal-footer border-0">
+                                            <button type="button" class="btn btn-light rounded-3" data-bs-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="btn btn-warning rounded-3">Save Changes</button>
                                         </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel
-                                        </button>
-                                        <button type="submit" class="btn btn-warning">Save Changes</button>
-                                    </div>
-                                </form>
+                                    </form>
+                                </div>
                             </div>
                         </div>
 
@@ -118,7 +119,3 @@
         </div>
     </div>
 </div>
-
-
-
-

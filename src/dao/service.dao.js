@@ -1,6 +1,7 @@
 import pool from "../config/db.js";
 import Service from "../models/Service.js";
 
+
 export async function addServiceDao(data) {
     const {name,department_id,fee} = data;
 
@@ -20,3 +21,9 @@ export async function getAllServices(){
         `);
     return result.rows;
 }
+
+export const getServicesByDepartmentId = async (departmentId) => {
+    const query = "SELECT * FROM services WHERE department_id = $1";
+    const { rows } = await pool.query(query, [departmentId]);
+    return rows;
+};
