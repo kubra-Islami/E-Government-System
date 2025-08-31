@@ -8,6 +8,7 @@ export default class Request {
                     created_at,
                     updated_at,
                     service_name,
+                    service_fee,
                     department_name,
                     reviewer_name
                 }) {
@@ -21,6 +22,7 @@ export default class Request {
 
         // Enriched fields from JOINs
         this.service_name = service_name;
+        this.service_fee = service_fee;
         this.department_name = department_name;
         this.reviewer_name = reviewer_name;
     }

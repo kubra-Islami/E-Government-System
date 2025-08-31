@@ -5,15 +5,17 @@ import {
     getCitizenDashboard,
     getServicesAndDepartments,
     getServicesByDepartment,
-     getCitizenRequests, submitServiceApplication
+     getCitizenRequests, submitServiceApplication,getPaymentPage,submitPayment
 } from "../controller/citizen.controller.js";
+import { getRequestsByCitizenId } from "../services/requests.service.js";
 
 import multer from "multer";
 import path from "path";
+import {getPaymentSuccess} from "../controller/payment.service.js";
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, "uploads/"); // folder where files will be saved
+        cb(null, "uploads/");
     },
     filename: function (req, file, cb) {
         const ext = path.extname(file.originalname);
@@ -38,9 +40,30 @@ router.get("/services/:departmentId", authMiddleware,getServicesByDepartment);
 
 router.get("/requests",authMiddleware, getCitizenRequests);
 
-router.get("/payments",authMiddleware, (req, res) => {
-    res.render("citizen/payments", { title: "Payments" });
+// Show payment page for a request
+router.get("/payments/:requestId",authMiddleware, getPaymentPage);
+
+// Handle payment submission
+router.post("/payments/:requestId", authMiddleware, submitPayment);
+
+router.get("/payments", authMiddleware, async (req, res, next) => {
+    try {
+        const requests = await getRequestsByCitizenId(req.user.id);
+
+        // console.log(requests);
+
+        const pendingRequests = requests.filter(r => r.status !== "paid");
+        res.render("citizen/pendingPayments", {
+            title: "Pending Payments",
+            requests: pendingRequests
+        });
+    } catch (err) {
+        next(err);
+    }
 });
+
+router.get("/success/:paymentId", getPaymentSuccess);
+
 
 router.get("/profile",authMiddleware, (req, res) => {
     res.render("citizen/profile", { title: "Profile",user: req.user}) ;

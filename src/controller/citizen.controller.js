@@ -2,10 +2,10 @@ import {getServicesByDepartmentId} from "../dao/service.dao.js";
 
 import { getRequestsByCitizenId} from "../dao/request.dao.js";
 import {addDocument} from "../services/documents.service.js";
-import {addRequest} from "../services/requests.service.js";
+import {addRequest ,getRequestById} from "../services/requests.service.js";
 import {getAllServices} from "../services/service.service.js";
 import {getAllDepartments} from "../services/department.service.js";
-
+import { addPayment } from "../services/payments.service.js";
 
 export const getCitizenDashboard = async (req, res, next) => {
     try {
@@ -30,7 +30,6 @@ export const getCitizenRequests = async (req, res, next) => {
         next(err);
     }
 };
-
 
 export const getServicesAndDepartments = async (req, res, next) => {
     try {
@@ -67,9 +66,10 @@ export const submitServiceApplication = async (req, res, next) => {
                 });
             }
         }
-        console.log(req.files);
-        res.redirect("/citizen/requests");
-
+        // console.log(req.files);
+        // res.redirect("/citizen/requests");
+        // res.redirect(`/citizen/payments/${newRequest.id}`);
+        res.redirect("/citizen/payments");
     } catch (err) {
         next(err);
     }
@@ -80,6 +80,48 @@ export const getServicesByDepartment = async (req, res, next) => {
         const { departmentId } = req.params;
         const services = await getServicesByDepartmentId(departmentId);
         res.json(services);
+    } catch (err) {
+        next(err);
+    }
+};
+
+export const getPaymentPage = async (req, res, next) => {
+    try {
+        const { requestId } = req.params;
+        const request = await getRequestById(requestId);
+
+        if (!request) return res.status(404).send("Request not found");
+
+        res.render("citizen/payments", {
+            title: "Payments",
+            request,
+            service: request.service,
+            department: request.department
+        });
+    } catch (err) {
+        next(err);
+    }
+};
+
+export const submitPayment = async (req, res, next) => {
+    try {
+        const { requestId } = req.params;
+        const { paymentMethod } = req.body;
+
+        // Simulate payment processing
+        const paymentStatus = "success";
+
+        // Insert payment record
+        await addPayment({
+            request_id: requestId,
+            amount: req.body.amount,
+            status: paymentStatus
+        });
+
+        // Optionally, update request status
+        // await updateRequestStatus(requestId, "paid");
+
+        res.redirect("/citizen/requests");
     } catch (err) {
         next(err);
     }
