@@ -1,5 +1,4 @@
 import pool from "../config/db.js";
-import Payment from "../models/Payment.js";
 
 export const addPaymentDao = async ({ request_id, amount, status }) => {
     const sql = `

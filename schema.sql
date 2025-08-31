@@ -17,6 +17,8 @@ CREATE TABLE Users
     national_id   VARCHAR(20) UNIQUE                                                             NOT NULL,
     date_of_birth DATE                                                                           NOT NULL,
     contact_info  VARCHAR(150),
+    avatar        TEXT,
+    phone         VARCHAR(20),
     role          VARCHAR(20) CHECK (role IN ('citizen', 'officer', 'department_head', 'admin')) NOT NULL,
     department_id INT                                                                            REFERENCES departments (id) ON DELETE SET NULL,
     created_at    TIMESTAMP DEFAULT NOW(),
@@ -76,4 +78,12 @@ CREATE TABLE notifications
     channel     VARCHAR(20) CHECK (channel IN ('in_app', 'email', 'both')) DEFAULT 'in_app',
     read_status BOOLEAN                                                    DEFAULT FALSE,
     created_at  TIMESTAMP                                                  DEFAULT NOW()
+);
+-- 8. activities  ===> فعالیت ها
+CREATE TABLE activities
+(
+    id          SERIAL PRIMARY KEY,
+    user_id     INT  NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+    description TEXT NOT NULL,
+    created_at  TIMESTAMP DEFAULT NOW()
 );

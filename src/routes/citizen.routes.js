@@ -5,7 +5,13 @@ import {
     getCitizenDashboard,
     getServicesAndDepartments,
     getServicesByDepartment,
-     getCitizenRequests, submitServiceApplication,getPaymentPage,submitPayment
+    getCitizenRequests,
+    submitServiceApplication,
+    getPaymentPage,
+    submitPayment,
+    getCitizenProfile,
+    updateCitizenProfile,
+    uploadAvatar
 } from "../controller/citizen.controller.js";
 import { getRequestsByCitizenId } from "../services/requests.service.js";
 
@@ -37,7 +43,6 @@ router.post("/applyService", authMiddleware, upload.array("documents"), submitSe
 
 router.get("/services/:departmentId", authMiddleware,getServicesByDepartment);
 
-
 router.get("/requests",authMiddleware, getCitizenRequests);
 
 // Show payment page for a request
@@ -64,10 +69,16 @@ router.get("/payments", authMiddleware, async (req, res, next) => {
 
 router.get("/success/:paymentId", getPaymentSuccess);
 
+// Get profile page
+router.get("/profile", authMiddleware, getCitizenProfile);
 
-router.get("/profile",authMiddleware, (req, res) => {
-    res.render("citizen/profile", { title: "Profile",user: req.user}) ;
-});
+// Update profile
+router.post("/profile/update", authMiddleware, updateCitizenProfile);
+
+// Upload avatar
+router.post("/profile/upload-avatar", authMiddleware, upload.single("avatar"), uploadAvatar);
+
+
 
 router.get("/notifications",authMiddleware, (req, res) => {
     res.render("citizen/notifications", { title: "Notifications" });

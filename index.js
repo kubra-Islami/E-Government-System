@@ -14,7 +14,7 @@ import AdminRoutes from "./src/routes/admin.routes.js";
 import CitizenRoutes from "./src/routes/citizen.routes.js";
 import OfficerRoutes from "./src/routes/officer.routes.js";
 import {requireAdmin} from "./src/middlewares/auth.requireAdmin.js";
-import {findById} from "./src/dao/user.dao.js";
+import {getUserByIdDao} from "./src/dao/user.dao.js";
 
 const app = express();
 
@@ -29,7 +29,8 @@ app.use(async (req, res, next) => {
     if (token) {
         try {
             const decoded = verifyToken(token);
-            const fullUser = await findById(decoded.id);
+            // const fullUser = await findById(decoded.id);
+            const fullUser = await getUserByIdDao(decoded.id);
             res.locals.user = fullUser;
             req.user = fullUser;
         } catch (err) {
@@ -46,6 +47,7 @@ app.use(async (req, res, next) => {
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/uploads", express.static(path.join(path.resolve(), "uploads")));
 
 app.use(expressLayouts);
 app.set("layout", "layouts/layout");

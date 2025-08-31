@@ -6,6 +6,7 @@ import {addRequest ,getRequestById} from "../services/requests.service.js";
 import {getAllServices} from "../services/service.service.js";
 import {getAllDepartments} from "../services/department.service.js";
 import { addPayment } from "../services/payments.service.js";
+import * as profileService from "../services/profile.service.js";
 
 export const getCitizenDashboard = async (req, res, next) => {
     try {
@@ -122,6 +123,67 @@ export const submitPayment = async (req, res, next) => {
         // await updateRequestStatus(requestId, "paid");
 
         res.redirect("/citizen/requests");
+    } catch (err) {
+        next(err);
+    }
+};
+
+
+// GET profile page
+export const getCitizenProfile = async (req, res, next) => {
+    try {
+        const userId = req.user.id;
+        const profileData = await profileService.getProfileById(userId);
+        const recentActivities = await profileService.getRecentActivities(userId);
+
+
+        res.render("citizen/profile", {
+            title: "My Profile",
+            user: profileData,
+            recentActivities: recentActivities
+        });
+    } catch (err) {
+        next(err);
+    }
+};
+
+export const getProfilePage = async (req, res, next) => {
+    try {
+        const user = await getUserByIdDao(req.user.id);
+        if (!user) return res.status(404).send("User not found");
+
+        const recentActivities = await getRecentActivitiesByUserId(req.user.id);
+
+        res.render("citizen/profile", { user, recentActivities });
+    } catch (err) {
+        next(err);
+    }
+};
+// POST update profile
+export const updateCitizenProfile = async (req, res, next) => {
+    try {
+        const userId = req.user.id;
+        let { email, phone ,date_of_birth } = req.body;
+
+        await profileService.updateProfile(userId, { email, phone ,date_of_birth});
+
+        console.log(req.body);
+        res.redirect("/citizen/profile");
+    } catch (err) {
+        next(err);
+    }
+};
+
+// POST upload avatar
+export const uploadAvatar = async (req, res, next) => {
+    try {
+        const userId = req.user.id;
+        const avatarPath = req.file ? `/uploads/${req.file.filename}` : null;
+
+        if (avatarPath) {
+            await profileService.updateProfile(userId, { avatar: avatarPath });
+        }
+        res.redirect("/citizen/profile");
     } catch (err) {
         next(err);
     }

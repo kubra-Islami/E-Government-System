@@ -27,3 +27,13 @@ export async function findById(id) {
 }
 
 
+export const getUserByIdDao = async (userId) => {
+    const sql = `
+        SELECT id, name, email, national_id, date_of_birth, contact_info, phone, role, department_id, avatar
+        FROM users
+        WHERE id = $1
+    `;
+    const { rows } = await pool.query(sql, [userId]);
+    return rows[0] || null;
+};
+
