@@ -3,19 +3,35 @@ const router = express.Router();
 import {authMiddleware} from "../middlewares/auth.middleware.js";
 import {
     getCitizenDashboard,
-    submitServiceApplication,
+    getServicesAndDepartments,
     getServicesByDepartment,
-    submitServiceApplication1, getCitizenRequests
+     getCitizenRequests, submitServiceApplication
 } from "../controller/citizen.controller.js";
+
 import multer from "multer";
-const upload = multer({ dest: "uploads/" });
+import path from "path";
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, "uploads/"); // folder where files will be saved
+    },
+    filename: function (req, file, cb) {
+        const ext = path.extname(file.originalname);
+        const base = path.basename(file.originalname, ext);
+        const uniqueName = `${Date.now()}-${base}${ext}`;
+        cb(null, uniqueName);
+    }
+});
+
+const upload = multer({ storage });
 
 router.get("/dashboard",authMiddleware,getCitizenDashboard );
 
 // Show the "Apply for Service" page
-router.get("/applyService", authMiddleware, submitServiceApplication);
+router.get("/applyService", authMiddleware, getServicesAndDepartments);
+
 // Handle form submission
-router.post("/applyService", authMiddleware, upload.array("documents"), submitServiceApplication1);
+router.post("/applyService", authMiddleware, upload.array("documents"), submitServiceApplication);
 
 router.get("/services/:departmentId", authMiddleware,getServicesByDepartment);
 

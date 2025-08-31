@@ -12,7 +12,7 @@ export async function addServiceDao(data) {
     return new Service(rows[0]);
 }
 
-export async function getAllServices(){
+export async function getAllServicesDao(){
     const result = await pool.query(`
             SELECT s.id, s.name, s.fee, d.name as department
             FROM services s

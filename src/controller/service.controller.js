@@ -1,6 +1,6 @@
-import {addService} from "../services/service.service.js"
-import {getAllServices} from "../dao/service.dao.js";
-import {getAllDepartments} from "../dao/department.dao.js";
+import {addService, getAllServices} from "../services/service.service.js"
+import {getAllDepartments} from "../services/department.service.js";
+
 
 export async function addServiceController(req, res) {
     try {

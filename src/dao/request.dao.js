@@ -9,16 +9,15 @@ export const addRequestDao = async ({ citizen_id, service_id }) => {
     return rows[0];
 };
 
-
-export const addDocumentDao = async ({ request_id, file_path }) => {
-    const sql = `INSERT INTO documents (request_id, file_path) 
-                 VALUES ($1, $2) RETURNING *`;
-    const params = [request_id, file_path];
-    const { rows } = await pool.query(sql, params);
-    return rows[0];
-};
-
-
+export async function getAllRequestsDao(){
+    const result = await pool.query(`
+            SELECT s.id, s.name, s.fee, d.name as department
+            FROM services s
+            JOIN departments d ON s.department_id = d.id
+            ORDER BY s.id ASC
+        `);
+    return result.rows;
+}
 
 export const getRequestsByCitizenId = async (citizenId) => {
     const sql = `

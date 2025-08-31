@@ -6,9 +6,9 @@ import {
     removeUser,
     updateUser
 } from "../services/admin.service.js";
-import {getAllDepartments} from "../dao/department.dao.js";
 // Search all requests, users, and services
 import { globalSearchUsers, globalSearchServices, globalSearchRequests } from "../services/admin.service.js";
+import {getAllDepartments} from "../services/department.service.js";
 
 // Admin Dashboard
 export const getAdminDashboard = async (req, res, next) => {

@@ -1,5 +1,4 @@
-import {addServiceDao} from "../dao/service.dao.js";
-
+import {addServiceDao, getAllServicesDao} from "../dao/service.dao.js";
 
 export async function addService(data) {
     const service = await addServiceDao({
@@ -8,4 +7,8 @@ export async function addService(data) {
         department_id : data.department
     });
     return service;
+}
+
+export async function getAllServices(){
+    return await getAllServicesDao();
 }

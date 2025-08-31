@@ -1,7 +1,10 @@
-import {getAllServices,getServicesByDepartmentId} from "../dao/service.dao.js";
-import {getAllDepartments} from "../dao/department.dao.js";
-import {addDocumentDao, addRequestDao, getRequestsByCitizenId} from "../dao/request.dao.js";
-import {getAllRequests} from "../services/requests.service.js";
+import {getServicesByDepartmentId} from "../dao/service.dao.js";
+
+import { getRequestsByCitizenId} from "../dao/request.dao.js";
+import {addDocument} from "../services/documents.service.js";
+import {addRequest} from "../services/requests.service.js";
+import {getAllServices} from "../services/service.service.js";
+import {getAllDepartments} from "../services/department.service.js";
 
 
 export const getCitizenDashboard = async (req, res, next) => {
@@ -29,7 +32,7 @@ export const getCitizenRequests = async (req, res, next) => {
 };
 
 
-export const submitServiceApplication = async (req, res, next) => {
+export const getServicesAndDepartments = async (req, res, next) => {
     try {
         const services = await getAllServices();
         const departments = await getAllDepartments();
@@ -44,30 +47,27 @@ export const submitServiceApplication = async (req, res, next) => {
     }
 };
 
-export const submitServiceApplication1 = async (req, res, next) => {
+export const submitServiceApplication = async (req, res, next) => {
     try {
         const { department, service } = req.body;
         const citizenId = req.user.id;
 
         // Insert request
-        const newRequest = await addRequestDao({
+        const newRequest = await addRequest({
             citizen_id: citizenId,
             service_id: service,
         });
-        console.log(newRequest);
-        console.log(citizenId);
-        console.log('department');
-        console.log(department);
         // Handle file uploads (if any)
         if (req.files && req.files.length > 0) {
             for (const file of req.files) {
-                await addDocumentDao({
+                await addDocument({
                     request_id: newRequest.id,
                     file_path: file.filename,
                     original_name: file.originalname
                 });
             }
         }
+        console.log(req.files);
         res.redirect("/citizen/requests");
 
     } catch (err) {

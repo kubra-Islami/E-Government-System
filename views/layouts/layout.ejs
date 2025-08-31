@@ -88,6 +88,81 @@
             }
         }
     });
+
+
+    // file part for applying for service
+    const uploadBox = document.getElementById("uploadBox");
+    const fileInput = document.getElementById("documents");
+    const fileList = document.getElementById("fileList");
+    const uploadPlaceholder = document.getElementById("uploadPlaceholder");
+
+    let selectedFiles = [];
+
+    // Prevent default drag behavior
+    ["dragenter", "dragover", "dragleave", "drop"].forEach(event =>
+        uploadBox.addEventListener(event, e => e.preventDefault())
+    );
+
+    // Highlight drag area
+    ["dragenter", "dragover"].forEach(event =>
+        uploadBox.addEventListener(event, () => uploadBox.classList.add("dragover"))
+    );
+    ["dragleave", "drop"].forEach(event =>
+        uploadBox.addEventListener(event, () => uploadBox.classList.remove("dragover"))
+    );
+
+    // Handle dropped files
+    uploadBox.addEventListener("drop", e => handleFiles(e.dataTransfer.files));
+
+    // Handle file input change
+    fileInput.addEventListener("change", () => handleFiles(fileInput.files));
+
+    function handleFiles(files) {
+        selectedFiles = [...selectedFiles, ...Array.from(files)];
+        updateFileInput();
+        renderFileList();
+    }
+
+    // Update hidden input so form submits the files
+    function updateFileInput() {
+        const dt = new DataTransfer();
+        selectedFiles.forEach(file => dt.items.add(file));
+        fileInput.files = dt.files;
+    }
+
+    // Render file previews
+    function renderFileList() {
+        fileList.innerHTML = "";
+        uploadPlaceholder.style.display = selectedFiles.length ? "none" : "block";
+
+        selectedFiles.forEach((file, index) => {
+            const preview = document.createElement("div");
+            preview.classList.add("file-preview");
+
+            if (file.type.startsWith("image/")) {
+                const img = document.createElement("img");
+                img.src = URL.createObjectURL(file);
+                preview.appendChild(img);
+            } else if (file.type === "application/pdf") {
+                preview.innerHTML = `<i class="bi bi-file-earmark-pdf-fill text-danger fs-2"></i><br>${file.name}`;
+            } else {
+                preview.innerHTML = `<i class="bi bi-file-earmark-fill text-secondary fs-2"></i><br>${file.name}`;
+            }
+
+            // Remove button
+            const removeBtn = document.createElement("button");
+            removeBtn.innerHTML = "&times;";
+            removeBtn.classList.add("remove-btn");
+            removeBtn.addEventListener("click", () => {
+                selectedFiles.splice(index, 1);
+                updateFileInput();
+                renderFileList();
+            });
+
+            preview.appendChild(removeBtn);
+            fileList.appendChild(preview);
+        });
+    }
 </script>
 </body>
 </html>

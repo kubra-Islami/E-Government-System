@@ -1,11 +1,9 @@
-import pool from "../config/db.js";
+import {addRequestDao, getAllRequestsDao} from "../dao/request.dao.js";
 
 export async function getAllRequests(){
-    const result = await pool.query(`
-            SELECT s.id, s.name, s.fee, d.name as department
-            FROM services s
-            JOIN departments d ON s.department_id = d.id
-            ORDER BY s.id ASC
-        `);
-    return result.rows;
+    return await getAllRequestsDao();
+}
+
+export async function addRequest({ citizen_id, service_id }){
+    return await addRequestDao({ citizen_id, service_id });
 }
