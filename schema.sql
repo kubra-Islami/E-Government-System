@@ -72,13 +72,19 @@ CREATE TABLE payments
 CREATE TABLE notifications
 (
     id          SERIAL PRIMARY KEY,
-    user_id     INT  NOT NULL REFERENCES users (id) ON DELETE CASCADE,
-    request_id  INT REFERENCES requests (id) ON DELETE CASCADE,
+    user_id     INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    request_id  INT REFERENCES requests(id) ON DELETE CASCADE,
     message     TEXT NOT NULL,
     channel     VARCHAR(20) CHECK (channel IN ('in_app', 'email', 'both')) DEFAULT 'in_app',
-    read_status BOOLEAN                                                    DEFAULT FALSE,
-    created_at  TIMESTAMP                                                  DEFAULT NOW()
+    is_read     BOOLEAN DEFAULT FALSE,
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP DEFAULT NOW()
 );
+
+CREATE INDEX idx_notifications_user_id ON notifications(user_id);
+CREATE INDEX idx_notifications_is_read ON notifications(is_read);
+
+
 -- 8. activities  ===> فعالیت ها
 CREATE TABLE activities
 (

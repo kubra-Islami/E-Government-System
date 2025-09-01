@@ -1,0 +1,60 @@
+<div class="container py-5">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-bold text-dark mb-1">
+                <i class="bi bi-bell-fill me-2 text-primary"></i> Notifications
+            </h2>
+            <p class="text-muted small">All updates related to your service requests</p>
+        </div>
+        <a href="/citizen/dashboard" class="btn btn-outline-primary rounded-pill px-4">
+            <i class="bi bi-arrow-left-circle me-1"></i> Dashboard
+        </a>
+    </div>
+
+    <!-- Notifications List -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body p-4">
+
+                    <% if (notifications && notifications.length > 0) { %>
+                        <ul class="list-group list-group-flush">
+                            <% notifications.forEach(notification => { %>
+                                <li class="list-group-item d-flex justify-content-between align-items-start rounded mb-2 shadow-sm
+                                           <%= notification.read ? 'bg-light text-muted' : 'bg-white' %>">
+                                    <div class="d-flex align-items-center">
+                                        <% if (!notification.read) { %>
+                                            <i class="bi bi-circle-fill text-primary me-2 fs-6"></i>
+                                        <% } else { %>
+                                            <i class="bi bi-check2-circle text-success me-2 fs-6"></i>
+                                        <% } %>
+                                        <div>
+                                            <p class="mb-1"><%= notification.message %></p>
+                                            <small class="text-muted"><%= new Date(notification.created_at).toLocaleString() %></small>
+                                        </div>
+                                    </div>
+                                    <% if (!notification.read) { %>
+                                        <form action="/citizen/notifications/mark-read/<%= notification.id %>" method="POST">
+                                            <button class="btn btn-sm btn-outline-primary rounded-pill">Mark Read</button>
+                                        </form>
+                                    <% } %>
+                                </li>
+                            <% }) %>
+                        </ul>
+                    <% } else { %>
+                        <p class="text-muted text-center py-4">No notifications found.</p>
+                    <% } %>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .list-group-item:hover {
+        background-color: #f1f5f9;
+        transition: 0.2s;
+    }
+</style>

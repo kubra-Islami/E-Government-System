@@ -6,7 +6,8 @@
     <title><%= title %> | E-Gov Portal</title>
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Manrope:wght@400;600&family=Urbanist:wght@400;600&family=Roboto:wght@400;600&family=Satoshi:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Manrope:wght@400;600&family=Urbanist:wght@400;600&family=Roboto:wght@400;600&family=Satoshi:wght@400;600&display=swap"
+          rel="stylesheet">
 
 
     <style>
@@ -14,6 +15,7 @@
             font-family: 'Inter', sans-serif;
             background-color: #f8f9fa;
         }
+
         h1, h2, h3 {
             font-family: 'Manrope', sans-serif;
         }
@@ -25,7 +27,6 @@
 <% if (!(typeof hideHeader !== "undefined" && hideHeader)) { %>
     <%- include('../partials/header') %>
 <% } %>
-
 
 <div class="container-fluid">
     <div class="row">
@@ -57,110 +58,13 @@
 <script>
     const roleSelect = document.getElementById("role");
     if (roleSelect) {
-        roleSelect.addEventListener("change", function() {
+        roleSelect.addEventListener("change", function () {
             const departmentField = document.getElementById("departmentField");
             if (this.value === "officer" || this.value === "admin") {
                 departmentField.classList.remove("d-none");
             } else {
                 departmentField.classList.add("d-none");
             }
-        });
-    }
-
-    document.getElementById("departmentSelect").addEventListener("change", async function() {
-        const deptId = this.value;
-        const serviceSelect = document.getElementById("serviceSelect");
-        serviceSelect.innerHTML = `<option value=""> Select Service </option>`; // reset
-
-        if (deptId) {
-            try {
-                const res = await fetch(`/citizen/services/${deptId}`);
-                const services = await res.json();
-
-                services.forEach(s => {
-                    const option = document.createElement("option");
-                    option.value = s.id;
-                    option.textContent = s.name;
-                    serviceSelect.appendChild(option);
-                });
-            } catch (err) {
-                console.error("Error fetching services:", err);
-            }
-        }
-    });
-
-
-    // file part for applying for service
-    const uploadBox = document.getElementById("uploadBox");
-    const fileInput = document.getElementById("documents");
-    const fileList = document.getElementById("fileList");
-    const uploadPlaceholder = document.getElementById("uploadPlaceholder");
-
-    let selectedFiles = [];
-
-    // Prevent default drag behavior
-    ["dragenter", "dragover", "dragleave", "drop"].forEach(event =>
-        uploadBox.addEventListener(event, e => e.preventDefault())
-    );
-
-    // Highlight drag area
-    ["dragenter", "dragover"].forEach(event =>
-        uploadBox.addEventListener(event, () => uploadBox.classList.add("dragover"))
-    );
-    ["dragleave", "drop"].forEach(event =>
-        uploadBox.addEventListener(event, () => uploadBox.classList.remove("dragover"))
-    );
-
-    // Handle dropped files
-    uploadBox.addEventListener("drop", e => handleFiles(e.dataTransfer.files));
-
-    // Handle file input change
-    fileInput.addEventListener("change", () => handleFiles(fileInput.files));
-
-    function handleFiles(files) {
-        selectedFiles = [...selectedFiles, ...Array.from(files)];
-        updateFileInput();
-        renderFileList();
-    }
-
-    // Update hidden input so form submits the files
-    function updateFileInput() {
-        const dt = new DataTransfer();
-        selectedFiles.forEach(file => dt.items.add(file));
-        fileInput.files = dt.files;
-    }
-
-    // Render file previews
-    function renderFileList() {
-        fileList.innerHTML = "";
-        uploadPlaceholder.style.display = selectedFiles.length ? "none" : "block";
-
-        selectedFiles.forEach((file, index) => {
-            const preview = document.createElement("div");
-            preview.classList.add("file-preview");
-
-            if (file.type.startsWith("image/")) {
-                const img = document.createElement("img");
-                img.src = URL.createObjectURL(file);
-                preview.appendChild(img);
-            } else if (file.type === "application/pdf") {
-                preview.innerHTML = `<i class="bi bi-file-earmark-pdf-fill text-danger fs-2"></i><br>${file.name}`;
-            } else {
-                preview.innerHTML = `<i class="bi bi-file-earmark-fill text-secondary fs-2"></i><br>${file.name}`;
-            }
-
-            // Remove button
-            const removeBtn = document.createElement("button");
-            removeBtn.innerHTML = "&times;";
-            removeBtn.classList.add("remove-btn");
-            removeBtn.addEventListener("click", () => {
-                selectedFiles.splice(index, 1);
-                updateFileInput();
-                renderFileList();
-            });
-
-            preview.appendChild(removeBtn);
-            fileList.appendChild(preview);
         });
     }
 </script>

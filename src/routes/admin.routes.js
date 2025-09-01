@@ -7,7 +7,11 @@ import {
     showDepartments,
     showGlobalSearch, showUserController, updateUserController
 } from "../controller/admin.controller.js";
-import {addDepartmentController} from "../controller/department.controller.js";
+import {
+    addDepartmentController, deleteDepartmentController,
+    showDepartmentController,
+    updateDepartmentController
+} from "../controller/department.controller.js";
 import {addServiceController, showServices} from "../controller/service.controller.js";
 
 const router = express.Router();
@@ -29,6 +33,11 @@ router.get("/search", showGlobalSearch);
 // department routes
 router.get("/departments", showDepartments);
 router.post("/add_department", addDepartmentController);
+
+router.get("/departments/:id/show", showDepartmentController);
+router.post("/departments/:id/edit", updateDepartmentController);
+router.get("/departments/:id/delete", deleteDepartmentController);
+
 
 //Service routes
 router.post("/add_service", addServiceController);

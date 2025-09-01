@@ -43,7 +43,8 @@
                     <i class="bi bi-upload me-2 text-warning"></i> Upload Documents
                 </label>
 
-                <div id="uploadBox" class="upload-box text-center p-4 rounded-4 border border-2 border-dashed shadow-sm">
+                <div id="uploadBox"
+                     class="upload-box text-center p-4 rounded-4 border border-2 border-dashed shadow-sm">
                     <!-- Default placeholder -->
                     <div id="uploadPlaceholder">
                         <i class="bi bi-cloud-arrow-up-fill text-success fs-1"></i>
@@ -81,6 +82,7 @@
         border-color: #4CAF50;
         box-shadow: 0 6px 20px rgba(76, 175, 80, 0.15);
     }
+
     .file-preview {
         position: relative;
         width: 100%;
@@ -88,7 +90,7 @@
         border-radius: 12px;
         overflow: hidden;
         background: #f8f9fa;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -96,16 +98,18 @@
         text-align: center;
         padding: 4px;
     }
+
     .file-preview img {
         max-width: 100%;
         max-height: 100%;
         object-fit: cover;
     }
+
     .remove-btn {
         position: absolute;
         top: 4px;
         right: 4px;
-        background: rgba(0,0,0,0.6);
+        background: rgba(0, 0, 0, 0.6);
         color: white;
         border: none;
         border-radius: 50%;
@@ -117,9 +121,11 @@
         font-size: 14px;
         cursor: pointer;
     }
+
     .remove-btn:hover {
-        background: rgba(220,53,69,0.8);
+        background: rgba(220, 53, 69, 0.8);
     }
+
     /* Card with subtle gradient */
     .modern-card {
         background: linear-gradient(135deg, #ffffff, #f9fafc);
@@ -150,6 +156,7 @@
         border: 1px solid #e0e0e0;
         padding-left: 1.2rem;
     }
+
     .modern-input:focus {
         border-color: #4CAF50;
         box-shadow: 0 0 0 0.25rem rgba(76, 175, 80, 0.25);
@@ -162,8 +169,109 @@
         color: white;
         transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
+
     .btn-gradient:hover {
         transform: translateY(-2px);
         box-shadow: 0 8px 20px rgba(76, 175, 80, 0.4);
     }
 </style>
+
+
+<script>
+    <!--  department Select  -->
+    document.getElementById("departmentSelect").addEventListener("change", async function () {
+        const deptId = this.value;
+        const serviceSelect = document.getElementById("serviceSelect");
+        serviceSelect.innerHTML = `<option value=""> Select Service </option>`; // reset
+
+        if (deptId) {
+            try {
+                const res = await fetch(`/citizen/services/${deptId}`);
+                const services = await res.json();
+
+                services.forEach(s => {
+                    const option = document.createElement("option");
+                    option.value = s.id;
+                    option.textContent = s.name;
+                    serviceSelect.appendChild(option);
+                });
+            } catch (err) {
+                console.error("Error fetching services:", err);
+            }
+        }
+    });
+
+    const uploadBox = document.getElementById("uploadBox");
+    const fileInput = document.getElementById("documents");
+    const fileList = document.getElementById("fileList");
+    const uploadPlaceholder = document.getElementById("uploadPlaceholder");
+
+    let selectedFiles = [];
+
+    // Prevent default drag behavior
+    ["dragenter", "dragover", "dragleave", "drop"].forEach(event =>
+        uploadBox.addEventListener(event, e => e.preventDefault())
+    );
+
+    // Highlight drag area
+    ["dragenter", "dragover"].forEach(event =>
+        uploadBox.addEventListener(event, () => uploadBox.classList.add("dragover"))
+    );
+    ["dragleave", "drop"].forEach(event =>
+        uploadBox.addEventListener(event, () => uploadBox.classList.remove("dragover"))
+    );
+
+    // Handle dropped files
+    uploadBox.addEventListener("drop", e => handleFiles(e.dataTransfer.files));
+
+    // Handle file input change
+    fileInput.addEventListener("change", () => handleFiles(fileInput.files));
+
+    function handleFiles(files) {
+        selectedFiles = [...selectedFiles, ...Array.from(files)];
+        updateFileInput();
+        renderFileList();
+    }
+
+    // Update hidden input so form submits the files
+    function updateFileInput() {
+        const dt = new DataTransfer();
+        selectedFiles.forEach(file => dt.items.add(file));
+        fileInput.files = dt.files;
+    }
+
+    // Render file previews
+    function renderFileList() {
+        fileList.innerHTML = "";
+        uploadPlaceholder.style.display = selectedFiles.length ? "none" : "block";
+
+        selectedFiles.forEach((file, index) => {
+            const preview = document.createElement("div");
+            preview.classList.add("file-preview");
+
+            if (file.type.startsWith("image/")) {
+                const img = document.createElement("img");
+                img.src = URL.createObjectURL(file);
+                preview.appendChild(img);
+            } else if (file.type === "application/pdf") {
+                preview.innerHTML = `<i class="bi bi-file-earmark-pdf-fill text-danger fs-2"></i><br>${file.name}`;
+            } else {
+                preview.innerHTML = `<i class="bi bi-file-earmark-fill text-secondary fs-2"></i><br>${file.name}`;
+            }
+
+            // Remove button
+            const removeBtn = document.createElement("button");
+            removeBtn.innerHTML = "&times;";
+            removeBtn.classList.add("remove-btn");
+            removeBtn.addEventListener("click", () => {
+                selectedFiles.splice(index, 1);
+                updateFileInput();
+                renderFileList();
+            });
+
+            preview.appendChild(removeBtn);
+            fileList.appendChild(preview);
+        });
+    }
+
+</script>

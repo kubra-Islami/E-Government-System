@@ -18,6 +18,7 @@ import { getRequestsByCitizenId } from "../services/requests.service.js";
 import multer from "multer";
 import path from "path";
 import {getPaymentSuccess} from "../controller/payment.service.js";
+import {getNotificationsPage, markNotificationRead} from "../controller/notification.controller.js";
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -78,10 +79,8 @@ router.post("/profile/update", authMiddleware, updateCitizenProfile);
 // Upload avatar
 router.post("/profile/upload-avatar", authMiddleware, upload.single("avatar"), uploadAvatar);
 
-
-
-router.get("/notifications",authMiddleware, (req, res) => {
-    res.render("citizen/notifications", { title: "Notifications" });
-});
+// Notifications routes
+router.get("/notifications", authMiddleware, getNotificationsPage);
+router.post("/notifications/mark-read/:id", authMiddleware, markNotificationRead);
 
 export default router;
