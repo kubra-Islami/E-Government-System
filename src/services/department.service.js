@@ -13,7 +13,6 @@ export async function getAllDepartments () {
 
 }
 
-
 export const editDepartment = async (id, name) => {
     return await DepartmentDAO.updateDepartment(id, name);
 };

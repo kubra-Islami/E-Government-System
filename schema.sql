@@ -33,7 +33,8 @@ CREATE TABLE services
     name          VARCHAR(100) NOT NULL,
     department_id INT          NOT NULL REFERENCES departments (id) ON DELETE CASCADE,
     fee           DECIMAL(10, 2) DEFAULT 0,
-    created_at    TIMESTAMP      DEFAULT NOW()
+    created_at    TIMESTAMP      DEFAULT NOW(),
+    updated_at    TIMESTAMP DEFAULT NOW()
 );
 
 -- 4. Requests   ===>   درخواست ها

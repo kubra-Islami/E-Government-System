@@ -1,6 +1,7 @@
-import {addService, getAllServices} from "../services/service.service.js"
+import * as ServiceOfService from "../services/service.service.js"
+import {addService, editService} from "../services/service.service.js";
 import {getAllDepartments} from "../services/department.service.js";
-
+import * as DepartmentService from "../services/department.service.js";
 
 export async function addServiceController(req, res) {
     try {
@@ -17,7 +18,7 @@ export async function addServiceController(req, res) {
 
 export const showServices = async (req, res) => {
     try {
-        const services = await getAllServices();
+        const services = await ServiceOfService.getAllServices();
         const departments = await getAllDepartments();
 
         res.render("admin/services", {
@@ -28,4 +29,32 @@ export const showServices = async (req, res) => {
     } catch (error) {
         res.status(500).send("Server Error");
     }
+};
+
+// Show edit form
+export const showServiceController = async (req, res) => {
+    const { id } = req.params;
+    const service = await ServiceOfService.getService(id);
+    const departments = await getAllDepartments();
+
+    res.render("admin/edit_service", { title: "Edit Service", service,departments });
+};
+
+// Handle update
+export const updateServiceController = async (req, res) => {
+    const { id, name, fee, department } = req.body;
+    try {
+        await editService(name, fee, department, id);
+        res.redirect("/admin/services");
+    } catch (err) {
+        res.status(500).send("Error updating service: " + err.message);
+    }
+};
+
+
+// Handle delete
+export const deleteServiceController = async (req, res) => {
+    const { id } = req.params;
+    await ServiceOfService.removeService(id);
+    res.redirect("/admin/services");
 };

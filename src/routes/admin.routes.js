@@ -12,7 +12,12 @@ import {
     showDepartmentController,
     updateDepartmentController
 } from "../controller/department.controller.js";
-import {addServiceController, showServices} from "../controller/service.controller.js";
+import {
+    addServiceController, deleteServiceController,
+    showServiceController,
+    showServices,
+    updateServiceController
+} from "../controller/service.controller.js";
 
 const router = express.Router();
 
@@ -27,7 +32,6 @@ router.post("/users/:id/edit", updateUserController);
 
 // Reports
 router.get("/reports", showReports);
-router.get("/services", showServices);
 router.get("/search", showGlobalSearch);
 
 // department routes
@@ -38,8 +42,11 @@ router.get("/departments/:id/show", showDepartmentController);
 router.post("/departments/:id/edit", updateDepartmentController);
 router.get("/departments/:id/delete", deleteDepartmentController);
 
-
 //Service routes
 router.post("/add_service", addServiceController);
+router.get("/services", showServices);
 
+router.get("/services/:id/show", showServiceController);
+router.post("/services/:id/edit", updateServiceController);
+router.get("/services/:id/delete", deleteServiceController);
 export default router;
