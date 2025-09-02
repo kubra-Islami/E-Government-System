@@ -1,27 +1,27 @@
 import * as OfficerService from '../services/officer.service.js';
-import {getServicesByDepartment} from "./citizen.controller.js";
 import pool from "../config/db.js";
+
 export async function dashboard(req, res) {
     const officer = req.user;
-
     // Read query params
-    const { q, status, page = 1, limit = 20, fromDate, toDate } = req.query;
-
+    const { q, status, page = 1, limit = 20, from, to } = req.query;
     const filters = {
         search: q || null,
         status: status || null,
         page: parseInt(page, 10),
         limit: parseInt(limit, 10),
-        fromDate: fromDate || null,
-        toDate: toDate || null,
+        fromDate: from || null,
+        toDate: to || null,
     };
 
     const requests = await OfficerService.listRequestsForOfficer(officer, filters);
     console.log('requests ', requests);
+
     const services = await pool.query(
         'SELECT * FROM services WHERE department_id = $1',
         [officer.department_id]
     );
+
     res.render('officer/dashboard', {
         title: 'Officer Dashboard',
         requests,
@@ -29,13 +29,12 @@ export async function dashboard(req, res) {
         status,
         page,
         limit,
-        fromDate,
-        toDate,
-        services: services.fields,
+        fromDate: filters.fromDate,
+        toDate: filters.toDate,
+        services: services.rows,
         activePage: "dashboard"
     });
 }
-
 
 export async function requestDetail(req, res) {
     try {

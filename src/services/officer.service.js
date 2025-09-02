@@ -4,6 +4,7 @@ import * as UserDAO from '../dao/user.dao.js';
 
 export async function listRequestsForOfficer(officerUser, filters) {
     const departmentId = officerUser.department_id;
+    // console.log('departmentId ', departmentId);
     return await RequestDAO.getRequestsForDepartment({ departmentId, ...filters });
 }
 

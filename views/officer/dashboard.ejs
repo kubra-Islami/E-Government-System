@@ -10,7 +10,8 @@
             <div class="col-md-3">
                 <div class="input-group">
                     <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
-                    <input type="text" name="q" class="form-control" placeholder="Search by name or request ID" value="<%= q || '' %>">
+                    <input type="text" name="q" class="form-control" placeholder="Search by name or request ID"
+                           value="<%= q || '' %>">
                 </div>
             </div>
 
@@ -18,10 +19,11 @@
             <div class="col-md-2">
                 <select name="status" class="form-select">
                     <option value="">All statuses</option>
-                    <option value="submitted" <%= status==='submitted' ? 'selected' : '' %>>Submitted</option>
-                    <option value="under_review" <%= status==='under_review' ? 'selected' : '' %>>Under Review</option>
-                    <option value="approved" <%= status==='approved' ? 'selected' : '' %>>Approved</option>
-                    <option value="rejected" <%= status==='rejected' ? 'selected' : '' %>>Rejected</option>
+                    <option value="submitted" <%= status === 'submitted' ? 'selected' : '' %>>Submitted</option>
+                    <option value="under_review" <%= status === 'under_review' ? 'selected' : '' %>>Under Review
+                    </option>
+                    <option value="approved" <%= status === 'approved' ? 'selected' : '' %>>Approved</option>
+                    <option value="rejected" <%= status === 'rejected' ? 'selected' : '' %>>Rejected</option>
                 </select>
             </div>
 
@@ -95,11 +97,12 @@
                                 rejected: "danger"
                             }[r.status]; %>
                             <span class="badge bg-<%= badgeClass %> text-uppercase px-3 py-2">
-                                    <%= r.status.replace('_', ' ') %>
-                                </span>
+                                        <%= r.status.replace('_', ' ') %>
+                                    </span>
                         </td>
                         <td class="text-center">
-                            <a href="/officer/requests/<%= r.id %>" class="btn btn-sm btn-outline-primary" data-bs-toggle="tooltip" title="View Details">
+                            <a href="/officer/requests/<%= r.id %>" class="btn btn-sm btn-outline-primary"
+                               data-bs-toggle="tooltip" title="View Details">
                                 <i class="bi bi-folder2-open"></i>
                             </a>
                         </td>
@@ -112,8 +115,8 @@
 </div>
 
 <script>
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl);
     });
 </script>

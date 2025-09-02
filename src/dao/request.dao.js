@@ -79,9 +79,6 @@ export const getRequestsByCitizenId = async (citizenId) => {
 
     `;
     const { rows } = await pool.query(sql, [citizenId]);
-
-    console.log('rows')
-    console.log(rows)
     return rows.map(row => new Request(row));
 };
 
@@ -106,9 +103,9 @@ export async function getRequestsForDepartment(
         values.push(status);
     }
     if (search) {
-        where += ` AND (u.name ILIKE $${idx} OR CAST(r.id AS TEXT) = $${idx})`;
-        values.push(`%${search}%`);
-        idx++;
+        where += ` AND (u.name ILIKE $${idx} OR CAST(r.id AS TEXT) = $${idx + 1})`;
+        values.push(`%${search}%`, search);
+        idx += 2;
     }
     if (fromDate) {
         where += ` AND r.created_at >= $${idx++}`;
@@ -121,6 +118,7 @@ export async function getRequestsForDepartment(
 
     const sql = `
         SELECT r.id,
+               r.request_number,
                r.status,
                r.created_at,
                r.updated_at,
@@ -136,9 +134,16 @@ export async function getRequestsForDepartment(
             LIMIT $${idx++} OFFSET $${idx++}
     `;
     values.push(limit, offset);
-
-    const { rows } = await pool.query(sql, values);
-    return rows;
+    try {
+        const { rows } = await pool.query(sql, values);
+        console.log('rows', rows);
+        return rows;
+    } catch (err) {
+        console.error('SQL ERROR:', err.message);
+        console.error('SQL QUERY:', sql);
+        console.error('SQL VALUES:', values);
+        throw err;
+    }
 }
 
 
