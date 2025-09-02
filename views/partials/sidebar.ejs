@@ -39,26 +39,24 @@
         <% } %>
 
         <% if (user && user.role === "officer") { %>
-            <li class="nav-item mb-1">
-                <a href="/officer/dashboard" class="nav-link text-dark d-flex align-items-center rounded">
-                    <i class="bi bi-speedometer2 me-2"></i> Dashboard
-                </a>
-            </li>
-            <li class="nav-item mb-1">
-                <a href="/officer/requests" class="nav-link text-dark d-flex align-items-center rounded">
-                    <i class="bi bi-journal-text me-2"></i> Review Requests
-                </a>
-            </li>
-            <li class="nav-item mb-1">
-                <a href="/officer/search" class="nav-link text-dark d-flex align-items-center rounded">
-                    <i class="bi bi-search me-2"></i> Search & Filter
-                </a>
-            </li>
-            <li class="nav-item mb-1">
-                <a href="/officer/notifications" class="nav-link text-dark d-flex align-items-center rounded">
-                    <i class="bi bi-bell me-2"></i> Notifications
-                </a>
-            </li>
+                <li class="nav-item mb-1">
+                    <a href="/officer/dashboard"
+                       class="nav-link d-flex align-items-center rounded <%= (activePage === 'dashboard') ? 'active text-white bg-primary' : 'text-dark' %>">
+                        <i class="bi bi-speedometer2 me-2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a href="/officer/requests"
+                       class="nav-link d-flex align-items-center rounded <%= (activePage === 'requests') ? 'active text-white bg-primary' : 'text-dark' %>">
+                        <i class="bi bi-journal-text me-2"></i> Review Requests
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a href="/officer/notifications"
+                       class="nav-link d-flex align-items-center rounded <%= (activePage === 'notifications') ? 'active text-white bg-primary' : 'text-dark' %>">
+                        <i class="bi bi-bell me-2"></i> Notifications
+                    </a>
+                </li>
         <% } %>
 
         <% if (user && user.role === "admin") { %>

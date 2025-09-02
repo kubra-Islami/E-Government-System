@@ -16,3 +16,4 @@ export async function getRequestById( request_id){
 export async function getRequestsByCitizenId(citizenId) {
     return await getRequestsByCitizenIdDao(citizenId);
 }
+

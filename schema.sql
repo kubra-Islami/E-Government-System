@@ -43,7 +43,7 @@ CREATE TABLE requests
     id          SERIAL PRIMARY KEY,
     citizen_id  INT NOT NULL REFERENCES users (id) ON DELETE CASCADE,
     service_id  INT NOT NULL REFERENCES services (id) ON DELETE CASCADE,
-    reviewed_by INT REFERENCES Users (id),
+    reviewed_by INT REFERENCES users (id),
     status      VARCHAR(20) CHECK (status IN ('submitted', 'under_review', 'approved', 'rejected')) DEFAULT 'submitted',
     created_at  TIMESTAMP                                                                           DEFAULT NOW(),
     updated_at  TIMESTAMP                                                                           DEFAULT NOW()

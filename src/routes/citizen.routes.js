@@ -55,9 +55,6 @@ router.post("/payments/:requestId", authMiddleware, submitPayment);
 router.get("/payments", authMiddleware, async (req, res, next) => {
     try {
         const requests = await getRequestsByCitizenId(req.user.id);
-
-        // console.log(requests);
-
         const pendingRequests = requests.filter(r => r.status !== "paid");
         res.render("citizen/pendingPayments", {
             title: "Pending Payments",

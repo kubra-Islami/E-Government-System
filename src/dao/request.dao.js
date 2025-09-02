@@ -84,3 +84,86 @@ export const getRequestsByCitizenId = async (citizenId) => {
     console.log(rows)
     return rows.map(row => new Request(row));
 };
+
+export async function getRequestsForDepartment(
+    {
+        departmentId,
+        status,
+        search,
+        page = 1,
+        limit = 20,
+        fromDate,
+        toDate
+    }) {
+    const offset = (page - 1) * limit;
+    const values = [departmentId];
+    let idx = 2;
+
+    let where = `WHERE d.id = $1`;
+
+    if (status) {
+        where += ` AND r.status = $${idx++}`;
+        values.push(status);
+    }
+    if (search) {
+        where += ` AND (u.name ILIKE $${idx} OR CAST(r.id AS TEXT) = $${idx})`;
+        values.push(`%${search}%`);
+        idx++;
+    }
+    if (fromDate) {
+        where += ` AND r.created_at >= $${idx++}`;
+        values.push(fromDate);
+    }
+    if (toDate) {
+        where += ` AND r.created_at <= $${idx++}`;
+        values.push(toDate);
+    }
+
+    const sql = `
+        SELECT r.id,
+               r.status,
+               r.created_at,
+               r.updated_at,
+               u.name AS citizen_name,
+               s.name AS service_name,
+               d.name AS department_name
+        FROM requests r
+                 JOIN services s ON r.service_id = s.id
+                 JOIN departments d ON s.department_id = d.id
+                 JOIN users u ON r.citizen_id = u.id
+            ${where}
+        ORDER BY r.created_at DESC
+            LIMIT $${idx++} OFFSET $${idx++}
+    `;
+    values.push(limit, offset);
+
+    const { rows } = await pool.query(sql, values);
+    return rows;
+}
+
+
+export async function getRequestById(id) {
+    const { rows } = await pool.query(`
+    SELECT r.*, s.name AS service_name, u.name AS citizen_name, u.email AS citizen_email
+    FROM requests r
+    JOIN services s ON r.service_id = s.id
+    JOIN users u ON r.citizen_id = u.id
+    WHERE r.id = $1
+  `, [id]);
+    return rows[0];
+}
+
+export async function updateRequestStatus({ id, status, officer_id, officer_comment }) {
+    const { rows } = await pool.query(`
+    UPDATE requests
+    SET status = $1, assigned_officer_id = $2, officer_comment = $3, updated_at = now()
+    WHERE id = $4
+    RETURNING *
+  `, [status, officer_id, officer_comment, id]);
+    return rows[0];
+}
+
+export async function getDocumentsByRequestId(requestId) {
+    const { rows } = await pool.query(`SELECT * FROM documents WHERE request_id = $1`, [requestId]);
+    return rows;
+}

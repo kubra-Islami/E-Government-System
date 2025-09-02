@@ -1,6 +1,5 @@
 import * as ServiceOfService from "../services/service.service.js"
 import {addService, editService} from "../services/service.service.js";
-import {getAllDepartments} from "../services/department.service.js";
 import * as DepartmentService from "../services/department.service.js";
 
 export async function addServiceController(req, res) {
@@ -19,7 +18,7 @@ export async function addServiceController(req, res) {
 export const showServices = async (req, res) => {
     try {
         const services = await ServiceOfService.getAllServices();
-        const departments = await getAllDepartments();
+        const departments = await DepartmentService.getAllDepartments();
 
         res.render("admin/services", {
             title: "Manage Services",
@@ -58,3 +57,5 @@ export const deleteServiceController = async (req, res) => {
     await ServiceOfService.removeService(id);
     res.redirect("/admin/services");
 };
+
+

@@ -51,11 +51,12 @@ export const submitServiceApplication = async (req, res, next) => {
     try {
         const { department, service } = req.body;
         const citizenId = req.user.id;
+        const serviceId = parseInt(req.body.service, 10);
 
         // Insert request
         const newRequest = await addRequest({
             citizen_id: citizenId,
-            service_id: service,
+            service_id: serviceId,
         });
         // Handle file uploads (if any)
         if (req.files && req.files.length > 0) {
@@ -67,11 +68,9 @@ export const submitServiceApplication = async (req, res, next) => {
                 });
             }
         }
-        // console.log(req.files);
-        // res.redirect("/citizen/requests");
-        // res.redirect(`/citizen/payments/${newRequest.id}`);
         res.redirect("/citizen/payments");
     } catch (err) {
+        console.error("Failed to add request:", err);
         next(err);
     }
 };

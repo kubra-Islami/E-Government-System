@@ -35,6 +35,14 @@
                         class="form-select form-select-lg rounded-pill shadow-sm modern-input">
                     <option value="" disabled selected>Select Service</option>
                 </select>
+                <!-- Service Fee -->
+                <div class="my-4" id="serviceFeeBox" style="display: none;">
+                    <label class="form-label fw-semibold text-muted">
+                        <i class="bi bi-cash-coin me-2 text-success"></i> Service Fee
+                    </label>
+                    <div class="p-3 border bg-light fw-bold text-primary" id="serviceFee"></div>
+                </div>
+
             </div>
 
             <!-- Upload -->
@@ -193,6 +201,7 @@
                     const option = document.createElement("option");
                     option.value = s.id;
                     option.textContent = s.name;
+                    option.dataset.fee = s.fee;
                     serviceSelect.appendChild(option);
                 });
             } catch (err) {
@@ -200,6 +209,20 @@
             }
         }
     });
+    // Show fee when a service is selected
+    document.getElementById("serviceSelect").addEventListener("change", function () {
+        const selectedOption = this.options[this.selectedIndex];
+        const feeBox = document.getElementById("serviceFeeBox");
+        const feeDisplay = document.getElementById("serviceFee");
+
+        if (selectedOption && selectedOption.dataset.fee) {
+            feeDisplay.textContent = `$  ${selectedOption.dataset.fee}  `;
+            feeBox.style.display = "block";
+        } else {
+            feeBox.style.display = "none";
+        }
+    });
+
 
     const uploadBox = document.getElementById("uploadBox");
     const fileInput = document.getElementById("documents");

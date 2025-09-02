@@ -1,0 +1,25 @@
+<h2>Request: <%= request.request_number %></h2>
+<p>Service: <%= request.service_name %></p>
+<p>Citizen: <%= request.citizen_name %> - <%= request.citizen_email %></p>
+
+<h4>Submitted Data</h4>
+<pre><%= JSON.stringify(request.data, null, 2) %></pre>
+
+<h4>Documents</h4>
+<ul>
+    <% documents.forEach(d => { %>
+        <li>
+            <a href="/officer/documents/<%= d.id %>/download"><%= d.filename %></a>
+        </li>
+    <% }) %>
+</ul>
+
+<form action="/officer/requests/<%= request.id %>/review" method="POST">
+    <div class="mb-3">
+        <label>Comment (visible to citizen)</label>
+        <textarea name="comment" class="form-control"></textarea>
+    </div>
+
+    <button type="submit" name="action" value="approve" class="btn btn-success">Approve</button>
+    <button type="submit" name="action" value="reject" class="btn btn-danger">Reject</button>
+</form>
