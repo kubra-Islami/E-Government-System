@@ -1,26 +1,71 @@
-
-<h2>Review Request #<%= request.id %></h2>
-<p><strong>Citizen:</strong> <%= request.citizen_name %></p>
-<p><strong>Service:</strong> <%= request.service_name %></p>
-
-<h4>Documents</h4>
-<ul>
-    <% request.documents.forEach(d => { %>
-        <li><a href="<%= d.url %>" target="_blank"><%= d.filename %></a></li>
-    <% }) %>
-</ul>
-
-<form action="/officer/requests/<%= request.id %>/decision" method="POST">
-    <div class="mb-3">
-        <label>Decision</label>
-        <select name="status" class="form-select">
-            <option value="Approved">Approve</option>
-            <option value="Rejected">Reject</option>
-        </select>
+<div class="container py-5">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-primary">Review Request <span class="text-secondary">#<%= request.id %></span></h2>
+        <span class="badge bg-warning text-dark fs-6 text-uppercase px-3 py-2"><%= request.status %></span>
     </div>
-    <div class="mb-3">
-        <label>Comments</label>
-        <textarea name="comments" class="form-control"></textarea>
+
+    <!-- Request Info -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="card-title fw-semibold">Citizen Information</h5>
+                    <p class="mb-1"><strong>Name:</strong> <%= request.citizen_name %></p>
+                    <p class="mb-0"><strong>Email:</strong> <%= request.citizen_email || 'N/A' %></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="card-title fw-semibold">Service Information</h5>
+                    <p class="mb-1"><strong>Service:</strong> <%= request.service_name %></p>
+                    <p class="mb-0"><strong>Department:</strong> <%= request.department_name %></p>
+                </div>
+            </div>
+        </div>
     </div>
-    <button class="btn btn-success">Submit Decision</button>
-</form>
+
+    <!-- Documents Section -->
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body">
+            <h5 class="fw-semibold mb-3">Uploaded Documents</h5>
+            <% if (documents.length === 0) { %>
+                <p class="text-muted">No documents uploaded.</p>
+            <% } else { %>
+                <ul class="list-group list-group-flush">
+                    <% documents.forEach(d => { %>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-file-earmark-text me-2"></i><%= d.filename %></span>
+                            <a href="<%= d.url %>" target="_blank" class="btn btn-sm btn-outline-primary">View</a>
+                        </li>
+                    <% }) %>
+                </ul>
+            <% } %>
+        </div>
+    </div>
+
+    <!-- Decision Form -->
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <h5 class="fw-semibold mb-3">Officer Decision</h5>
+            <form action="/officer/requests/<%= request.id %>/review" method="POST">
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Decision</label>
+                    <select name="action" class="form-select" required>
+                        <option value="" disabled selected>Select action</option>
+                        <option value="approve">Approve</option>
+                        <option value="reject">Reject</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Comments</label>
+                    <textarea name="comment" class="form-control" rows="4" placeholder="Add any notes or comments"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 fw-semibold">Submit Decision</button>
+            </form>
+        </div>
+    </div>
+</div>
+

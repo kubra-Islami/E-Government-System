@@ -44,7 +44,6 @@ CREATE TABLE requests
     citizen_id  INT NOT NULL REFERENCES users (id) ON DELETE CASCADE,
     service_id  INT NOT NULL REFERENCES services (id) ON DELETE CASCADE,
     reviewed_by INT REFERENCES users (id),
-    request_number VARCHAR(50),
     assigned_officer_id INT REFERENCES users(id),
     officer_comment TEXT,
     status      VARCHAR(20) CHECK (status IN ('submitted', 'under_review', 'approved', 'rejected')) DEFAULT 'submitted',

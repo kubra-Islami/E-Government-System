@@ -82,6 +82,17 @@ export const getRequestsByCitizenId = async (citizenId) => {
     return rows.map(row => new Request(row));
 };
 
+export const getOfficerDepartmentId = async (officerId) => {
+    const sql = `
+        SELECT department_id
+        FROM users
+        WHERE id = $1 AND role = 'officer'
+    `;
+    const { rows } = await pool.query(sql, [officerId]);
+    return rows.length ? rows[0].department_id : null;
+};
+
+
 export async function getRequestsForDepartment(
     {
         departmentId,
@@ -118,7 +129,6 @@ export async function getRequestsForDepartment(
 
     const sql = `
         SELECT r.id,
-               r.request_number,
                r.status,
                r.created_at,
                r.updated_at,
@@ -136,27 +146,33 @@ export async function getRequestsForDepartment(
     values.push(limit, offset);
     try {
         const { rows } = await pool.query(sql, values);
-        console.log('rows', rows);
         return rows;
     } catch (err) {
-        console.error('SQL ERROR:', err.message);
-        console.error('SQL QUERY:', sql);
-        console.error('SQL VALUES:', values);
         throw err;
     }
 }
 
 
-export async function getRequestById(id) {
+export async function getRequestById(requestId) {
     const { rows } = await pool.query(`
-    SELECT r.*, s.name AS service_name, u.name AS citizen_name, u.email AS citizen_email
-    FROM requests r
-    JOIN services s ON r.service_id = s.id
-    JOIN users u ON r.citizen_id = u.id
-    WHERE r.id = $1
-  `, [id]);
+        SELECT
+            r.*,
+            s.name AS service_name,
+            d.id AS department_id,
+            d.name AS department_name,
+            u.name AS citizen_name,
+            u.email AS citizen_email
+        FROM requests r
+                 JOIN services s ON r.service_id = s.id
+                 JOIN departments d ON s.department_id = d.id
+                 JOIN users u ON r.citizen_id = u.id
+        WHERE r.id = $1
+    `, [requestId]);
     return rows[0];
 }
+
+
+
 
 export async function updateRequestStatus({ id, status, officer_id, officer_comment }) {
     const { rows } = await pool.query(`

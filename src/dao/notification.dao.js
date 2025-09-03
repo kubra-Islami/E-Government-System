@@ -25,11 +25,22 @@ export const markNotificationRead = async (notificationId, userId) => {
 };
 
 // Create a notification
-export const createNotification = async (userId, message) => {
-    const result = await db.query(
-        `INSERT INTO notifications (user_id, message) 
-         VALUES ($1, $2) RETURNING *`,
-        [userId, message]
-    );
-    return result.rows[0];
+// export const createNotification = async (userId, message) => {
+//     const result = await db.query(
+//         `INSERT INTO notifications (user_id, message)
+//          VALUES ($1, $2) RETURNING *`,
+//         [userId, message]
+//     );
+//     return result.rows[0];
+// };
+
+
+export const createNotification = async ({ user_id, title, message, link }) => {
+    const { rows } = await pool.query(`
+        INSERT INTO notifications (user_id, title, message, link)
+        VALUES ($1, $2, $3, $4)
+            RETURNING *
+    `, [user_id, title, message, link]);
+
+    return rows[0];
 };
