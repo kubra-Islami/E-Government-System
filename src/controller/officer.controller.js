@@ -1,7 +1,7 @@
 import * as OfficerService from '../services/officer.service.js';
+import * as DocumentDAO from "../dao/document.dao.js";
 import pool from "../config/db.js";
-import * as RequestDAO from "../dao/request.dao.js";
-import * as ServiceDAO from "../services/officer.service.js";
+import path from "path";
 
 export async function dashboard(req, res) {
     const officer = req.user;
@@ -71,6 +71,24 @@ export async function requestsList(req, res) {
     }
 }
 
+export async function downloadDocument(req, res, next) {
+    try {
+        const docId = req.params.id;
+        const document = await DocumentDAO.getById(docId);
+
+        if (!document) {
+            return res.status(404).send("Document not found");
+        }
+
+        // Build correct absolute path inside uploads/
+        const filePath = path.join(process.cwd(), "uploads", document.file_path);
+
+        return res.download(filePath, document.original_name);
+    } catch (err) {
+        console.error("Error downloading file:", err);
+        next(err);
+    }
+}
 
 export async function postReview(req, res) {
     const { action, comment } = req.body;

@@ -52,7 +52,10 @@
                             <% documents.forEach(d => { %>
                                 <li class="list-group-item d-flex justify-content-between align-items-center py-2 px-2">
                                     <span><i class="bi bi-file-earmark-text me-2"></i><%= d.filename %></span>
-                                    <a href="/officer/documents/<%= d.id %>/download" class="btn btn-sm btn-outline-primary">Download</a>
+<!--                                    <a href="/officer/documents/<%= d.id %>/download" class="btn btn-sm btn-outline-primary">Download</a>-->
+                                    <a href="/officer/documents/<%= d.id %>/download" class="btn btn-sm btn-outline-primary">
+                                        Download
+                                    </a>
                                 </li>
                             <% }) %>
                         </ul>

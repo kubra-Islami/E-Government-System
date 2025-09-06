@@ -8,6 +8,9 @@ router.get('/dashboard', OfficerController.dashboard);
 router.get('/requests', OfficerController.requestsList);
 router.get('/requests/:id', OfficerController.requestDetail);
 router.post('/requests/:id/review', OfficerController.postReview);
+router.get('/documents/:id/download', OfficerController.downloadDocument);
+
+
 // add more routes: assign, download doc, add note, etc.
 
 export default router;
