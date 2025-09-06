@@ -1,8 +1,5 @@
 import pool from "../config/db.js";
 import Service from "../models/Service.js";
-// import * as DepartmentDAO from "./department.dao.js";
-import * as ServiceDAO from "./service.dao.js";
-
 
 export async function addServiceDao(data) {
     const {name, department_id, fee} = data;
@@ -44,6 +41,15 @@ export const getServicesByDepartmentId = async (departmentId) => {
     return rows;
 };
 
+export async function getServicesByDepartment(departmentId) {
+    const { rows } = await pool.query(`
+        SELECT id, name, fee 
+        FROM services 
+        WHERE department_id = $1
+        ORDER BY name
+    `, [departmentId]);
+    return rows;
+}
 // Update Service
 export const updateService = async (name, fee, department_id, id) => {
     const result = await pool.query(

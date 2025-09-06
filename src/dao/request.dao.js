@@ -172,7 +172,18 @@ export async function getRequestById(requestId) {
 }
 
 
+export async function getRequestsByDepartment(departmentId) {
+    const { rows } = await pool.query(`
+        SELECT r.id, r.request_number, r.status, u.name AS citizen_name, u.email AS citizen_email, s.name AS service_name
+        FROM requests r
+                 JOIN users u ON r.citizen_id = u.id
+                 JOIN services s ON r.service_id = s.id
+        WHERE s.department_id = $1
+        ORDER BY r.created_at DESC
+    `, [departmentId]);
 
+    return rows;
+}
 
 export async function updateRequestStatus({ id, status, officer_id, officer_comment }) {
     const { rows } = await pool.query(`

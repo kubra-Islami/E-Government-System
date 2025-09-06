@@ -1,5 +1,7 @@
 import * as OfficerService from '../services/officer.service.js';
 import pool from "../config/db.js";
+import * as RequestDAO from "../dao/request.dao.js";
+import * as ServiceDAO from "../services/officer.service.js";
 
 export async function dashboard(req, res) {
     const officer = req.user;
@@ -45,6 +47,30 @@ export async function requestDetail(req, res) {
         return res.status(404).send('Not found');
     }
 }
+
+export async function requestsList(req, res) {
+    const user = req.user;
+
+    try {
+        const requests = await OfficerService.getRequestsByDepartment(user.department_id);
+        const services = await OfficerService.getServicesByDepartment(user.department_id);
+
+        res.render('officer/requests', {
+            user,
+            requests,
+            services,
+            activePage: 'requests',
+            q: req.query.q || '',
+            status: req.query.status || '',
+            fromDate: req.query.from || '',
+            toDate: req.query.to || ''
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server Error');
+    }
+}
+
 
 export async function postReview(req, res) {
     const { action, comment } = req.body;

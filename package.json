@@ -2,13 +2,13 @@
   "name": "e-government-system-api",
   "version": "1.0.0",
   "description": "",
-  "homepage": "https://github.com/kubra-Islami/E-Government-System-API#readme",
+  "homepage": "https://github.com/kubra-Islami/E-Government-System#readme",
   "bugs": {
-    "url": "https://github.com/kubra-Islami/E-Government-System-API/issues"
+    "url": "https://github.com/kubra-Islami/E-Government-System/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kubra-Islami/E-Government-System-API.git"
+    "url": "git+https://github.com/kubra-Islami/E-Government-System"
   },
   "license": "ISC",
   "author": "",
