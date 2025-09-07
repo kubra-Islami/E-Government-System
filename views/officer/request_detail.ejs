@@ -49,15 +49,18 @@
                         <p class="text-muted small">No documents uploaded.</p>
                     <% } else { %>
                         <ul class="list-group list-group-flush small">
-                            <% documents.forEach(d => { %>
-                                <li class="list-group-item d-flex justify-content-between align-items-center py-2 px-2">
-                                    <span><i class="bi bi-file-earmark-text me-2"></i><%= d.filename %></span>
-<!--                                    <a href="/officer/documents/<%= d.id %>/download" class="btn btn-sm btn-outline-primary">Download</a>-->
-                                    <a href="/officer/documents/<%= d.id %>/download" class="btn btn-sm btn-outline-primary">
-                                        Download
-                                    </a>
-                                </li>
-                            <% }) %>
+                            <% if ((documents || []).length === 0) { %>
+                                <p class="text-muted small">No documents uploaded.</p>
+                            <% } else { %>
+                                <ul class="list-group list-group-flush small">
+                                    <% documents.forEach(d => { %>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <span><i class="bi bi-file-earmark-text me-2"></i><%= d.filename %></span>
+                                            <a href="/officer/documents/<%= d.id %>/download" target="_blank" class="btn btn-sm btn-outline-primary">Download</a>
+                                        </li>
+                                    <% }) %>
+                                </ul>
+                            <% } %>
                         </ul>
                     <% } %>
                 </div>
@@ -70,27 +73,25 @@
                 <div class="card-body">
                     <h6 class="fw-semibold mb-2"><i class="bi bi-check2-square me-2"></i>Officer Review</h6>
 
-                    <% if(request.status === 'approved' || request.status === 'rejected') { %>
-                        <p class="text-muted">This request has been <strong><%= request.status %></strong>. You cannot change its status.</p>
-                        <% if(request.officer_comment){ %>
-                            <div class="alert alert-secondary p-2 mt-2" role="alert">
-                                <strong>Comment:</strong> <%= request.officer_comment %>
-                            </div>
-                        <% } %>
-                    <% } else { %>
+                    <% if(request.status === 'submitted') { %>
+                        <!-- First review form -->
                         <form action="/officer/requests/<%= request.id %>/review" method="POST">
-                            <div class="mb-3">
-                                <textarea name="comment" class="form-control form-control-sm" rows="4" placeholder="Add comments for the citizen"></textarea>
-                            </div>
+                            <textarea name="comment" class="form-control mb-2" placeholder="First review comments"></textarea>
+                            <button type="submit" name="action" value="review" class="btn btn-warning w-100">Mark as Under Review</button>
+                        </form>
+
+                    <% } else if(request.status === 'under_review') { %>
+                        <!-- Final decision form -->
+                        <form action="/officer/requests/<%= request.id %>/review" method="POST">
+                            <textarea name="comment" class="form-control mb-2" placeholder="Final decision comments"></textarea>
                             <div class="d-flex gap-2">
-                                <button type="submit" name="action" value="approve" class="btn btn-success flex-grow-1 fw-semibold">
-                                    <i class="bi bi-hand-thumbs-up me-1"></i>Approve
-                                </button>
-                                <button type="submit" name="action" value="reject" class="btn btn-danger flex-grow-1 fw-semibold">
-                                    <i class="bi bi-hand-thumbs-down me-1"></i>Reject
-                                </button>
+                                <button type="submit" name="action" value="approve" class="btn btn-success flex-grow-1">Approve</button>
+                                <button type="submit" name="action" value="reject" class="btn btn-danger flex-grow-1">Reject</button>
                             </div>
                         </form>
+
+                    <% } else { %>
+                        <p class="text-muted">This request has been <strong><%= request.status %></strong>.</p>
                     <% } %>
                 </div>
             </div>

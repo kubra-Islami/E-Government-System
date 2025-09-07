@@ -1,5 +1,4 @@
 import {
-    fetchReports,
     getDashboardStats,
     getUserById,
     listUsers,
@@ -14,7 +13,9 @@ import {getAllDepartments} from "../services/department.service.js";
 export const getAdminDashboard = async (req, res, next) => {
     try {
         const stats = await getDashboardStats();
+
         res.render("admin/dashboard", {
+            layout: "layouts/admin_layout",
             title: "Admin Dashboard",
             user: req.user,
             stats

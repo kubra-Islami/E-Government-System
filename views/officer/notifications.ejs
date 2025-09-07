@@ -1,0 +1,24 @@
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-primary">Notifications</h2>
+        <span class="badge bg-info text-dark">You have <%= notifications.length %> notifications</span>
+    </div>
+
+    <% if (notifications.length === 0) { %>
+        <div class="alert alert-secondary">No notifications yet.</div>
+    <% } else { %>
+        <ul class="list-group shadow-sm">
+            <% notifications.forEach(n => { %>
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div>
+                        <p class="mb-1"><%= n.message %></p>
+                        <small class="text-muted"><%= new Date(n.created_at).toLocaleString() %></small>
+                    </div>
+                    <% if (!n.read) { %>
+                        <span class="badge bg-warning text-dark">New</span>
+                    <% } %>
+                </li>
+            <% }) %>
+        </ul>
+    <% } %>
+</div>

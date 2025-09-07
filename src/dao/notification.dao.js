@@ -2,34 +2,36 @@ import db from "../config/db.js";
 
 // Fetch all notifications for a user
 export const fetchNotificationsByUserId = async (userId) => {
-    const result = await db.query(
-        `SELECT id, user_id, request_id, message, channel, is_read, created_at
-         FROM notifications
-         WHERE user_id = $1
-         ORDER BY created_at DESC`,
+    const { rows } = await db.query(
+        `SELECT id, user_id, request_id, message, channel, is_read, created_at, updated_at
+     FROM notifications
+     WHERE user_id = $1
+     ORDER BY created_at DESC`,
         [userId]
     );
-    return result.rows;
+    return rows;
 };
+
 
 // Mark a notification as read
 export const markNotificationRead = async (notificationId, userId) => {
-    const result = await db.query(
+    const { rows } = await db.query(
         `UPDATE notifications
-         SET read = TRUE
-         WHERE id = $1 AND user_id = $2
-         RETURNING *`,
+     SET is_read = TRUE, updated_at = NOW()
+     WHERE id = $1 AND user_id = $2
+     RETURNING *`,
         [notificationId, userId]
     );
-    return result.rows[0];
+    return rows[0];
 };
 
-export const createNotification = async ({ user_id, title, message, link }) => {
-    const { rows } = await pool.query(`
-        INSERT INTO notifications (user_id, title, message, link)
-        VALUES ($1, $2, $3, $4)
-            RETURNING *
-    `, [user_id, title, message, link]);
 
+export const createNotification = async (user_id, request_id, message, channel = "in_app") => {
+    const { rows } = await db.query(
+        `INSERT INTO notifications (user_id, request_id, message, channel)
+         VALUES ($1, $2, $3, $4)
+             RETURNING *`,
+        [user_id, request_id, message, channel]
+    );
     return rows[0];
 };

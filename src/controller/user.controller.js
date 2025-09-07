@@ -7,6 +7,7 @@ export const showRegisterPage = async (req, res) => {
         res.render("auth/register", {
             title: "Register",
             departments,
+            layout: "layouts/auth_layout",
             hideHeader: true,
             hideFooter: true,
             hideSidebar: true
@@ -14,6 +15,7 @@ export const showRegisterPage = async (req, res) => {
     } catch (err) {
         res.render("auth/register", {
             title: "Register",
+            layout: "layouts/auth_layout",
             departments: [],
             hideHeader: true,
             hideFooter: true,
@@ -27,6 +29,7 @@ export const showLoginPage = (req, res) => {
     try {
         res.render("auth/login", {
             title: "Login",
+            layout: "layouts/auth_layout",
             user: req.user,
             error: undefined,
             hideHeader: true,
@@ -37,6 +40,7 @@ export const showLoginPage = (req, res) => {
         res.render("auth/login", {
             title: "Login",
             hideHeader: true,
+            layout: "layouts/auth_layout",
             hideFooter: true,
             hideSidebar: true,
             error: err.message,
@@ -78,6 +82,7 @@ export const register = async (req, res) => {
             title: "Register",
             error: err.message,
             departments,
+            layout: "layouts/auth_layout",
             hideHeader: true,
             hideFooter: true,
             hideSidebar: true,
@@ -108,6 +113,7 @@ export async function login(req, res) {
             user: null,
             error: e.message,
             hideHeader: true,
+            layout: "layouts/auth_layout",
             hideFooter: true,
             hideSidebar: true,
         });

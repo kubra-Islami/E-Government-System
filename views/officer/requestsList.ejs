@@ -1,0 +1,72 @@
+<div class="container mt-4">
+    <h2 class="mb-4">Service Requests</h2>
+
+    <!-- Flash messages -->
+    <% if (typeof success !== "undefined" && success) { %>
+        <div class="alert alert-success"><%= success %></div>
+    <% } %>
+    <% if (typeof error !== "undefined" && error) { %>
+        <div class="alert alert-danger"><%= error %></div>
+    <% } %>
+
+    <% if (requests && requests.length > 0) { %>
+        <div class="table-responsive shadow-sm rounded">
+            <table class="table table-striped align-middle">
+                <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Citizen</th>
+                    <th>Service</th>
+                    <th>Department</th>
+                    <th>Status</th>
+                    <th>Submitted</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <% requests.forEach((req, index) => { %>
+                    <tr>
+                        <td><%= index + 1 %></td>
+                        <td><%= req.citizen_name || 'N/A' %></td>
+                        <td><%= req.service_name %></td>
+                        <td><%= req.department_name %></td>
+                        <td>
+                            <% if (req.status === 'pending') { %>
+                                <span class="badge bg-warning text-dark">Pending</span>
+                            <% } else if (req.status === 'approved') { %>
+                                <span class="badge bg-success">Approved</span>
+                            <% } else if (req.status === 'rejected') { %>
+                                <span class="badge bg-danger">Rejected</span>
+                            <% } else { %>
+                                <span class="badge bg-secondary"><%= req.status %></span>
+                            <% } %>
+                        </td>
+                        <td><%= new Date(req.created_at).toLocaleDateString() %></td>
+                        <td>
+                            <a href="/officer/requests/<%= req.id %>" class="btn btn-sm btn-primary">
+                                <i class="bi bi-eye"></i> View
+                            </a>
+
+                            <% if (req.status !== 'approved') { %>
+                                <form action="/officer/requests/<%= req.id %>/approve" method="POST" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-success">
+                                        <i class="bi bi-check-circle"></i> Approve
+                                    </button>
+                                </form>
+                                <form action="/officer/requests/<%= req.id %>/reject" method="POST" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        <i class="bi bi-x-circle"></i> Reject
+                                    </button>
+                                </form>
+                            <% } %>
+                        </td>
+
+                    </tr>
+                <% }) %>
+                </tbody>
+            </table>
+        </div>
+    <% } else { %>
+        <div class="alert alert-info">No service requests found.</div>
+    <% } %>
+</div>

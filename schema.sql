@@ -34,22 +34,34 @@ CREATE TABLE services
     department_id INT          NOT NULL REFERENCES departments (id) ON DELETE CASCADE,
     fee           DECIMAL(10, 2) DEFAULT 0,
     created_at    TIMESTAMP      DEFAULT NOW(),
-    updated_at    TIMESTAMP DEFAULT NOW()
+    updated_at    TIMESTAMP      DEFAULT NOW()
 );
 
 -- 4. Requests   ===>   درخواست ها
 CREATE TABLE requests
 (
-    id          SERIAL PRIMARY KEY,
-    citizen_id  INT NOT NULL REFERENCES users (id) ON DELETE CASCADE,
-    service_id  INT NOT NULL REFERENCES services (id) ON DELETE CASCADE,
-    reviewed_by INT REFERENCES users (id),
-    assigned_officer_id INT REFERENCES users(id),
-    officer_comment TEXT,
-    status      VARCHAR(20) CHECK (status IN ('submitted', 'under_review', 'approved', 'rejected')) DEFAULT 'submitted',
-    created_at  TIMESTAMP                                                                           DEFAULT NOW(),
-    updated_at  TIMESTAMP                                                                           DEFAULT NOW()
+    id                   SERIAL PRIMARY KEY,
+    citizen_id           INT NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+    service_id           INT NOT NULL REFERENCES services (id) ON DELETE CASCADE,
+    COLUMN               request_number VARCHAR(20) UNIQUE,
+    -- First review
+    first_reviewer_id    INT REFERENCES users (id),
+    first_review_comment TEXT,
+    first_reviewed_at    TIMESTAMP,
+
+    -- Final decision
+    final_reviewer_id    INT REFERENCES users (id),
+    final_comment        TEXT,
+    final_reviewed_at    TIMESTAMP,
+
+    status               VARCHAR(20) CHECK (
+        status IN ('submitted', 'under_review', 'approved', 'rejected')
+        )                          DEFAULT 'submitted',
+
+    created_at           TIMESTAMP DEFAULT NOW(),
+    updated_at           TIMESTAMP DEFAULT NOW()
 );
+
 
 -- 5. Documents    ===> اسناد و مدارک
 CREATE TABLE documents
@@ -74,18 +86,28 @@ CREATE TABLE payments
 -- 7. Notifications   ===> اعلانات   ○ Citizens get notified (in-app or email) when their request status changes.
 CREATE TABLE notifications
 (
-    id          SERIAL PRIMARY KEY,
-    user_id     INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    request_id  INT REFERENCES requests(id) ON DELETE CASCADE,
-    message     TEXT NOT NULL,
-    channel     VARCHAR(20) CHECK (channel IN ('in_app', 'email', 'both')) DEFAULT 'in_app',
-    is_read     BOOLEAN DEFAULT FALSE,
-    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at  TIMESTAMP DEFAULT NOW()
+    id         SERIAL PRIMARY KEY,
+    user_id    INT       NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+    request_id INT REFERENCES requests (id) ON DELETE CASCADE,
+    message    TEXT      NOT NULL,
+    channel    VARCHAR(20) CHECK (channel IN ('in_app', 'email', 'both')) DEFAULT 'in_app',
+    is_read    BOOLEAN                                                    DEFAULT FALSE,
+    created_at TIMESTAMP NOT NULL                                         DEFAULT NOW(),
+    updated_at TIMESTAMP                                                  DEFAULT NOW()
 );
 
-CREATE INDEX idx_notifications_user_id ON notifications(user_id);
-CREATE INDEX idx_notifications_is_read ON notifications(is_read);
+CREATE INDEX idx_notifications_user_id ON notifications (user_id);
+CREATE INDEX idx_notifications_is_read ON notifications (is_read);
+
+--8. request_notes === > یاداشت های درخواست
+CREATE TABLE request_notes
+(
+    id         SERIAL PRIMARY KEY,
+    request_id INT  NOT NULL REFERENCES requests (id) ON DELETE CASCADE,
+    officer_id INT  NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+    note       TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW()
+);
 
 
 -- 8. activities  ===> فعالیت ها

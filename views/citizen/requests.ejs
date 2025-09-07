@@ -19,15 +19,15 @@
                                 <div>
                                     <h5 class="fw-bold mb-1"><%= r.service_name %></h5>
                                     <span class="text-muted small">
-                    <i class="bi bi-building me-1"></i> <%= r.department_name %>
-                  </span>
+                                        <i class="bi bi-building me-1"></i> <%= r.department_name %>
+                                    </span>
                                 </div>
                                 <span class="badge bg-<%= r.status === 'approved' ? 'success'
                                         : r.status === 'rejected' ? 'danger'
                                                 : r.status === 'under_review' ? 'info'
                                                         : 'warning' %>">
-                  <%= r.status.replace('_', ' ') %>
-                </span>
+                                    <%= r.status.replace('_', ' ') %>
+                                </span>
                             </div>
 
                             <!-- Progress Steps -->
@@ -44,14 +44,14 @@
                                 <div class="flex-fill border-top mx-2"></div>
                                 <div class="step flex-fill">
                                     <div class="circle <%= r.status === 'approved' ? 'bg-success text-white' : r.status === 'rejected' ? 'bg-danger text-white' : 'bg-light' %>">3</div>
-                                    <small class="d-block mt-2"><%= r.status === 'rejected' ? 'Rejected' : 'Approved' %></small>
+                                    <small class="d-block mt-2"><%= r.status === 'approved' ? 'Approved' : r.status === 'rejected' ? 'Rejected' : 'Pending Decision' %></small>
                                 </div>
                             </div>
 
                             <!-- Reviewer + Date -->
                             <p class="small mb-1">
                                 <i class="bi bi-person-check me-1 text-primary"></i>
-                                <%= r.reviewer_name || "Not reviewed yet" %>
+                                Reviewer: <%= r.reviewer_name || "Not reviewed yet" %>
                             </p>
                             <p class="small text-muted mb-0">
                                 <i class="bi bi-calendar3 me-1"></i>

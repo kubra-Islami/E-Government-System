@@ -10,7 +10,15 @@ export const markAsRead = async (notificationId, userId) => {
     return await notificationDAO.markNotificationRead(notificationId, userId);
 };
 
-// Add new notification
-export const addNotification = async (userId, message) => {
-    return await notificationDAO.createNotification(userId, message);
+// Add new notification and emit it
+export const addNotification = async (req, userId, message) => {
+    const notification = await notificationDAO.createNotification(userId, message);
+
+    // Emit via Socket.IO
+    const io = req.app.get("io");
+    io.to(`user_${userId}`).emit("notification", notification);
+
+    return notification;
 };
+
+

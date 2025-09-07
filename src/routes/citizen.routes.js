@@ -19,6 +19,7 @@ import multer from "multer";
 import path from "path";
 import {getPaymentSuccess} from "../controller/payment.service.js";
 import {getNotificationsPage, markNotificationRead} from "../controller/notification.controller.js";
+import {getNotificationsByUserId} from "../services/notification.service.js";
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -54,11 +55,14 @@ router.post("/payments/:requestId", authMiddleware, submitPayment);
 
 router.get("/payments", authMiddleware, async (req, res, next) => {
     try {
+        const notifications = await getNotificationsByUserId(req.user.id);
         const requests = await getRequestsByCitizenId(req.user.id);
         const pendingRequests = requests.filter(r => r.status !== "paid");
         res.render("citizen/pendingPayments", {
             title: "Pending Payments",
-            requests: pendingRequests
+            layout: "layouts/citizen_layout",
+            requests: pendingRequests,
+            notifications
         });
     } catch (err) {
         next(err);
