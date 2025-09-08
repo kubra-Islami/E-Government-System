@@ -1,0 +1,23 @@
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <!-- Breadcrumbs -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-0">
+            <% if (breadcrumbs && breadcrumbs.length) { %>
+                <% breadcrumbs.forEach((crumb, index) => { %>
+                    <li class="breadcrumb-item <%= index === breadcrumbs.length - 1 ? 'active' : '' %>">
+                        <% if (index !== breadcrumbs.length - 1) { %>
+                            <a href="<%= crumb.url %>"><%= crumb.label %></a>
+                        <% } else { %>
+                            <%= crumb.label %>
+                        <% } %>
+                    </li>
+                <% }) %>
+            <% } %>
+        </ol>
+    </nav>
+
+    <!-- Back Button -->
+    <a href="javascript:history.back()" class="btn btn-sm btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i> Back
+    </a>
+</div>

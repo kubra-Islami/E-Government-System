@@ -53,7 +53,7 @@ CREATE TABLE requests
     final_reviewer_id    INT REFERENCES users (id),
     final_comment        TEXT,
     final_reviewed_at    TIMESTAMP,
-
+    request_number       VARCHAR(20) UNIQUE,
     status               VARCHAR(20) CHECK (
         status IN ('submitted', 'under_review', 'approved', 'rejected')
         )                          DEFAULT 'submitted',

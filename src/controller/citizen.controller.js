@@ -1,6 +1,6 @@
 import {getServicesByDepartmentId} from "../dao/service.dao.js";
 
-import { getRequestsByCitizenId} from "../dao/request.dao.js";
+import {getRequestsByCitizenId, getStatsResult} from "../dao/request.dao.js";
 import {addDocument} from "../services/documents.service.js";
 import {addRequest ,getRequestById} from "../services/requests.service.js";
 import {getAllServices} from "../services/service.service.js";
@@ -12,19 +12,29 @@ import { getNotificationsByUserId } from "../services/notification.service.js";
 
 export const getCitizenDashboard = async (req, res, next) => {
     try {
+        const citizenId = req.user.id;
         const notifications = await getNotificationsByUserId(req.user.id);
 
-        console.log(notifications)
+        const statsResult = await getStatsResult(citizenId);
+        const stats = statsResult.length > 0 ? statsResult[0] : {
+            total_requests: 0,
+            pending_requests: 0,
+            total_payments: 0
+        };
+
         res.render("citizen/dashboard", {
             layout: "layouts/citizen_layout",
             title: "Citizen Dashboard",
             user: req.user,
-            notifications
+            notifications,
+            stats,
         });
     } catch (err) {
+        console.error("Error loading citizen dashboard:", err);
         next(err);
     }
 };
+
 
 export const getCitizenRequests = async (req, res, next) => {
     try {

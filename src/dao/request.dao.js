@@ -9,6 +9,24 @@ export const addRequestDao = async ({ citizen_id, service_id }) => {
     return rows[0];
 };
 
+
+
+export async function getStatsResult(citizenId) {
+    const result = await db.query(
+        `SELECT
+             COUNT(r.*) AS total_requests,
+             COUNT(*) FILTER (WHERE r.status IN ('submitted', 'under_review')) AS pending_requests,
+                 COALESCE(SUM(p.amount), 0) AS total_payments
+         FROM requests r
+                  LEFT JOIN payments p ON r.id = p.request_id
+         WHERE r.citizen_id = $1`,
+        [citizenId]
+    );
+    return result.rows;
+}
+
+
+
 export async function getAllRequestsDao(){
     const result = await db.query(`
             SELECT s.id, s.name, s.fee, d.name as department

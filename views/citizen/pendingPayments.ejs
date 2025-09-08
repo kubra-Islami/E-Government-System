@@ -1,4 +1,11 @@
 <div class="container py-5">
+
+    <%- include('../citizen-breadcrumb', {
+    breadcrumbs: [
+    { label: "Dashboard", url: "/citizen/dashboard" },
+    { label: "Pending Payments" }
+    ]
+    }) %>
     <h2 class="mb-5 text-center fw-bold">Pending Payments</h2>
 
     <% if (requests.length === 0) { %>

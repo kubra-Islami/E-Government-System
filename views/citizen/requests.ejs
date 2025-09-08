@@ -1,4 +1,10 @@
 <div class="container my-5">
+    <%- include('../citizen-breadcrumb', {
+    breadcrumbs: [
+    { label: "Dashboard", url: "/citizen/dashboard" },
+    { label: "My Requests" }
+    ]
+    }) %>
     <h2 class="fw-bold mb-4 text-success">
         <i class="bi bi-list-check me-2"></i> My Requests
     </h2>

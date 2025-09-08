@@ -1,6 +1,12 @@
-<div class="container d-flex justify-content-center">
-    <div class="card shadow border-0 rounded-4 p-5 my-5 w-100 modern-card" style="max-width: 720px;">
+<div class="container">
+    <%- include('../citizen-breadcrumb', {
+    breadcrumbs: [
+    { label: "Dashboard", url: "/citizen/dashboard" },
+    { label: "Apply for Service" }
+    ]
+    }) %>
 
+    <div class="card shadow border-0 rounded-4 p-5 my-5 w-100 modern-card" style="max-width: 720px;">
         <!-- Header -->
         <div class="text-center mb-5">
             <div class="icon-circle mx-auto mb-3">
@@ -11,7 +17,6 @@
         </div>
 
         <form action="/citizen/applyService" method="POST" enctype="multipart/form-data">
-
             <!-- Department -->
             <div class="mb-4">
                 <label for="departmentSelect" class="form-label fw-semibold text-muted">
@@ -35,6 +40,7 @@
                         class="form-select form-select-lg rounded-pill shadow-sm modern-input">
                     <option value="" disabled selected>Select Service</option>
                 </select>
+
                 <!-- Service Fee -->
                 <div class="my-4" id="serviceFeeBox" style="display: none;">
                     <label class="form-label fw-semibold text-muted">
@@ -42,7 +48,6 @@
                     </label>
                     <div class="p-3 border bg-light fw-bold text-primary" id="serviceFee"></div>
                 </div>
-
             </div>
 
             <!-- Upload -->
@@ -50,9 +55,7 @@
                 <label class="form-label fw-semibold text-muted">
                     <i class="bi bi-upload me-2 text-warning"></i> Upload Documents
                 </label>
-
-                <div id="uploadBox"
-                     class="upload-box text-center p-4 rounded-4 border border-2 border-dashed shadow-sm">
+                <div id="uploadBox" class="upload-box text-center p-4 rounded-4 border border-2 border-dashed shadow-sm">
                     <!-- Default placeholder -->
                     <div id="uploadPlaceholder">
                         <i class="bi bi-cloud-arrow-up-fill text-success fs-1"></i>
@@ -84,6 +87,7 @@
     </div>
 </div>
 
+
 <style>
     .upload-box.dragover {
         background: #f0fff4;
@@ -93,8 +97,8 @@
 
     .file-preview {
         position: relative;
-        width: 100%;
-        height: 80%;
+        width: 50%;
+        height: 50%;
         border-radius: 12px;
         overflow: hidden;
         background: #f8f9fa;
@@ -137,6 +141,7 @@
     /* Card with subtle gradient */
     .modern-card {
         background: linear-gradient(135deg, #ffffff, #f9fafc);
+        margin: auto;
     }
 
     /* Circle icon header */
