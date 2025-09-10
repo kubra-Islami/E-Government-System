@@ -1,4 +1,10 @@
 <div class="container mt-4">
+    <%- include('../breadcrumb', {
+    breadcrumbs: [
+    { label: "Dashboard", url: "/admin/dashboard" },
+    { label: "Reports & Stats" }
+    ]
+    }) %>
     <h2>Reports & Stats</h2>
 
     <% if (reports.length > 0) { %>

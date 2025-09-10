@@ -2,7 +2,7 @@ import pool from "../config/db.js";
 import Report from "../models/Report.js";
 
 export async function getUserList() {
-    const { rows } = await pool.query("SELECT id, name, email, role FROM users ORDER BY id ASC");
+    const { rows } = await pool.query("SELECT * FROM users ORDER BY id ASC");
     return rows;
 }
 

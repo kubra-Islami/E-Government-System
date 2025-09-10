@@ -1,4 +1,10 @@
 <div class="container py-4">
+    <%- include('../breadcrumb', {
+    breadcrumbs: [
+    { label: "Dashboard", url: "/officer/dashboard" },
+    { label: "Request" }
+    ]
+    }) %>
     <!-- Header -->
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
         <h3 class="fw-bold text-primary mb-2">

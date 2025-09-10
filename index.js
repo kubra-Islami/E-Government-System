@@ -16,6 +16,7 @@ import { requireAdmin } from "./src/middlewares/auth.requireAdmin.js";
 import { getUserByIdDao } from "./src/dao/user.dao.js";
 import { createServer } from "http";
 import { Server } from "socket.io";
+import res from "express/lib/response.js";
 
 const app = express();
 const server = createServer(app);
@@ -68,6 +69,9 @@ app.use("/api/users", UserRoutes);
 app.use("/admin", requireAdmin, AdminRoutes);
 // app.use("/officer", OfficerRoutes);
 app.use("/citizen", CitizenRoutes);
+app.use("/logout", async (req, res) => {
+    res.redirect("/api/users/login");
+});
 app.use("/officer", async (req, res, next) => {
     try {
         if (req.user && req.user.role === "officer") {

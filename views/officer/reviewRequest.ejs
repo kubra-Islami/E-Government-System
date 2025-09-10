@@ -1,4 +1,11 @@
 <div class="container py-5">
+
+    <%- include('../breadcrumb', {
+    breadcrumbs: [
+    { label: "Dashboard", url: "/officer/dashboard" },
+    { label: "Review Request" }
+    ]
+    }) %>
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold text-primary">Review Request <span class="text-secondary">#<%= request.id %></span></h2>

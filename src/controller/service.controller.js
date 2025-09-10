@@ -22,6 +22,7 @@ export const showServices = async (req, res) => {
 
         res.render("admin/services", {
             title: "Manage Services",
+            layout: "layouts/admin_layout",
             services,
             departments
         });

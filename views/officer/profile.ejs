@@ -1,4 +1,10 @@
 <div class="container py-4">
+    <%- include('../breadcrumb', {
+    breadcrumbs: [
+    { label: "Dashboard", url: "/officer/dashboard" },
+    { label: "Profile" }
+    ]
+    }) %>
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card shadow-sm border-0">
@@ -21,10 +27,10 @@
                             <input type="text" class="form-control" value="<%= officer.department_name %>" disabled>
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold">Job Title</label>
-                            <input type="text" class="form-control" name="job_title" value="<%= officer.role %>">
-                        </div>
+<!--                        <div class="mb-3">-->
+<!--                            <label class="form-label fw-semibold">Job Title</label>-->
+<!--                            <input type="text" class="form-control" name="job_title" value="<%= officer.role %>">-->
+<!--                        </div>-->
 
                         <div class="d-flex justify-content-end">
                             <button type="submit" class="btn btn-primary fw-semibold">Update Profile</button>

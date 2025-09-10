@@ -3,6 +3,7 @@ import path from "path";
 
 import * as OfficerService from "../services/officer.service.js";
 import { getNotificationsByUserId } from "../services/notification.service.js";
+import {getServicesByDepartmentId} from "../dao/service.dao.js";
 
 export const dashboard = async (req, res) => {
     try {
@@ -13,11 +14,19 @@ export const dashboard = async (req, res) => {
 
         // Fetch notifications for this officer
         const notifications = await getNotificationsByUserId(req.user.id);
+        // Fetch services for officer's department
+        // const servicesResult = await pool.query(
+        //     "SELECT * FROM services WHERE department_id = $1",
+        //     [req.user.department_id]
+        // );
+        const services = getServicesByDepartmentId(req.user.id);
+
 
         res.render("officer/dashboard", {
             layout: "layouts/officer_layout",
             title: "Officer Dashboard",
             requests,
+            services,
             q,
             status,
             activePage: "dashboard",

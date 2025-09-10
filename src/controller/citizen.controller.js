@@ -162,12 +162,14 @@ export const getCitizenProfile = async (req, res, next) => {
         const profileData = await profileService.getProfileById(userId);
         const recentActivities = await profileService.getRecentActivities(userId);
 
+        const notifications = await getNotificationsByUserId(req.user.id);
 
         res.render("citizen/profile", {
             title: "My Profile",
             user: profileData,
             layout: "layouts/citizen_layout",
-            recentActivities: recentActivities
+            recentActivities: recentActivities,
+            notifications
         });
     } catch (err) {
         next(err);

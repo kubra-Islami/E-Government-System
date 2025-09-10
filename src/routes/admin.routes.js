@@ -5,7 +5,7 @@ import {
     showReports,
     showUsers,
     showDepartments,
-    showGlobalSearch, showUserController, updateUserController
+    showGlobalSearch, showUserController, updateUserController, getAdminProfile
 } from "../controller/admin.controller.js";
 import {
     addDepartmentController, deleteDepartmentController,
@@ -49,4 +49,7 @@ router.get("/services", showServices);
 router.get("/services/:id/show", showServiceController);
 router.post("/services/:id/edit", updateServiceController);
 router.get("/services/:id/delete", deleteServiceController);
+
+// Get profile page
+router.get("/profile", getAdminProfile);
 export default router;

@@ -1,4 +1,10 @@
 <div class="container py-5">
+    <%- include('../breadcrumb', {
+    breadcrumbs: [
+    { label: "Dashboard", url: "/citizen/dashboard" },
+    { label: "Notifications List" }
+    ]
+    }) %>
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-5">
         <div>

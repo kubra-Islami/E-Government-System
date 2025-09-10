@@ -43,7 +43,7 @@ CREATE TABLE requests
     id                   SERIAL PRIMARY KEY,
     citizen_id           INT NOT NULL REFERENCES users (id) ON DELETE CASCADE,
     service_id           INT NOT NULL REFERENCES services (id) ON DELETE CASCADE,
-    COLUMN               request_number VARCHAR(20) UNIQUE,
+    request_number       VARCHAR(20) UNIQUE,
     -- First review
     first_reviewer_id    INT REFERENCES users (id),
     first_review_comment TEXT,
@@ -53,7 +53,6 @@ CREATE TABLE requests
     final_reviewer_id    INT REFERENCES users (id),
     final_comment        TEXT,
     final_reviewed_at    TIMESTAMP,
-    request_number       VARCHAR(20) UNIQUE,
     status               VARCHAR(20) CHECK (
         status IN ('submitted', 'under_review', 'approved', 'rejected')
         )                          DEFAULT 'submitted',
