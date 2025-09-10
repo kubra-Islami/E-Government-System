@@ -32,7 +32,7 @@
                                         : r.status === 'rejected' ? 'danger'
                                                 : r.status === 'under_review' ? 'info'
                                                         : 'warning' %>">
-                                    <%= r.status.replace('_', ' ') %>
+                                       <%= r.status ? r.status.replace('_', ' ') : 'submitted' %>
                                 </span>
                             </div>
 

@@ -4,7 +4,7 @@ import * as notificationService from "../services/notification.service.js";
 export const getNotificationsPage = async (req, res, next) => {
     try {
         const notifications = await notificationService.getNotificationsByUserId(req.user.id);
-        res.render("citizen/notifications", { title: "Notifications", notifications });
+        res.render("citizen/notifications", { title: "Notifications", notifications , layout: "layouts/citizen_layout",});
     } catch (err) {
         next(err);
     }

@@ -4,9 +4,9 @@ import db from "../config/db.js";
 export const fetchNotificationsByUserId = async (userId) => {
     const { rows } = await db.query(
         `SELECT id, user_id, request_id, message, channel, is_read, created_at, updated_at
-     FROM notifications
-     WHERE user_id = $1
-     ORDER BY created_at DESC`,
+         FROM notifications
+         WHERE user_id = $1
+         ORDER BY created_at DESC`,
         [userId]
     );
     return rows;

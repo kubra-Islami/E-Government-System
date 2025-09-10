@@ -26,7 +26,7 @@ export const getCitizenDashboard = async (req, res, next) => {
             layout: "layouts/citizen_layout",
             title: "Citizen Dashboard",
             user: req.user,
-            notifications,
+            notifications ,
             stats,
         });
     } catch (err) {
@@ -35,6 +35,19 @@ export const getCitizenDashboard = async (req, res, next) => {
     }
 };
 
+export const getCitizenNotifications = async (req, res, next) => {
+    try {
+        const notifications = await getNotificationsByUserId(req.user.id);
+        res.render("citizen/notifications", {
+            layout: "layouts/citizen_layout",
+            title: "Notifications",
+            user: req.user,
+            notifications : null,
+        });
+    } catch (err) {
+        next(err);
+    }
+};
 
 export const getCitizenRequests = async (req, res, next) => {
     try {

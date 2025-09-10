@@ -2,7 +2,7 @@
     <%- include('../breadcrumb', {
     breadcrumbs: [
     { label: "Dashboard", url: "/officer/dashboard" },
-    { label: "Request" }
+    { label: "Request Details" }
     ]
     }) %>
     <!-- Header -->
@@ -11,11 +11,11 @@
             Request <span class="text-secondary">#<%= request.request_number %></span>
         </h3>
         <span class="badge
-                     <%= request.status === 'approved' ? 'bg-success' :
-                request.status === 'rejected' ? 'bg-danger' :
-                        request.status === 'under_review' ? 'bg-warning text-dark' : 'bg-secondary' %>
-                     text-uppercase fs-7 px-3 py-1">
-            <%= request.status.replace('_', ' ') %>
+             <%= request.status === 'approved' ? 'bg-success' :
+                        request.status === 'rejected' ? 'bg-danger' :
+                                request.status === 'under_review' ? 'bg-warning text-dark' : 'bg-secondary' %>
+             text-uppercase fs-7 px-3 py-1">
+            <%= request.status ? request.status.replace('_', ' ') : 'Unknown' %>
         </span>
     </div>
 
@@ -44,7 +44,6 @@
         </div>
     </div>
 
-    <!-- Documents & Review -->
     <div class="row g-3 mb-4">
         <!-- Documents -->
         <div class="col-lg-6">
@@ -73,21 +72,18 @@
             </div>
         </div>
 
-        <!-- Officer Review -->
         <div class="col-lg-6">
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-body">
                     <h6 class="fw-semibold mb-2"><i class="bi bi-check2-square me-2"></i>Officer Review</h6>
 
                     <% if(request.status === 'submitted') { %>
-                        <!-- First review form -->
                         <form action="/officer/requests/<%= request.id %>/review" method="POST">
                             <textarea name="comment" class="form-control mb-2" placeholder="First review comments"></textarea>
                             <button type="submit" name="action" value="review" class="btn btn-warning w-100">Mark as Under Review</button>
                         </form>
 
                     <% } else if(request.status === 'under_review') { %>
-                        <!-- Final decision form -->
                         <form action="/officer/requests/<%= request.id %>/review" method="POST">
                             <textarea name="comment" class="form-control mb-2" placeholder="Final decision comments"></textarea>
                             <div class="d-flex gap-2">
@@ -97,7 +93,10 @@
                         </form>
 
                     <% } else { %>
-                        <p class="text-muted">This request has been <strong><%= request.status %></strong>.</p>
+                        <p class="text-muted">
+                            This request has been
+                            <strong><%= request.status ? request.status.replace('_', ' ') : 'Unknown' %></strong>.
+                        </p>
                     <% } %>
                 </div>
             </div>

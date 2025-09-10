@@ -56,7 +56,6 @@ CREATE TABLE requests
     status               VARCHAR(20) CHECK (
         status IN ('submitted', 'under_review', 'approved', 'rejected')
         )                          DEFAULT 'submitted',
-
     created_at           TIMESTAMP DEFAULT NOW(),
     updated_at           TIMESTAMP DEFAULT NOW()
 );
@@ -65,11 +64,12 @@ CREATE TABLE requests
 -- 5. Documents    ===> اسناد و مدارک
 CREATE TABLE documents
 (
-    id            SERIAL PRIMARY KEY,
-    request_id    INT  NOT NULL REFERENCES requests (id) ON DELETE CASCADE,
-    file_path     TEXT NOT NULL,
-    original_name VARCHAR(255),
-    uploaded_at   TIMESTAMP DEFAULT NOW()
+    id                    SERIAL PRIMARY KEY,
+    request_id            INT  NOT NULL REFERENCES requests (id) ON DELETE CASCADE,
+    file_path             TEXT NOT NULL,
+    original_name         VARCHAR(255),
+    transaction_reference VARCHAR(100),
+    uploaded_at           TIMESTAMP DEFAULT NOW()
 );
 
 -- 6. Payments   ===> پرداخت ها
@@ -115,5 +115,7 @@ CREATE TABLE activities
     id          SERIAL PRIMARY KEY,
     user_id     INT  NOT NULL REFERENCES users (id) ON DELETE CASCADE,
     description TEXT NOT NULL,
+    target_type VARCHAR(50),
+    target_id   INT,
     created_at  TIMESTAMP DEFAULT NOW()
 );

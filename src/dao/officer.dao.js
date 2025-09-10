@@ -31,23 +31,54 @@ export const findRequestById = async (requestId) => {
     return rows[0];
 };
 
-export const updateRequestStatus = async (requestId, status, officerId) => {
-    const { rows } = await db.query(
-        `UPDATE requests
-     SET status = $1, reviewed_by = $2, updated_at = NOW()
-     WHERE id = $3
-     RETURNING *`,
-        [status, officerId, requestId]
-    );
+export const updateRequestStatus = async (requestId, status, officerId, comment) => {
+    let query, params;
+
+    if (status === 'under_review') {
+        query = `
+            UPDATE requests
+            SET status = $1,
+                first_reviewer_id = $2,
+                first_review_comment = $3,
+                first_reviewed_at = NOW(),
+                updated_at = NOW()
+            WHERE id = $4
+            RETURNING *`;
+        params = [status, officerId, comment, requestId];
+    } else if (status === 'approved' || status === 'rejected') {
+        query = `
+            UPDATE requests
+            SET status = $1,
+                final_reviewer_id = $2,
+                final_comment = $3,
+                final_reviewed_at = NOW(),
+                updated_at = NOW()
+            WHERE id = $4
+            RETURNING *`;
+        params = [status, officerId, comment, requestId];
+    } else {
+        // fallback, just update status
+        query = `
+            UPDATE requests
+            SET status = $1,
+                updated_at = NOW()
+            WHERE id = $2
+            RETURNING *`;
+        params = [status, requestId];
+    }
+
+    const { rows } = await pool.query(query, params);
     return rows[0];
 };
+
+
 
 export const assignRequest = async (requestId, officerId) => {
     const { rows } = await db.query(
         `UPDATE requests
-     SET reviewed_by = $1, updated_at = NOW()
-     WHERE id = $2
-     RETURNING *`,
+         SET first_reviewer_id = $1, updated_at = NOW()
+         WHERE id = $2
+         RETURNING *`,
         [officerId, requestId]
     );
     return rows[0];
@@ -106,3 +137,33 @@ export const findDocumentById = async (documentId) => {
     );
     return rows[0];
 };
+// officer.dao.js
+import pool from "../config/db.js";
+
+// For first review
+export async function markUnderReview(requestId, officerId, comment) {
+    await pool.query(
+        `UPDATE requests
+         SET status = 'under_review',
+             first_reviewer_id = $1,
+             first_review_comment = $2,
+             first_reviewed_at = NOW(),
+             updated_at = NOW()
+         WHERE id = $3`,
+        [officerId, comment, requestId]
+    );
+}
+
+// For final decision
+export async function finalizeReview(requestId, officerId, status, comment) {
+    await pool.query(
+        `UPDATE requests
+         SET status = $1,
+             final_reviewer_id = $2,
+             final_comment = $3,
+             final_reviewed_at = NOW(),
+             updated_at = NOW()
+         WHERE id = $4`,
+        [status, officerId, comment, requestId]
+    );
+}

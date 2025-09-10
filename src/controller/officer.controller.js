@@ -14,11 +14,6 @@ export const dashboard = async (req, res) => {
 
         // Fetch notifications for this officer
         const notifications = await getNotificationsByUserId(req.user.id);
-        // Fetch services for officer's department
-        // const servicesResult = await pool.query(
-        //     "SELECT * FROM services WHERE department_id = $1",
-        //     [req.user.department_id]
-        // );
         const services = getServicesByDepartmentId(req.user.id);
 
 
@@ -88,10 +83,19 @@ export const requestDetail = async (req, res) => {
 };
 
 export const postReview = async (req, res) => {
-    const { status } = req.body;
-    await OfficerService.reviewRequest(req.params.id, status, req.user);
+    const { action, comment } = req.body;
+
+    let status;
+    if (action === "review") status = "under_review";
+    else if (action === "approve") status = "approved";
+    else if (action === "reject") status = "rejected";
+    else status = "submitted";
+
+    console.log(req.body)
+    await OfficerService.reviewRequest(req.params.id, status, req.user, comment);
     res.redirect(`/officer/requests/${req.params.id}`);
 };
+
 
 export const assignRequest = async (req, res) => {
     const { officerId } = req.body;

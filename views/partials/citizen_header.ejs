@@ -18,12 +18,16 @@
                 <li class="nav-item">
                     <a class="nav-link position-relative" href="/citizen/notifications" aria-label="Notifications">
                         <i class="bi bi-bell-fill fs-5"></i>
-                        <% if (notifications && notifications.filter(n => !n.read).length > 0) { %>
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger shadow-sm">
-                                <%= notifications.filter(n => !n.read).length %>
+                        <%
+                        const unreadCount = notifications ? notifications.filter(n => !n.read).length : 0;
+                        if (unreadCount > 0) {
+                        %>
+                            <span class="position-absolute translate-middle badge rounded-pill bg-danger shadow-sm" style="top: 25%">
+                                 <%= unreadCount %>
                             </span>
                         <% } %>
                     </a>
+
                 </li>
 
                 <!-- User dropdown -->

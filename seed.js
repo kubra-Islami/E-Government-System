@@ -3,8 +3,8 @@ import pool from "./src/config/db.js";
 
 async function resetTables() {
     await pool.query(`
-    TRUNCATE TABLE requests, services, users, departments
-    RESTART IDENTITY CASCADE;
+        TRUNCATE TABLE requests, services, departments
+        RESTART IDENTITY CASCADE;
   `);
     console.log("Tables truncated");
 }
@@ -55,6 +55,7 @@ async function seedDepartments() {
 // Seed Services
 async function seedServices() {
     const departments = await pool.query("SELECT id FROM departments");
+
     const services = [
         { name: "Passport Renewal", fee: 50 },
         { name: "Business License", fee: 100 },
@@ -63,16 +64,24 @@ async function seedServices() {
     ];
 
     for (let dept of departments.rows) {
-        for (let service of services) {
+
+        const shuffled = faker.helpers.shuffle(services);
+
+
+        const count = faker.number.int({ min: 1, max: services.length });
+        const selected = shuffled.slice(0, count);
+
+        for (let service of selected) {
             await pool.query(
                 `INSERT INTO services (name, fee, department_id)
-         VALUES ($1, $2, $3)
-         ON CONFLICT DO NOTHING`,
+                 VALUES ($1, $2, $3)
+                     ON CONFLICT (name, department_id) DO NOTHING`, // ensures no duplicates in same dept
                 [service.name, service.fee, dept.id]
             );
         }
     }
-    console.log(" Services seeded");
+
+    console.log(" Services seeded dynamically");
 }
 
 // Seed Requests

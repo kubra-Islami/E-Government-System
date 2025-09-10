@@ -80,7 +80,7 @@ export const getRequestsByCitizenId = async (citizenId) => {
         SELECT r.id,
                r.citizen_id,
                r.service_id,
-               r.status,
+               COALESCE(r.status, 'submitted') AS status, 
                r.created_at,
                r.updated_at,
                r.first_reviewer_id,
@@ -105,6 +105,7 @@ export const getRequestsByCitizenId = async (citizenId) => {
     const { rows } = await db.query(sql, [citizenId]);
     return rows.map(row => new Request(row));
 };
+
 
 
 export const getOfficerDepartmentId = async (officerId) => {

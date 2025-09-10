@@ -2,24 +2,24 @@ import express from "express";
 const router = express.Router();
 import { ensureAuthenticated, ensureOfficer } from '../middlewares/auth.requireOfficer.js';
 import * as OfficerController from '../controller/officer.controller.js';
-import {profile} from "../controller/officer.controller.js";
+import {buildBreadcrumbs} from "../middlewares/breadcrumbs.js";
 
-router.use(ensureAuthenticated, ensureOfficer);
+router.use(ensureAuthenticated,buildBreadcrumbs, ensureOfficer);
 
 // Dashboard
 router.get('/dashboard', OfficerController.dashboard);
 
 // Requests
-router.get("/requests", OfficerController.requestsList);          // List all assigned requests
-router.get("/requests/:id", OfficerController.requestDetail);     // View request details
-router.post("/requests/:id/review", OfficerController.postReview); // Approve/Reject request
+router.get("/requests", OfficerController.requestsList);
+router.get("/requests/:id", OfficerController.requestDetail);
+router.post("/requests/:id/review", OfficerController.postReview);
 
 // Assign request (self-assign or assign to another officer)
 router.post("/requests/:id/assign", OfficerController.assignRequest);
 
 // Notes / Tickets (for citizen communication)
-router.post("/requests/:id/notes", OfficerController.addNote);     // Officer leaves note/comment
-router.get("/requests/:id/notes", OfficerController.getNotes);     // View notes on a request
+router.post("/requests/:id/notes", OfficerController.addNote);
+router.get("/requests/:id/notes", OfficerController.getNotes);
 
 // Notifications (triggered when officer leaves note or review)
 router.post("/requests/:id/notify", OfficerController.sendNotification);
