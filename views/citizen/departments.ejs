@@ -1,0 +1,40 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb bg-light p-3 rounded-3">
+        <li class="breadcrumb-item"><a href="citizen/dashboard" class="text-decoration-none text-secondary">Dashboard</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Departments</li>
+    </ol>
+</nav>
+
+<div class="card bg-white shadow-sm mb-5 p-4 border-0 rounded-3">
+    <div class="d-flex align-items-center">
+        <i class="bi bi-person-fill-gear text-info fs-1 me-3"></i>
+        <div>
+            <h1 class="h3 fw-bold mb-0">Select a Department</h1>
+            <p class="text-muted mb-0">Choose the department that provides the service you need.</p>
+        </div>
+    </div>
+</div>
+
+<section>
+    <% if (departments && departments.length > 0) { %>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            <% departments.forEach(department => { %>
+                <div class="col">
+                    <a href="/citizen/department-services/<%= department.id %>" class="text-decoration-none">
+                        <div class="card h-100 border-0 shadow-sm rounded-3 card-hover-effect">
+                            <div class="card-body d-flex flex-column justify-content-center align-items-center text-center p-4">
+                                <i class="bi bi-building fs-1 text-primary mb-3"></i>
+                                <h5 class="card-title fw-bold text-dark"><%= department.name %></h5>
+                                <p class="card-text text-muted mb-0"><%= department.description %></p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            <% }); %>
+        </div>
+    <% } else { %>
+        <div class="alert alert-warning text-center" role="alert">
+            No departments are currently available. Please check back later.
+        </div>
+    <% } %>
+</section>

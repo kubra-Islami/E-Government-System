@@ -1,13 +1,13 @@
 import Request from "../models/Request.js";
 import db from "../config/db.js";
 
-export const addRequestDao = async ({ citizen_id, service_id }) => {
-    const sql = `INSERT INTO requests (citizen_id, service_id) 
-                 VALUES ($1, $2) RETURNING *`;
-    const params = [citizen_id, service_id];
-    const { rows } = await db.query(sql, params);
-    return rows[0];
-};
+// export const addRequestDao = async ({ citizen_id, service_id }) => {
+//     const sql = `INSERT INTO requests (citizen_id, service_id)
+//                  VALUES ($1, $2) RETURNING *`;
+//     const params = [citizen_id, service_id];
+//     const { rows } = await db.query(sql, params);
+//     return rows[0];
+// };
 
 
 
@@ -118,6 +118,27 @@ export const getOfficerDepartmentId = async (officerId) => {
     return rows.length ? rows[0].department_id : null;
 };
 
+export async function addRequestDao({ citizen_id, service_id, status, form_data }) {
+    const query = `
+    INSERT INTO requests (citizen_id, service_id, status, form_data, created_at)
+    VALUES ($1, $2, $3, $4, NOW())
+    RETURNING *;
+  `;
+    const values = [citizen_id, service_id, status, form_data];
+    const result = await db.query(query, values);
+    return result.rows[0];
+}
+
+export async function addDocumentDao({ request_id, file_path, original_name }) {
+    const query = `
+    INSERT INTO documents (request_id, file_path, original_name, uploaded_at)
+    VALUES ($1, $2, $3, NOW())
+    RETURNING *;
+  `;
+    const values = [request_id, file_path, original_name];
+    const result = await db.query(query, values);
+    return result.rows[0];
+}
 
 export async function getRequestsForDepartment(
     {

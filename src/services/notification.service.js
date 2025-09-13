@@ -22,3 +22,10 @@ export const addNotification = async (req, userId, message) => {
 };
 
 
+export const markNotificationRead = async (notificationId, userId) => {
+    return await notificationDAO.markNotificationRead(notificationId, userId);
+};
+
+export const markAllNotificationsRead = async (userId) => {
+    return await notificationDAO.markAllNotificationsRead(userId);
+};

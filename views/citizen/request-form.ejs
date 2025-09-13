@@ -1,0 +1,64 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb bg-light p-3 rounded-3">
+        <li class="breadcrumb-item"><a href="/dashboard" class="text-decoration-none text-secondary">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="/applyService" class="text-decoration-none text-secondary">Departments</a></li>
+        <li class="breadcrumb-item"><a href="/applyService/department/<%= service.departmentId %>" class="text-decoration-none text-secondary">
+                <%= service.departmentName %> Services</a></li>
+        <li class="breadcrumb-item active" aria-current="page"><%= service.name %> Application</li>
+    </ol>
+</nav>
+
+<div class="card bg-white shadow-sm mb-5 p-4 border-0 rounded-3">
+    <div class="d-flex align-items-center">
+        <i class="bi bi-file-earmark-text text-success fs-1 me-3"></i>
+        <div>
+            <h1 class="h3 fw-bold mb-0">Apply for <%= service.name %></h1>
+            <p class="text-muted mb-0"><%= service.description %></p>
+        </div>
+    </div>
+</div>
+
+<section>
+    <div class="card bg-white shadow-sm p-4 rounded-3">
+        <form action="/citizen/services/apply/<%= service.id %>" method="POST" enctype="multipart/form-data">
+            <!-- Hidden field to link the request to a service -->
+            <input type="hidden" name="serviceId" value="<%= service.id %>">
+
+            <!-- Dynamically render form fields based on the service data -->
+            <% if (service.formFields && service.formFields.length > 0) { %>
+                <h4 class="fw-bold mb-3">Required Information</h4>
+                <div class="row g-3 mb-4">
+                    <% service.formFields.forEach(field => { %>
+                        <div class="col-md-6">
+                            <label for="<%= field.name %>" class="form-label fw-semibold"><%= field.label %></label>
+                            <% if (field.type === 'textarea') { %>
+                                <textarea class="form-control" id="<%= field.name %>" name="<%= field.name %>" rows="3" required></textarea>
+                            <% } else { %>
+                                <input type="<%= field.type %>" class="form-control" id="<%= field.name %>" name="<%= field.name %>" <%= field.required ? 'required' : '' %> placeholder="<%= field.placeholder %>">
+                            <% } %>
+                        </div>
+                    <% }); %>
+                </div>
+            <% } %>
+
+            <!-- Dynamically render document upload sections -->
+            <% if (service.requiredDocuments && service.requiredDocuments.length > 0) { %>
+                <h4 class="fw-bold mb-3">Required Documents</h4>
+                <div class="row g-3 mb-4">
+                    <% service.requiredDocuments.forEach(doc => { %>
+                        <div class="col-md-6">
+                            <label for="<%= doc.name %>" class="form-label fw-semibold"><%= doc.label %></label>
+                            <input class="form-control" type="file" name="documents" id="<%= doc.name %>" name="<%= doc.name %>" accept=".pdf, .jpg, .jpeg, .png" <%= doc.required ? 'required' : '' %>>
+                            <div class="form-text text-muted"><%= doc.description %></div>
+                        </div>
+                    <% }); %>
+                </div>
+            <% } %>
+
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary btn-lg">Submit Application</button>
+            </div>
+        </form>
+    </div>
+
+</section>

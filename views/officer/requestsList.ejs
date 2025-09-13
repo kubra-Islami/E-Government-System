@@ -5,9 +5,7 @@
     { label: "Service Requests" }
     ]
     }) %>
-    <h2 class="mb-4">Service Requests</h2>
 
-    <!-- Flash messages -->
     <% if (typeof success !== "undefined" && success) { %>
         <div class="alert alert-success"><%= success %></div>
     <% } %>
@@ -73,6 +71,9 @@
             </table>
         </div>
     <% } else { %>
-        <div class="alert alert-info">No service requests found.</div>
+        <div class="text-center py-5">
+            <i class="bi bi-inbox fs-2 d-block mb-3 text-muted"></i>
+            <h5 class="text-muted mb-2">No requests found yet</h5>
+        </div>
     <% } %>
 </div>

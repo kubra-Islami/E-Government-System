@@ -12,6 +12,8 @@ export async function addServiceDao(data) {
     return new Service(rows[0]);
 }
 
+
+
 export async function getAllServicesDao() {
     const result = await pool.query(`
         SELECT s.id, s.name, s.fee, s.department_id, d.name as department
@@ -25,15 +27,32 @@ export async function getAllServicesDao() {
 // Get one Service by ID
 export const getServiceById = async (id) => {
     const result = await pool.query(
-        `SELECT s.id, s.name, s.fee, s.department_id, d.name AS department_name
+        `SELECT s.id, s.name, s.fee, s.department_id, d.name AS department_name,
+                s.form_fields, s.required_documents
          FROM services s
-         JOIN departments d ON s.department_id = d.id
+                  JOIN departments d ON s.department_id = d.id
          WHERE s.id = $1`,
         [id]
     );
-    return result.rows[0];
+
+    const service = result.rows[0];
+
+    if (service) {
+        // Parse the JSON data from the database to a JavaScript object
+        service.formFields = service.form_fields ? JSON.parse(service.form_fields) : [];
+        service.requiredDocuments = service.required_documents ? JSON.parse(service.required_documents) : [];
+        // Delete the original properties to avoid redundancy
+        delete service.form_fields;
+        delete service.required_documents;
+    }
+
+    return service;
 };
 
+export const getDepartmentById = async (id) => {
+    const result = await pool.query("SELECT * FROM departments WHERE id = $1", [id]);
+    return result.rows[0];
+};
 
 export const getServicesByDepartmentId = async (departmentId) => {
     const query = "SELECT * FROM services WHERE department_id = $1";

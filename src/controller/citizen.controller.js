@@ -1,20 +1,18 @@
-import {getServicesByDepartmentId} from "../dao/service.dao.js";
+import {getServiceById, getServicesByDepartmentId} from "../dao/service.dao.js";
 
 import {getRequestsByCitizenId, getStatsResult} from "../dao/request.dao.js";
-import {addDocument} from "../services/documents.service.js";
-import {addRequest ,getRequestById} from "../services/requests.service.js";
-import {getAllServices} from "../services/service.service.js";
+import {getRequestById, createRequest, saveDocument} from "../services/requests.service.js";
 import {getAllDepartments} from "../services/department.service.js";
 import { addPayment } from "../services/payments.service.js";
 import * as profileService from "../services/profile.service.js";
 import { getNotificationsByUserId } from "../services/notification.service.js";
-
+import {getAllServices} from "../services/service.service.js";
 
 export const getCitizenDashboard = async (req, res, next) => {
     try {
         const citizenId = req.user.id;
         const notifications = await getNotificationsByUserId(req.user.id);
-
+        const recentActivities = await profileService.getRecentActivities(citizenId);
         const statsResult = await getStatsResult(citizenId);
         const stats = statsResult.length > 0 ? statsResult[0] : {
             total_requests: 0,
@@ -27,6 +25,8 @@ export const getCitizenDashboard = async (req, res, next) => {
             title: "Citizen Dashboard",
             user: req.user,
             notifications ,
+            latestNotifications:[],
+            recentRequests :recentActivities,
             stats,
         });
     } catch (err) {
@@ -66,17 +66,24 @@ export const getCitizenRequests = async (req, res, next) => {
     }
 };
 
-export const getServicesAndDepartments = async (req, res, next) => {
+export const getDepartments = async (req, res, next) => {
     try {
         const notifications = await getNotificationsByUserId(req.user.id);
-        const services = await getAllServices();
         const departments = await getAllDepartments();
-        res.render("citizen/applyService", {
-            title: "Request Services",
+        const allServices = await getAllServices();
+        // Organize services by department
+        const departmentsWithServices = departments.map(department => {
+            const servicesForDepartment = allServices.filter(service => service.department_id === department.id);
+            return {
+                ...department,
+                services: servicesForDepartment
+            };
+        });
+        res.render("citizen/departments", {
+            title: "Departments List",
             layout: "layouts/citizen_layout",
             user: req.user,
-            services,
-            departments,
+            departments: departmentsWithServices,
             notifications
         });
     } catch (err) {
@@ -84,39 +91,88 @@ export const getServicesAndDepartments = async (req, res, next) => {
     }
 };
 
-export const submitServiceApplication = async (req, res, next) => {
+export const applicationForm = async (req, res, next) => {
     try {
-        const { department, service } = req.body;
-        const citizenId = req.user.id;
-        const serviceId = parseInt(req.body.service, 10);
-
-        // Insert request
-        const newRequest = await addRequest({
-            citizen_id: citizenId,
-            service_id: serviceId,
-        });
-        // Handle file uploads (if any)
-        if (req.files && req.files.length > 0) {
-            for (const file of req.files) {
-                await addDocument({
-                    request_id: newRequest.id,
-                    file_path: file.filename,
-                    original_name: file.originalname
-                });
-            }
+        const { serviceId } = req.params;
+        const service = await getServiceById(parseInt(serviceId, 10));
+        if (!service) {
+            return res.status(404).send("Service not found.");
         }
-        res.redirect("/citizen/payments");
+        service.departmentName = service.department_name || 'Unknown Department';
+
+        res.render("citizen/request-form", {
+            layout: "layouts/citizen_layout",
+            title: service.name + " Application",
+            user: req.user,
+            service,
+        });
+
+        console.log("Service formFields:", service.formFields);
+        console.log("Service requiredDocuments:", service.requiredDocuments);
+
     } catch (err) {
-        console.error("Failed to add request:", err);
+        console.error("Failed to render application form:", err);
         next(err);
     }
 };
 
+export const submitApplication = async (req, res, next) => {
+    try {
+        const { serviceId } = req.params;
+        const citizenId = req.user.id;
+
+        // Form data (dynamic fields)
+        const formData = req.body;
+        const files = req.files || [];
+
+        // Save request
+        const request = await createRequest({
+            citizen_id: citizenId,
+            service_id: serviceId,
+            status: "submitted",
+            form_data: JSON.stringify(formData)
+        });
+
+        // Save uploaded documents
+        for (const file of files) {
+            await saveDocument({
+                request_id: request.id,
+                file_path: `/uploads/${file.filename}`,
+                original_name: file.originalname
+            });
+        }
+
+
+
+        res.redirect("/citizen/requests");
+    } catch (err) {
+        console.error("Error submitting application:", err);
+        next(err);
+    }
+};
+
+
 export const getServicesByDepartment = async (req, res, next) => {
     try {
         const { departmentId } = req.params;
-        const services = await getServicesByDepartmentId(departmentId);
-        res.json(services);
+        // Convert the string departmentId to a number
+        const departmentIdNum = parseInt(departmentId, 10);
+
+        const notifications = await getNotificationsByUserId(req.user.id);
+        const departments = await getAllDepartments();
+        const services = await getServicesByDepartmentId(departmentIdNum);
+
+        // Now, find will work correctly as both values are numbers
+        const selectedDepartment = departments.find(d => d.id === departmentIdNum);
+
+        res.render("citizen/departmentServices", {
+            title: selectedDepartment ? selectedDepartment.name : "Department Services",
+            layout: "layouts/citizen_layout",
+            user: req.user,
+            services,
+            selectedDepartment,
+            notifications
+        });
     } catch (err) {
         next(err);
     }

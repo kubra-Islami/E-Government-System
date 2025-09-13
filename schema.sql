@@ -33,9 +33,12 @@ CREATE TABLE services
     name          VARCHAR(100) NOT NULL,
     department_id INT          NOT NULL REFERENCES departments (id) ON DELETE CASCADE,
     fee           DECIMAL(10, 2) DEFAULT 0,
+    form_fields   TEXT,
+    required_documents TEXT,
     created_at    TIMESTAMP      DEFAULT NOW(),
     updated_at    TIMESTAMP      DEFAULT NOW()
 );
+
 
 -- 4. Requests   ===>   درخواست ها
 CREATE TABLE requests
@@ -52,6 +55,7 @@ CREATE TABLE requests
     -- Final decision
     final_reviewer_id    INT REFERENCES users (id),
     final_comment        TEXT,
+    form_data            JSONB,
     final_reviewed_at    TIMESTAMP,
     status               VARCHAR(20) CHECK (
         status IN ('submitted', 'under_review', 'approved', 'rejected')
