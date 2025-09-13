@@ -1,17 +1,17 @@
 <div class="container py-5">
-    <%- include('../breadcrumb', {
-    breadcrumbs: [
-    { label: "Dashboard", url: "/citizen/dashboard" },
-    { label: "profile" }
-    ]
-    }) %>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-light p-3 rounded-3">
+            <li class="breadcrumb-item"><a href="/citizen/dashboard" class="text-decoration-none text-secondary">Dashboard</a></li>
+            <li class="breadcrumb-item active text-primary" aria-current="page">profile</li>
+        </ol>
+    </nav>
     <div class="row g-4  my-5">
         <!-- Left Column: Avatar -->
         <div class="col-lg-4">
             <div class="card border-0 shadow-sm rounded-4 p-3 text-center">
                 <div class="mb-3">
-                    <img src="<%= user.avatar || '/images/default-avatar.png' %>"
-                         alt="Profile Picture"
+                    <img src="<%= user.avatar || './images/default-avatar.jpg' %>"
+                         alt="avatar image"
                          class="rounded-circle mb-3"
                          width="130" height="130">
                 </div>

@@ -1,17 +1,15 @@
 <div class="container py-5">
-    <%- include('../breadcrumb', {
-    breadcrumbs: [
-    { label: "Dashboard", url: "/citizen/dashboard" },
-    { label: "Notifications List" }
-    ]
-    }) %>
-
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-light p-3 rounded-3">
+            <li class="breadcrumb-item"><a href="/citizen/dashboard" class="text-decoration-none text-secondary">Dashboard</a></li>
+            <li class="breadcrumb-item active text-primary" aria-current="page">notifications</li>
+        </ol>
+    </nav>
     <!-- Notifications List -->
     <div class="row">
         <div class="col-lg-12">
             <div class="card border-0 shadow-sm rounded-4">
                 <div class="card-body p-4">
-
                     <% if (notifications && notifications.length > 0) { %>
                         <ul class="list-group list-group-flush">
                             <% notifications.forEach(notification => { %>

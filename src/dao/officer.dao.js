@@ -57,7 +57,6 @@ export const updateRequestStatus = async (requestId, status, officerId, comment)
             RETURNING *`;
         params = [status, officerId, comment, requestId];
     } else {
-        // fallback, just update status
         query = `
             UPDATE requests
             SET status = $1,

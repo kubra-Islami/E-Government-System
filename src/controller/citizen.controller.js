@@ -7,12 +7,34 @@ import { addPayment } from "../services/payments.service.js";
 import * as profileService from "../services/profile.service.js";
 import { getNotificationsByUserId } from "../services/notification.service.js";
 import {getAllServices} from "../services/service.service.js";
+import {getRecentActivities} from "../services/profile.service.js";
+
 
 export const getCitizenDashboard = async (req, res, next) => {
     try {
         const citizenId = req.user.id;
-        const notifications = await getNotificationsByUserId(req.user.id);
-        const recentActivities = await profileService.getRecentActivities(citizenId);
+
+        // Fetch notifications
+        const allNotifications = await getNotificationsByUserId(citizenId);
+        const unreadCount = allNotifications.filter(n => !n.is_read).length;
+
+        // Limit to 5 latest for display
+        const latestNotifications = allNotifications.slice(0, 5).map(n => ({
+            id: n.id,
+            message: n.message,
+            timeAgo: new Date(n.created_at).toLocaleString(),
+        }));
+
+        // Fetch recent applications/requests
+        const recentActivities = await getRecentActivities(citizenId);
+        const recentRequests = recentActivities.map(act => ({
+            id: act.id || null, // depends on your activities schema
+            serviceName: act.service_name || act.description || "N/A",
+            status: act.status || "Pending",
+            lastUpdated: act.date,
+        }));
+
+        // Stats
         const statsResult = await getStatsResult(citizenId);
         const stats = statsResult.length > 0 ? statsResult[0] : {
             total_requests: 0,
@@ -24,9 +46,9 @@ export const getCitizenDashboard = async (req, res, next) => {
             layout: "layouts/citizen_layout",
             title: "Citizen Dashboard",
             user: req.user,
-            notifications ,
-            latestNotifications:[],
-            recentRequests :recentActivities,
+            notifications: { unread: unreadCount },
+            latestNotifications,
+            recentRequests,
             stats,
         });
     } catch (err) {
@@ -34,6 +56,7 @@ export const getCitizenDashboard = async (req, res, next) => {
         next(err);
     }
 };
+
 
 export const getCitizenNotifications = async (req, res, next) => {
     try {
@@ -170,6 +193,7 @@ export const getServicesByDepartment = async (req, res, next) => {
             layout: "layouts/citizen_layout",
             user: req.user,
             services,
+            departmentId,
             selectedDepartment,
             notifications
         });

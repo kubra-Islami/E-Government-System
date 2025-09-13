@@ -5,21 +5,18 @@
         <nav>
             <ul class="nav">
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="/dashboard">Dashboard</a>
+                    <a class="nav-link text-white" href="/citizen/dashboard">Dashboard</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="/services/new">New Request</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="/requests">My Requests</a>
+                    <a class="nav-link text-white" href="/citizen/requests">My Requests</a>
                 </li>
                 <li class="nav-item position-relative">
-                    <a class="nav-link text-white" href="/notifications">
+                    <a class="nav-link text-white" href="/citizen/notifications">
                         <i class="bi bi-bell-fill"></i> Notifications
                         <% if (notifications && notifications.unread > 0) { %>
                             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                 <%= notifications.unread %>
-              </span>
+                </span>
                         <% } %>
                     </a>
                 </li>
@@ -28,7 +25,7 @@
                         Hello,<%= user.name %>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="/profile">Profile</a></li>
+                        <li><a class="dropdown-item" href="/citizen/profile">Profile</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="/logout">Log Out</a></li>
                     </ul>

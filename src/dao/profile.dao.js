@@ -14,10 +14,10 @@ export const fetchProfile = async (userId) => {
 export const fetchRecentActivities = async (userId) => {
     const sql = await db.query(
         `SELECT description, to_char(created_at, 'YYYY-MM-DD HH24:MI') AS date
-     FROM activities
-     WHERE user_id = $1
-     ORDER BY created_at DESC
-     LIMIT 5`,
+         FROM activities
+         WHERE user_id = $1
+         ORDER BY created_at DESC
+         LIMIT 5`,
         [userId]
     );
     return sql.rows;

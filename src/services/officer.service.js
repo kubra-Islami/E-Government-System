@@ -3,6 +3,7 @@ import * as NotificationDAO from '../dao/notification.dao.js';
 import * as ServiceDAO from '../dao/service.dao.js';
 import * as OfficerDAO from "../dao/officer.dao.js";
 import {createNotification} from "../dao/notification.dao.js";
+import {getServiceById} from "../dao/service.dao.js";
 
 export async function listRequestsForOfficer(officerUser, filters) {
     const departmentId = await RequestDAO.getOfficerDepartmentId(officerUser.id);
@@ -43,12 +44,11 @@ export const reviewRequest = async (requestId, status, officer,comment) => {
         comment
     );
 
-    console.log(request);
     // Notify citizen
     await createNotification(
         request.citizen_id,
         request.id,
-        `Your request #${request.request_number} has been ${status.replace('_', ' ')} by officer ${officer.name}. Comment: "${comment}"`
+        `Your request has been ${status.replace('_', ' ')} by officer ${officer.name}. Comment: "${comment}"`
     );
 
     return request;
