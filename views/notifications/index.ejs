@@ -1,16 +1,69 @@
-<h1 class="mb-4"><%= title %></h1>
+<div class="container py-5">
 
-<ul class="list-group">
-    <% notifications.forEach(n => { %>
-        <li class="list-group-item d-flex justify-content-between align-items-center <%= n.is_read ? 'list-group-item-secondary' : 'list-group-item-warning' %>">
-            <div>
-                <%= n.message %>
-            </div>
-            <% if (!n.is_read) { %>
-                <form action="/<%= user.role %>/notifications/<%= n.id %>/read" method="POST" class="mb-0">
-                    <button class="btn btn-sm btn-primary" type="submit">Mark as read</button>
-                </form>
+    <!-- Page Title -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold"><i class="bi bi-bell-fill me-2 text-primary"></i> <%= title %></h3>
+        <% if (notifications.length > 0) { %>
+            <form action="/<%= user.role %>/notifications/read-all" method="POST">
+                <button class="btn btn-sm btn-outline-primary">
+                    <i class="bi bi-check2-all me-1"></i> Mark all as read
+                </button>
+            </form>
+        <% } %>
+    </div>
+
+    <!-- Notifications -->
+    <div class="card border-0 shadow rounded-4">
+        <div class="card-body p-0">
+            <% if (notifications && notifications.length > 0) { %>
+                <div class="list-group list-group-flush">
+                    <% notifications.forEach(n => { %>
+                        <div class="list-group-item d-flex justify-content-between align-items-start
+                                    <%= n.is_read ? 'bg-light text-muted' : 'bg-white' %>">
+
+                            <!-- Left side: Icon + Content -->
+                            <div class="d-flex align-items-start">
+                                <div class="me-3">
+                                    <% if (!n.is_read) { %>
+                                        <i class="bi bi-dot fs-2 text-primary"></i>
+                                    <% } else { %>
+                                        <i class="bi bi-check-circle-fill text-success fs-5"></i>
+                                    <% } %>
+                                </div>
+                                <div>
+                                    <p class="mb-1 fw-semibold"><%= n.message %></p>
+                                    <small class="text-muted">
+                                        <i class="bi bi-clock me-1"></i>
+                                        <%= new Date(n.created_at).toLocaleString() %>
+                                    </small>
+                                </div>
+                            </div>
+
+                            <!-- Right side: Action -->
+                            <% if (!n.is_read) { %>
+                                <form action="/<%= user.role %>/notifications/<%= n.id %>/read" method="POST">
+                                    <button class="btn btn-sm btn-outline-primary rounded-pill">
+                                        Mark Read
+                                    </button>
+                                </form>
+                            <% } %>
+                        </div>
+                    <% }) %>
+                </div>
+            <% } else { %>
+                <p class="text-center text-muted py-5 mb-0">🎉 No notifications yet.</p>
             <% } %>
-        </li>
-    <% }) %>
-</ul>
+        </div>
+    </div>
+</div>
+
+<style>
+    .list-group-item {
+        transition: background 0.2s ease, transform 0.1s ease;
+        cursor: pointer;
+    }
+    .list-group-item:hover {
+        background-color: #f8f9fa !important;
+        transform: translateX(3px);
+    }
+</style>

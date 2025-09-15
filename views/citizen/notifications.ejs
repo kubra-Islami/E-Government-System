@@ -26,11 +26,6 @@
                                             <small class="text-muted"><%= new Date(notification.created_at).toLocaleString() %></small>
                                         </div>
                                     </div>
-                                    <% if (!notification.read) { %>
-                                        <form action="/citizen/notifications/mark-read/<%= notification.id %>" method="POST">
-                                            <button class="btn btn-sm btn-outline-primary rounded-pill">Mark Read</button>
-                                        </form>
-                                    <% } %>
                                 </li>
                             <% }) %>
                         </ul>

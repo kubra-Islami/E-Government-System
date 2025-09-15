@@ -4,7 +4,7 @@ import * as NotificationService from "../services/notification.service.js";
 export const getNotificationsPage = async (req, res, next) => {
     try {
         const notifications = await NotificationService.getNotificationsByUserId(req.user.id);
-        res.render("citizen/notifications", { title: "Notifications", notifications , layout: "layouts/citizen_layout",});
+        res.render("citizen/notifications", { title: "Notifications", notifications , layout: "layouts/citizen_layout",user: req.user});
     } catch (err) {
         next(err);
     }
@@ -26,7 +26,7 @@ export const getMyNotifications = async (req, res) => {
         const notifications = await NotificationService.getNotificationsByUserId(req.user.id);
         res.render("notifications/index", {
             title: "My Notifications",
-            layout: "layouts/" + req.user.role + "_layout", // load citizen/officer/admin layout
+            layout: "layouts/" + req.user.role + "_layout",
             notifications,
             user: req.user,
         });

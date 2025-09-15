@@ -17,6 +17,7 @@ import multer from "multer";
 import path from "path";
 import {getPaymentSuccess} from "../controller/payment.service.js";
 import {getNotificationsByUserId} from "../services/notification.service.js";
+import {getNotificationsPage, markNotificationRead} from "../controller/notification.controller.js";
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -82,7 +83,7 @@ router.post("/profile/update", authMiddleware, updateCitizenProfile);
 router.post("/profile/upload-avatar", authMiddleware, upload.single("avatar"), uploadAvatar);
 
 // Notifications routes
-// router.get("/notifications", authMiddleware, getNotificationsPage);
-// router.post("/notifications/mark-read/:id", authMiddleware, markNotificationRead);
+router.get("/notifications", authMiddleware, getNotificationsPage);
+router.post("/notifications/mark-read/:id", authMiddleware, markNotificationRead);
 
 export default router;
