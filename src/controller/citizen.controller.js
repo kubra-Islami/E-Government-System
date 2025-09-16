@@ -240,8 +240,8 @@ export const submitPayment = async (req, res, next) => {
 
         // Optionally, update request status
         // await updateRequestStatus(requestId, "paid");
-
-        res.redirect("/citizen/requests");
+        res.render("citizen/payment-success", {layout: "layouts/citizen_layout"});
+        // res.redirect("/citizen/");
     } catch (err) {
         next(err);
     }

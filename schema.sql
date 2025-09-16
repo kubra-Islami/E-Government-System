@@ -83,7 +83,8 @@ CREATE TABLE payments
     request_id   INT            NOT NULL REFERENCES requests (id) ON DELETE CASCADE,
     amount       DECIMAL(10, 2) NOT NULL CHECK (amount >= 0),
     status       VARCHAR(20) CHECK (status IN ('success', 'failed', 'pending')) DEFAULT 'pending',
-    payment_date TIMESTAMP                                                      DEFAULT NOW()
+    payment_date TIMESTAMP                                                      DEFAULT NOW(),
+    paid_at TIMESTAMP DEFAULT NOW()
 );
 
 -- 7. Notifications   ===> اعلانات   ○ Citizens get notified (in-app or email) when their request status changes.

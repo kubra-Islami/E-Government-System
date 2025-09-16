@@ -47,7 +47,8 @@ router.get("/requests",authMiddleware, getCitizenRequests);
 router.get("/payments/:requestId",authMiddleware, getPaymentPage);
 
 // Handle payment submission
-router.post("/payments/:requestId", authMiddleware, submitPayment);
+// router.post("/payments/:requestId", authMiddleware, submitPayment);
+
 router.post(
     "/services/apply/:serviceId",
     authMiddleware,
@@ -71,7 +72,7 @@ router.get("/payments", authMiddleware, async (req, res, next) => {
     }
 });
 
-router.get("/success/:paymentId", getPaymentSuccess);
+router.post("/success/:paymentId", getPaymentSuccess);
 
 // Get profile page
 router.get("/profile", authMiddleware, getCitizenProfile);

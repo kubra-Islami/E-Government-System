@@ -1,11 +1,4 @@
 <div class="container my-5">
-
-    <%- include('../breadcrumb', {
-    breadcrumbs: [
-    { label: "Dashboard", url: "/citizen/dashboard" },
-    { label: "Payment" }
-    ]
-    }) %>
     <div class="row justify-content-center">
         <div class="col-lg-7 col-md-9">
 
@@ -38,7 +31,7 @@
                     </ul>
 
                     <!-- Payment Form -->
-                    <form action="/citizen/payments/<%= request.id %>" method="POST">
+                    <form action="/citizen/success/1" method="POST">
                         <input type="hidden" name="amount" value="<%= service.fee %>">
 
                         <!-- Payment Method -->
