@@ -133,5 +133,5 @@ async function runSeeds() {
     }
 }
 
-runSeeds();
+// runSeeds();
 // resetTables();

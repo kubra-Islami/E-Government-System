@@ -37,10 +37,32 @@ export const dashboard = async (req, res) => {
 };
 
 export const requestsList = async (req, res) => {
-    const requests = await OfficerService.getRequests(req.user.department_id);
+    const { q, status, from, to } = req.query;
+
+    const requests = await OfficerService.searchRequests({
+        departmentId: req.user.department_id,
+        q,
+        status,
+        from,
+        to
+    });
+
     const notifications = await getNotificationsByUserId(req.user.id);
-    res.render("officer/requestsList", { title: "Requests", requests ,  layout: "layouts/officer_layout", success: null, error: null, notifications});
+
+    res.render("officer/requestsList", {
+        title: "Requests",
+        requests,
+        layout: "layouts/officer_layout",
+        success: null,
+        error: null,
+        notifications,
+        q,
+        status,
+        fromDate: from,
+        toDate: to
+    });
 };
+
 
 export const requestDetail = async (req, res) => {
     const requestId = req.params.id;
@@ -137,18 +159,42 @@ export const downloadDocument = async (req, res) => {
         if (!doc) {
             return res.status(404).send("Document not found");
         }
-        const filePath = path.join(process.cwd(), "uploads", doc.file_path);
 
-        res.download(filePath, doc.original_name || "document");
+        // Always prepend uploads at runtime
+        const filePath = path.join(process.cwd(), doc.file_path);
+
+        setTimeout(()=>{
+            res.download(filePath, doc.original_name || doc.file_path);
+        },400)
+
     } catch (err) {
         console.error("Error downloading file:", err);
         res.status(500).send("Server error");
     }
 };
 
+
+
 export const searchRequests = async (req, res) => {
-    const requests = await OfficerService.getRequests(req.user.department_id);
-    res.render("officer/requests", { title: "Search Results", requests });
+    const { q, status, from, to } = req.query;
+
+    const requests = await OfficerService.searchRequests({
+        departmentId: req.user.department_id,
+        q,
+        status,
+        from,
+        to
+    });
+
+    res.render("officer/requestsList", {
+        title: "Search Results",
+        layout: "layouts/officer_layout",
+        requests,
+        q,
+        status,
+        fromDate: from,
+        toDate: to
+    });
 };
 
 export const profile = async (req, res) => {
@@ -159,6 +205,7 @@ export const profile = async (req, res) => {
             return res.status(404).send("Officer not found");
         }
 
+        console.log(officer)
         res.render("officer/profile", {
             officer,
             layout: "layouts/officer_layout",

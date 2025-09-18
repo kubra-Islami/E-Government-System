@@ -1,157 +1,169 @@
 <div class="container d-flex align-items-center justify-content-center min-vh-100">
-  <div class="col-md-7 col-lg-6">
-    <div class="card shadow rounded-3">
-      <div class="card-body p-4">
-        <h3 class="text-center mb-4 fw-bold text-primary">
-          <i class="bi bi-person-plus me-2"></i> Register
-        </h3>
+    <div class="col-md-7 col-lg-6">
+        <div class="card shadow rounded-3">
+            <div class="card-body p-4">
+                <h3 class="text-center mb-4 fw-bold text-primary">
+                    <i class="bi bi-person-plus me-2"></i> Register
+                </h3>
 
-        <% if (typeof error !== 'undefined') { %>
-          <div class="alert alert-danger"><%= error %></div>
-        <% } %>
+                <% if (typeof error !== 'undefined') { %>Job Title
+                <div class="alert alert-danger"><%= error %></div>
+                <% } %>
 
-        <form action="/api/users/register" method="POST" id="registerForm">
-          <!-- Name -->
-          <div class="mb-3">
-            <label for="name" class="form-label">Full Name</label>
-            <input
-                    type="text"
-                    class="form-control"
-                    id="name"
-                    name="name"
-                    placeholder="Enter your full name"
-                    required>
-          </div>
+                <form action="/api/users/register" method="POST" id="registerForm">
+                    <!-- Name -->
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Full Name</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                id="name"
+                                name="name"
+                                placeholder="Enter your full name"
+                                required>
+                    </div>
 
-          <!-- Email -->
-          <div class="mb-3">
-            <label for="email" class="form-label">Email address</label>
-            <input
-                    type="email"
-                    class="form-control"
-                    id="email"
-                    name="email"
-                    placeholder="Enter your email"
-                    required>
-          </div>
+                    <!-- Email -->
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email address</label>
+                        <input
+                                type="email"
+                                class="form-control"
+                                id="email"
+                                name="email"
+                                placeholder="Enter your email"
+                                required>
+                    </div>
 
-          <!-- Password -->
-          <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
-            <input
-                    type="password"
-                    class="form-control"
-                    id="password"
-                    name="password"
-                    placeholder="Enter a strong password"
-                    required minlength="6">
-          </div>
+                    <!-- Password -->
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input
+                                type="password"
+                                class="form-control"
+                                id="password"
+                                name="password"
+                                placeholder="Enter a strong password"
+                                required minlength="6">
+                    </div>
 
-          <!-- National ID (citizen only) -->
-          <div class="mb-3 citizen-only">
-            <label for="national_id" class="form-label">National ID</label>
-            <input
-                    type="text"
-                    class="form-control"
-                    id="national_id"
-                    name="national_id"
-                    placeholder="Enter your national ID">
-          </div>
+                    <!-- National ID (citizen only) -->
+                    <div class="mb-3 citizen-only">
+                        <label for="national_id" class="form-label">National ID</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                id="national_id"
+                                name="national_id"
+                                placeholder="Enter your national ID">
+                    </div>
 
-          <!-- Date of Birth (citizen only) -->
-          <div class="mb-3 citizen-only">
-            <label for="date_of_birth" class="form-label">Date of Birth</label>
-            <input
-                    type="date"
-                    class="form-control"
-                    id="date_of_birth"
-                    name="date_of_birth">
-          </div>
+                    <!-- Date of Birth (citizen only) -->
+                    <div class="mb-3 citizen-only">
+                        <label for="date_of_birth" class="form-label">Date of Birth</label>
+                        <input
+                                type="date"
+                                class="form-control"
+                                id="date_of_birth"
+                                name="date_of_birth">
+                    </div>
 
-          <!-- Contact Info -->
-          <div class="mb-3">
-            <label for="contact_info" class="form-label">Contact Info</label>
-            <input
-                    type="text"
-                    class="form-control"
-                    id="contact_info"
-                    name="contact_info"
-                    placeholder="Phone number or address"
-                    required>
-          </div>
+                    <!-- Contact Info -->
+                    <div class="mb-3">
+                        <label for="contact_info" class="form-label">Contact Info</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                id="contact_info"
+                                name="contact_info"
+                                placeholder="Phone number or address"
+                                required>
+                    </div>
 
-          <!-- Role -->
-          <div class="mb-3">
-            <label for="role" class="form-label">Role</label>
-            <select class="form-select" id="role" name="role" required>
-              <option value="citizen" selected>Citizen</option>
-              <option value="officer">Officer</option>
-              <option value="admin">Admin</option>
-            </select>
-          </div>
+                    <!-- Role -->
+                    <div class="mb-3">
+                        <label for="role" class="form-label">Role</label>
+                        <select class="form-select" id="role" name="role" required>
+                            <option value="citizen" selected>Citizen</option>
+                            <option value="officer">Officer</option>
+                            <option value="department_head">Department Head</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
 
-          <!-- Department (only for officer/admin) -->
-          <div class="mb-3 d-none" id="departmentField">
-            <label for="department_id" class="form-label">Department</label>
-            <select class="form-select" id="department_id" name="department_id">
-              <% departments.forEach(function(dept) { %>
-                <option value="<%= dept.id %>"><%= dept.name %></option>
-              <% }); %>
-            </select>
-          </div>
+                    <!-- Department (only for officer/admin) -->
+                    <div class="mb-3 d-none" id="departmentField">
+                        <label for="department_id" class="form-label">Department</label>
+                        <select class="form-select" id="department_id" name="department_id">
+                            <% departments.forEach(function(dept) { %>
+                                <option value="<%= dept.id %>"><%= dept.name %></option>
+                            <% }); %>
+                        </select>
+                    </div>
 
-          <!-- Job Title (only for officer) -->
-          <div class="mb-3 d-none" id="jobTitleField">
-            <label for="job_title" class="form-label">Job Title</label>
-            <input
-                    type="text"
-                    class="form-control"
-                    id="job_title"
-                    name="job_title"
-                    placeholder="Enter your job title">
-          </div>
+                    <!-- Job Title (only for officer) -->
+                    <div class="mb-3 d-none" id="jobTitleField">
+                        <label for="job_title" class="form-label">Job Title</label>
+                        <input
+                                type="text"
+                                class="form-control"
+                                id="job_title"
+                                name="job_title"
+                                placeholder="Enter your job title">
+                    </div>
 
-          <!-- Submit -->
-          <div class="d-grid">
-            <button type="submit" class="btn btn-primary btn-lg">Register</button>
-          </div>
-        </form>
+                    <!-- Submit -->
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">Register</button>
+                    </div>
+                </form>
 
-        <p class="text-center mt-3">
-          Already have an account? <a href="/api/users/login" class="fw-bold">Login</a>
-        </p>
-      </div>
+                <p class="text-center mt-3">
+                    Already have an account? <a href="/api/users/login" class="fw-bold">Login</a>
+                </p>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <!-- JavaScript to toggle fields based on role -->
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const roleSelect = document.getElementById("role");
-    const departmentField = document.getElementById("departmentField");
-    const jobTitleField = document.getElementById("jobTitleField");
-    const citizenFields = document.querySelectorAll(".citizen-only");
 
-    function toggleFields() {
-      const role = roleSelect.value;
+    document.addEventListener("DOMContentLoaded", function () {
+        const roleSelect = document.getElementById("role");
+        const departmentField = document.getElementById("departmentField");
+        const jobTitleField = document.getElementById("jobTitleField");
+        const citizenFields = document.querySelectorAll(".citizen-only");
 
-      if (role === "citizen") {
-        departmentField.classList.add("d-none");
-        jobTitleField.classList.add("d-none");
-        citizenFields.forEach(f => f.classList.remove("d-none"));
-      } else if (role === "officer") {
-        departmentField.classList.remove("d-none");
-        jobTitleField.classList.remove("d-none");
-        citizenFields.forEach(f => f.classList.add("d-none"));
-      } else if (role === "admin") {
-        departmentField.classList.remove("d-none");
-        jobTitleField.classList.add("d-none");
-        citizenFields.forEach(f => f.classList.add("d-none"));
-      }
-    }
+        function toggleFields() {
+            const role = roleSelect.value;
 
-    roleSelect.addEventListener("change", toggleFields);
-    toggleFields();
-  });
+            if (role === "citizen") {
+                // Show citizen fields only
+                departmentField.classList.add("d-none");
+                jobTitleField.classList.add("d-none");
+                citizenFields.forEach(f => f.classList.remove("d-none"));
+            } else if (role === "officer") {
+                // Officer needs department + job title
+                departmentField.classList.remove("d-none");
+                jobTitleField.classList.remove("d-none");
+                citizenFields.forEach(f => f.classList.add("d-none"));
+            } else if (role === "department_head") {
+                // Department head needs department only
+                departmentField.classList.remove("d-none");
+                jobTitleField.classList.add("d-none");
+                citizenFields.forEach(f => f.classList.add("d-none"));
+            } else if (role === "admin") {
+                // Admin needs department only
+                departmentField.classList.remove("d-none");
+                jobTitleField.classList.add("d-none");
+                citizenFields.forEach(f => f.classList.add("d-none"));
+            }
+        }
+
+        roleSelect.addEventListener("change", toggleFields);
+        toggleFields();
+    });
+
+
 </script>

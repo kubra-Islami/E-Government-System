@@ -6,7 +6,6 @@ import {
     getServicesByDepartment,
     getCitizenRequests,
     getPaymentPage,
-    submitPayment,
     getCitizenProfile,
     updateCitizenProfile,
     uploadAvatar, getDepartments, applicationForm, submitApplication
@@ -21,7 +20,7 @@ import {getNotificationsPage, markNotificationRead} from "../controller/notifica
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, "uploads/");
+        cb(null, path.join(process.cwd(), "uploads"));
     },
     filename: function (req, file, cb) {
         const ext = path.extname(file.originalname);
@@ -30,6 +29,7 @@ const storage = multer.diskStorage({
         cb(null, uniqueName);
     }
 });
+
 
 const upload = multer({ storage });
 

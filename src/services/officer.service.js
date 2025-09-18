@@ -30,6 +30,9 @@ export async function getServicesByDepartment(departmentId) {
 export const getRequests = async (departmentId) => {
     return OfficerDAO.findRequestsByDepartment(departmentId);
 };
+export const searchRequests = async (filters) => {
+    return OfficerDAO.findRequestsWithFilters(filters);
+};
 
 export const getRequestDetail = async (requestId) => {
     return OfficerDAO.findRequestById(requestId);

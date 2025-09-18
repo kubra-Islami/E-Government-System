@@ -119,7 +119,7 @@ export const addDocument = async (requestId, filename, filepath) => {
 
 export const findById = async (id) => {
     const { rows } = await db.query(
-        `SELECT u.id, u.name, u.email, u.role, d.name AS department_name
+        `SELECT u.id, u.name, u.email, u.role,u.job_title, d.name AS department_name
          FROM users u
                   LEFT JOIN departments d ON u.department_id = d.id
          WHERE u.id = $1;`,
@@ -166,3 +166,51 @@ export async function finalizeReview(requestId, officerId, status, comment) {
         [status, officerId, comment, requestId]
     );
 }
+
+
+export const findRequestsWithFilters = async ({ departmentId, q, status, from, to }) => {
+    let query = `
+        SELECT r.id,
+               r.status,
+               r.created_at,
+               s.name AS service_name,
+               d.name AS department_name,
+               u.name AS citizen_name
+        FROM requests r
+                 JOIN services s ON r.service_id = s.id
+                 JOIN departments d ON s.department_id = d.id
+                 JOIN users u ON r.citizen_id = u.id
+        WHERE d.id = $1
+    `;
+    const params = [departmentId];
+    let paramIndex = 2;
+
+    if (q) {
+        query += ` AND (u.name ILIKE $${paramIndex} OR CAST(r.id AS TEXT) ILIKE $${paramIndex})`;
+        params.push(`%${q}%`);
+        paramIndex++;
+    }
+
+    if (status) {
+        query += ` AND r.status = $${paramIndex}`;
+        params.push(status);
+        paramIndex++;
+    }
+
+    if (from) {
+        query += ` AND r.created_at >= $${paramIndex}`;
+        params.push(from);
+        paramIndex++;
+    }
+
+    if (to) {
+        query += ` AND r.created_at <= $${paramIndex}`;
+        params.push(to);
+        paramIndex++;
+    }
+
+    query += ` ORDER BY r.created_at DESC`;
+
+    const { rows } = await db.query(query, params);
+    return rows;
+};

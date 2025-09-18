@@ -9,6 +9,7 @@ export default class User {
                     contact_info,
                     role,
                     department_id,
+                    job_title,
                     created_at,
                     updated_at,
                 }) {
@@ -21,6 +22,7 @@ export default class User {
         this.contact_info = contact_info;
         this.role = role;
         this.department_id = department_id;
+        this.job_title = job_title;
         this.created_at = created_at;
         this.updated_at = updated_at;
     }

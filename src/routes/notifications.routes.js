@@ -23,8 +23,6 @@ router.get("/", async (req, res) => {
     });
 });
 
-
-
 // Mark one notification as read
 router.post("/:id/read", NotificationController.markAsRead);
 

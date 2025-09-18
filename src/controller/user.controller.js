@@ -66,6 +66,7 @@ export const register = async (req, res) => {
 
         if (user.role === "citizen") return res.redirect("/citizen/dashboard");
         if (user.role === "officer") return res.redirect("/officer/dashboard");
+        if (user.role === "department_head") return res.redirect("/department_head/dashboard");
         if (user.role === "admin") return res.redirect("/admin/dashboard");
         return res.redirect("/");
 
@@ -104,6 +105,7 @@ export async function login(req, res) {
         // Redirect based on role
         if (user.role === "citizen") return res.redirect("/citizen/dashboard");
         if (user.role === "officer") return res.redirect("/officer/dashboard");
+        if (user.role === "department_head") return res.redirect("/department_head/dashboard");
         if (user.role === "admin") return res.redirect("/admin/dashboard");
         return res.redirect("/");
 

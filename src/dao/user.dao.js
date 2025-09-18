@@ -3,18 +3,20 @@ import User from "../models/User.js";
 
 export async function createUser(data) {
     const {
-        name, email, password, national_id, date_of_birth, contact_info, role, department_id = null,
+        name, email, password, national_id, date_of_birth,
+        contact_info, role, department_id = null, job_title = null,
     } = data;
 
     const sql = `
-        INSERT INTO users (name, email, password, national_id, date_of_birth, contact_info, role, department_id)
-        VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
+        INSERT INTO users (name, email, password, national_id, date_of_birth, contact_info, role, department_id, job_title)
+        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
             RETURNING *;
     `;
-    const params = [name, email, password, national_id, date_of_birth, contact_info, role, department_id];
+    const params = [name, email, password, national_id, date_of_birth, contact_info, role, department_id, job_title];
     const { rows } = await pool.query(sql, params);
     return new User(rows[0]);
 }
+
 
 export async function findByEmail(email) {
     const { rows } = await pool.query("SELECT * FROM users WHERE email=$1", [email]);

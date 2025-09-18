@@ -3,14 +3,17 @@ import {createUser, findByEmail} from "../dao/user.dao.js";
 import {generateToken} from "../utils/token.util.js";
 
 export async function registerUser(payload) {
-
     const exists = await findByEmail(payload.email);
     if (exists) throw new Error("User already exists");
 
     const password = await hashPassword(payload.password);
     const role = payload.role || 'citizen';
 
-    if (role === 'citizen' || role === 'admin') payload.department_id = null;
+    // Clear fields for non-officers
+    if (role === 'citizen' || role === 'admin') {
+        payload.department_id = null;
+        payload.job_title = null;
+    }
 
     const user = await createUser({
         name: payload.name,
@@ -20,13 +23,14 @@ export async function registerUser(payload) {
         date_of_birth: payload.date_of_birth,
         contact_info: payload.contact_info,
         role,
-        department_id: payload.department_id
+        department_id: payload.department_id,
+        job_title: role === "officer" ? payload.job_title : null,
     });
-    // return buildAuthResponse(user);
-    const token = generateToken({ id: user.id, role: user.role ,name: user.name  });
 
+    const token = generateToken({ id: user.id, role: user.role, name: user.name });
     return { user, token };
 }
+
 
 export const loginUser = async ({email, password}) => {
     const user = await findByEmail(email);

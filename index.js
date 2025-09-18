@@ -12,6 +12,7 @@ import UserRoutes from "./src/routes/user.routes.js";
 import AdminRoutes from "./src/routes/admin.routes.js";
 import CitizenRoutes from "./src/routes/citizen.routes.js";
 import OfficerRoutes from "./src/routes/officer.routes.js";
+import departmentHead from "./src/routes/departmentHead.routes.js";
 import notificationsRouter from "./src/routes/notifications.routes.js";
 
 import { requireAdmin } from "./src/middlewares/auth.requireAdmin.js";
@@ -70,7 +71,7 @@ app.use(async (req, res, next) => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
-app.use("/uploads", express.static(path.join(path.resolve(), "uploads")));
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
 
 // --------------------
@@ -103,6 +104,12 @@ app.use("/admin/notifications", (req, res, next) => {
     return res.status(403).send("Forbidden");
 }, notificationsRouter);
 
+app.use("/department_head/notifications", (req, res, next) => {
+    if (req.user?.role === "department_head") return next();
+    return res.status(403).send("Forbidden");
+}, notificationsRouter);
+
+
 app.get("/notifications", (req, res) => {
     if (!req.user) return res.redirect("/api/users/login");
 
@@ -111,6 +118,8 @@ app.get("/notifications", (req, res) => {
             return res.redirect("/citizen/notifications");
         case "officer":
             return res.redirect("/officer/notifications");
+        case "department_head":
+            return res.redirect("/department_head/notifications");
         case "admin":
             return res.redirect("/admin/notifications");
         default:
@@ -122,6 +131,7 @@ app.use("/api/users", UserRoutes);
 app.use("/admin", requireAdmin, AdminRoutes);
 app.use("/citizen", CitizenRoutes);
 app.use("/officer", OfficerRoutes);
+app.use("/department_head", departmentHead);
 
 app.use("/logout", async (req, res) => {
     res.clearCookie("token");

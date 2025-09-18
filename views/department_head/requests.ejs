@@ -1,10 +1,4 @@
 <div class="container mt-4">
-    <%- include('../breadcrumb', {
-    breadcrumbs: [
-    { label: "Dashboard", url: "/officer/dashboard" },
-    { label: "Service Requests" }
-    ]
-    }) %>
 
     <% if (typeof success !== "undefined" && success) { %>
         <div class="alert alert-success"><%= success %></div>

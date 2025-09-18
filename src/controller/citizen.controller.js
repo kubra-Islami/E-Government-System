@@ -130,9 +130,6 @@ export const applicationForm = async (req, res, next) => {
             service,
         });
 
-        console.log("Service formFields:", service.formFields);
-        console.log("Service requiredDocuments:", service.requiredDocuments);
-
     } catch (err) {
         console.error("Failed to render application form:", err);
         next(err);
