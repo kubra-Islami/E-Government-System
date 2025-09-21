@@ -53,3 +53,6 @@ router.get("/services/:id/delete", deleteServiceController);
 // Get profile page
 router.get("/profile", getAdminProfile);
 export default router;
+
+
+

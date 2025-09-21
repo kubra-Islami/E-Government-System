@@ -204,8 +204,6 @@ export const profile = async (req, res) => {
         if (!officer) {
             return res.status(404).send("Officer not found");
         }
-
-        console.log(officer)
         res.render("officer/profile", {
             officer,
             layout: "layouts/officer_layout",
