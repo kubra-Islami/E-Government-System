@@ -3,6 +3,8 @@ const router = express.Router();
 import { ensureAuthenticated, ensureOfficer } from '../middlewares/auth.requireOfficer.js';
 import * as OfficerController from '../controller/officer.controller.js';
 import {buildBreadcrumbs} from "../middlewares/breadcrumbs.js";
+import { upload } from "../middlewares/upload.middleware.js";
+import {uploadAvatar} from "../controller/upload.Controller.js";
 
 router.use(ensureAuthenticated,buildBreadcrumbs, ensureOfficer);
 
@@ -33,5 +35,10 @@ router.get("/search", OfficerController.searchRequests);
 
 // profile
 router.get("/profile", OfficerController.profile);
+// Update profile
+router.post("/profile/update", OfficerController.updateOfficerProfile);
+
+// Upload avatar
+router.post("/profile/upload-avatar", upload.single("avatar"), uploadAvatar);
 
 export default router;

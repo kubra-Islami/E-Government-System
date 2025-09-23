@@ -1,7 +1,7 @@
 import {getServiceById, getServicesByDepartmentId} from "../dao/service.dao.js";
 
 import {getRequestsByCitizenId, getStatsResult} from "../dao/request.dao.js";
-import {getRequestById, createRequest, saveDocument} from "../services/requests.service.js";
+import {getRequestById} from "../services/requests.service.js";
 import {getAllDepartments} from "../services/department.service.js";
 import { addPayment } from "../services/payments.service.js";
 import * as profileService from "../services/profile.service.js";
@@ -291,17 +291,3 @@ export const updateCitizenProfile = async (req, res, next) => {
     }
 };
 
-// POST upload avatar
-export const uploadAvatar = async (req, res, next) => {
-    try {
-        const userId = req.user.id;
-        const avatarPath = req.file ? `/uploads/${req.file.filename}` : null;
-
-        if (avatarPath) {
-            await profileService.updateProfile(userId, { avatar: avatarPath });
-        }
-        res.redirect("/citizen/profile");
-    } catch (err) {
-        next(err);
-    }
-};

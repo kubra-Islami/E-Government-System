@@ -12,10 +12,10 @@
                     <div class="alert alert-success"><%= success %></div>
                 <% } %>
 
-                <form action="/api/users/login" method="POST">
+                <form action="/api/users/login" method="POST" id="login-form" class="needs-validation" novalidate>
                     <!-- Email -->
                     <div class="mb-3">
-                        <label for="email" class="form-label">Email address</label>
+                        <label for="email" class="form-label">Email address <span class="text-danger">*</span></label>
                         <input
                                 type="email"
                                 class="form-control"
@@ -24,11 +24,12 @@
                                 placeholder="Enter your email"
                                 required
                         >
+                        <div class="invalid-feedback">Please enter a valid email address.</div>
                     </div>
 
                     <!-- Password -->
                     <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
+                        <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
                         <input
                                 type="password"
                                 class="form-control"
@@ -37,6 +38,7 @@
                                 placeholder="Enter your password"
                                 required
                         >
+                        <div class="invalid-feedback">Please enter your password .</div>
                     </div>
 
                     <!-- Submit -->
@@ -53,3 +55,16 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("login-form");
+        form.addEventListener("submit", function (event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add("was-validated");
+        }, false);
+    })
+</script>

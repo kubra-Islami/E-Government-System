@@ -8,30 +8,30 @@ import {
     getPaymentPage,
     getCitizenProfile,
     updateCitizenProfile,
-    uploadAvatar, getDepartments, applicationForm, submitApplication
+     getDepartments, applicationForm, submitApplication
 } from "../controller/citizen.controller.js";
 import { getRequestsByCitizenId } from "../services/requests.service.js";
 
-import multer from "multer";
-import path from "path";
+import { upload } from "../middlewares/upload.middleware.js";
 import {getPaymentSuccess} from "../controller/payment.service.js";
 import {getNotificationsByUserId} from "../services/notification.service.js";
 import {getNotificationsPage, markNotificationRead} from "../controller/notification.controller.js";
+import {handleUpload, uploadAvatar} from "../controller/upload.Controller.js";
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, path.join(process.cwd(), "uploads"));
-    },
-    filename: function (req, file, cb) {
-        const ext = path.extname(file.originalname);
-        const base = path.basename(file.originalname, ext);
-        const uniqueName = `${Date.now()}-${base}${ext}`;
-        cb(null, uniqueName);
-    }
-});
+// const storage = multer.diskStorage({
+//     destination: function (req, file, cb) {
+//         cb(null, path.join(process.cwd(), "uploads"));
+//     },
+//     filename: function (req, file, cb) {
+//         const ext = path.extname(file.originalname);
+//         const base = path.basename(file.originalname, ext);
+//         const uniqueName = `${Date.now()}-${base}${ext}`;
+//         cb(null, uniqueName);
+//     }
+// });
 
 
-const upload = multer({ storage });
+// const upload = multer({ storage });
 
 router.get("/dashboard",authMiddleware,getCitizenDashboard );
 
@@ -45,9 +45,6 @@ router.get("/requests",authMiddleware, getCitizenRequests);
 
 // Show payment page for a request
 router.get("/payments/:requestId",authMiddleware, getPaymentPage);
-
-// Handle payment submission
-// router.post("/payments/:requestId", authMiddleware, submitPayment);
 
 router.post(
     "/services/apply/:serviceId",

@@ -1,17 +1,41 @@
 <div class="container py-4">
-    <%- include('../breadcrumb', {
-    breadcrumbs: [
-    { label: "Dashboard", url: "/officer/dashboard" },
-    { label: "Profile" }
-    ]
-    }) %>
-    <div class="row justify-content-center">
-        <div class="col-md-8">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-light p-3 rounded-3">
+            <li class="breadcrumb-item"><a href="/officer/dashboard" class="text-decoration-none text-secondary">Dashboard</a></li>
+            <li class="breadcrumb-item active text-primary" aria-current="page">profile</li>
+        </ol>
+    </nav>
+
+    <div class="row g-4  my-5">
+        <!-- Left Column: Avatar -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 p-3 text-center">
+                <div class="mb-3">
+                    <img src="<%= user.avatar || '../../images/default-avatar.jpg' %>"
+                         alt="avatar image"
+                         class="rounded-circle mb-3"
+                         width="130" height="130">
+                </div>
+
+                <h5 class="fw-bold mb-1"><%= user.name %></h5>
+                <p class="text-muted small mb-3">National ID: <%= user.national_id %></p>
+
+                <form action="/officer/profile/upload-avatar" method="POST" enctype="multipart/form-data">
+                    <input type="file" name="avatar" class="form-control form-control-sm mb-2">
+                    <button class="btn btn-primary btn-sm w-100 rounded-pill">
+                        <i class="bi bi-upload me-1"></i> Update Picture
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Right Column: Tabs -->
+        <div class="col-lg-8">
             <div class="card shadow-sm border-0">
                 <div class="card-body">
                     <h3 class="fw-bold text-primary mb-4">My Profile</h3>
 
-                    <form action="/officer/profile" method="POST">
+                    <form action="/officer/profile/update" method="POST">
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Name</label>
                             <input type="text" class="form-control" name="name" value="<%= officer.name %>" required>
@@ -40,4 +64,5 @@
             </div>
         </div>
     </div>
+
 </div>

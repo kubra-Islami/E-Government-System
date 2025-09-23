@@ -4,6 +4,7 @@ import path from "path";
 import * as OfficerService from "../services/officer.service.js";
 import { getNotificationsByUserId } from "../services/notification.service.js";
 import {getServicesByDepartmentId} from "../dao/service.dao.js";
+import * as profileService from "../services/profile.service.js";
 
 export const dashboard = async (req, res) => {
     try {
@@ -212,5 +213,18 @@ export const profile = async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(500).send("Server error");
+    }
+};
+
+// POST update profile
+export const updateOfficerProfile = async (req, res, next) => {
+    try {
+        const userId = req.user.id;
+        let { name, email ,job_title } = req.body;
+
+        await profileService.updateProfile(userId, { name, email ,job_title});
+        res.redirect("/officer/profile");
+    } catch (err) {
+        next(err);
     }
 };
