@@ -37,6 +37,7 @@ router.get("/dashboard",authMiddleware,getCitizenDashboard );
 
 // Show the "Apply for Service" page
 router.get("/departments", authMiddleware, getDepartments);
+
 router.get("/department-services/:departmentId", authMiddleware,getServicesByDepartment);
 
 router.get("/services/apply/:serviceId", authMiddleware, applicationForm);

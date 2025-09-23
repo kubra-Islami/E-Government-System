@@ -1,7 +1,7 @@
 import {getServiceById, getServicesByDepartmentId} from "../dao/service.dao.js";
 
 import {getRequestsByCitizenId, getStatsResult} from "../dao/request.dao.js";
-import {getRequestById} from "../services/requests.service.js";
+import {createRequest, getRequestById, saveDocument} from "../services/requests.service.js";
 import {getAllDepartments} from "../services/department.service.js";
 import { addPayment } from "../services/payments.service.js";
 import * as profileService from "../services/profile.service.js";
