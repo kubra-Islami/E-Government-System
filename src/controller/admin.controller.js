@@ -1,13 +1,10 @@
 import {
-    getDashboardStats,
+    getDashboardStats, getReportsAdmin,
     getUserById,
     removeUser,
     updateUser
 } from "../services/admin.service.js";
 
-
-// Search all requests, users, and services
-import {globalSearchUsers, globalSearchServices, globalSearchRequests} from "../services/admin.service.js";
 import {getAllDepartments} from "../services/department.service.js";
 import pool from "../config/db.js";
 import * as profileService from "../services/profile.service.js";
@@ -78,16 +75,6 @@ export async function updateUserController(req, res) {
     }
 }
 
-// Reports
-export async function showReports(req, res) {
-    try {
-        // const reports = await fetchReports();
-        res.render("admin/reports", {title: "Reports", reports: [], layout: "layouts/admin_layout",});
-    } catch (err) {
-        res.status(500).send("Error loading reports: " + err.message);
-    }
-}
-
 export async function showDepartments(req, res) {
     try {
         const departments = await getAllDepartments();
@@ -133,6 +120,19 @@ export const showGlobalSearch = async (req, res) => {
     }
 };
 
+export async function showReports(req, res) {
+    try {
+        const reports = await getReportsAdmin();
+        res.render("admin/reports", {
+            title: "Reports & Stats",
+            layout: "layouts/admin_layout",
+            reports: reports || []
+        });
+    } catch (err) {
+        console.error("Error loading reports:", err);
+        res.status(500).send("Error loading reports: " + err.message);
+    }
+}
 
 export const getAdminProfile = async (req, res,next) => {
     try {

@@ -35,6 +35,7 @@ router.post("/users/:id/edit",authMiddleware, updateUserController);
 
 // Reports
 router.get("/reports", authMiddleware,showReports);
+
 router.get("/search",authMiddleware, showGlobalSearch);
 
 // department routes

@@ -4,7 +4,7 @@ import {
     getDashboardStatsDao,
     getUserList,
     searchUsers,
-    searchServices, searchRequests, updateUserDao, getUserByIdDao
+    searchServices, searchRequests, updateUserDao, getUserByIdDao, getAdminReports
 } from "../dao/admin.dao.js";
 
 export async function getDashboardStats() {
@@ -29,11 +29,6 @@ export async function updateUser(id, data) {
     return await updateUserDao(id, data);
 }
 
-// Reports
-export async function fetchReports() {
-    return await getReports();
-}
-
 export async function globalSearchUsers(query) {
     return await searchUsers(query);
 }
@@ -44,4 +39,8 @@ export async function globalSearchServices(query) {
 
 export async function globalSearchRequests(query) {
     return await searchRequests(query);
+}
+// Reports
+export async function getReportsAdmin() {
+    return await getAdminReports();
 }

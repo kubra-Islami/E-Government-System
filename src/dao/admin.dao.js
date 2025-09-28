@@ -95,3 +95,38 @@ export async function searchRequests(query) {
     );
     return rows;
 }
+
+export async function getAdminReports() {
+    const query = `
+        SELECT d.id AS department_id, d.name AS department,
+               COUNT(r.id) AS total,
+               SUM(CASE WHEN r.status = 'submitted' THEN 1 ELSE 0 END) AS submitted,
+               SUM(CASE WHEN r.status = 'under_review' THEN 1 ELSE 0 END) AS under_review,
+               SUM(CASE WHEN r.status = 'approved' THEN 1 ELSE 0 END) AS approved,
+               SUM(CASE WHEN r.status = 'rejected' THEN 1 ELSE 0 END) AS rejected,
+               COALESCE(SUM(p.amount), 0) AS fees
+        FROM departments d
+                 LEFT JOIN services s ON s.department_id = d.id
+                 LEFT JOIN requests r ON r.service_id = s.id
+                 LEFT JOIN payments p ON p.request_id = r.id AND p.status = 'success'
+        GROUP BY d.id, d.name
+        ORDER BY d.name;
+    `;
+
+    const { rows } = await pool.query(query);
+
+    for (let row of rows) {
+        const serviceQuery = `
+            SELECT s.id, s.name, COUNT(r.id) AS total
+            FROM services s
+                     LEFT JOIN requests r ON r.service_id = s.id
+            WHERE s.department_id = $1
+            GROUP BY s.id, s.name
+            ORDER BY s.name;
+        `;
+        const { rows: serviceRows } = await pool.query(serviceQuery, [row.department_id]);
+        row.services = serviceRows;
+    }
+
+    return rows;
+}
