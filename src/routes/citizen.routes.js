@@ -16,19 +16,7 @@ import { upload } from "../middlewares/upload.middleware.js";
 import {getPaymentSuccess} from "../controller/payment.service.js";
 import {getNotificationsByUserId} from "../services/notification.service.js";
 import {getNotificationsPage, markNotificationRead} from "../controller/notification.controller.js";
-import {handleUpload, uploadAvatar} from "../controller/upload.Controller.js";
-
-// const storage = multer.diskStorage({
-//     destination: function (req, file, cb) {
-//         cb(null, path.join(process.cwd(), "uploads"));
-//     },
-//     filename: function (req, file, cb) {
-//         const ext = path.extname(file.originalname);
-//         const base = path.basename(file.originalname, ext);
-//         const uniqueName = `${Date.now()}-${base}${ext}`;
-//         cb(null, uniqueName);
-//     }
-// });
+import {uploadAvatar} from "../controller/upload.Controller.js";
 
 
 // const upload = multer({ storage });
@@ -83,6 +71,7 @@ router.post("/profile/upload-avatar", authMiddleware, upload.single("avatar"), u
 
 // Notifications routes
 router.get("/notifications", authMiddleware, getNotificationsPage);
+
 router.post("/notifications/mark-read/:id", authMiddleware, markNotificationRead);
 
 export default router;

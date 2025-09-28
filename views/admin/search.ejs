@@ -1,138 +1,112 @@
-<div class="container mt-5">
-    <%- include('../breadcrumb', {
-    breadcrumbs: [
-    { label: "Dashboard", url: "/admin/dashboard" },
-    { label: "Search" }
-    ]
-    }) %>
-    <!-- Page Title -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold text-primary"><i class="bi bi-search me-2"></i> <%= title %></h2>
-    </div>
+<h1 class="mb-4 fw-bold text-muted mb-5" >
+    <i class="bi bi-search me-2"></i> Search for specific request
+</h1>
 
-    <!-- Search Form -->
-    <form method="GET" action="/admin/search" class="mb-5">
-        <div class="input-group shadow-sm rounded">
-            <input type="text" name="q" class="form-control border-primary" placeholder="Search users, services, requests..." value="<%= typeof q !== 'undefined' ? q : '' %>">
-            <button class="btn btn-primary"><i class="bi bi-search me-1"></i> Search</button>
-        </div>
-    </form>
+<!-- Filter Section -->
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-body">
+        <form id="filterForm" method="GET" action="/officer/search" class="row g-3 align-items-center">
 
-    <!-- Users Section -->
-    <div class="mb-5">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="text-secondary"><i class="bi bi-people me-2"></i> Users</h4>
-            <span class="badge bg-info text-dark"><%= users.length %></span>
-        </div>
-        <% if (users.length > 0) { %>
-            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                <% users.forEach(u => { %>
-                    <div class="col">
-                        <div class="card h-100 shadow-sm border-0 hover-card">
-                            <div class="card-body d-flex flex-column justify-content-between">
-                                <div>
-                                    <h5 class="card-title"><i class="bi bi-person-circle me-2"></i><%= u.name %></h5>
-                                    <p class="card-text text-muted"><i class="bi bi-envelope me-1"></i> <%= u.email %></p>
-                                    <span class="badge bg-info text-dark"><%= u.role %></span>
-                                </div>
-                                <a href="/admin/users/<%= u.id %>/edit" class="btn btn-sm btn-outline-primary mt-3 w-100">Edit User</a>
-                            </div>
-                        </div>
-                    </div>
-                <% }) %>
+            <div class="col-md-3">
+                <div class="input-group">
+                    <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                    <input type="text" name="q" class="form-control" placeholder="Search by name or request ID"
+                           value="<%= q || '' %>">
+                </div>
             </div>
-        <% } else { %>
-            <p class="text-muted">No users found</p>
-        <% } %>
-    </div>
 
-    <!-- Services Section -->
-    <div class="mb-5">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="text-secondary"><i class="bi bi-gear me-2"></i> Services</h4>
-            <span class="badge bg-warning text-dark"><%= services.length %></span>
-        </div>
-        <% if (services.length > 0) { %>
-            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                <% services.forEach(s => { %>
-                    <div class="col">
-                        <div class="card h-100 shadow-sm border-0 hover-card">
-                            <div class="card-body d-flex flex-column justify-content-between">
-                                <div>
-                                    <h5 class="card-title"><i class="bi bi-gear-fill me-2"></i> <%= s.name %></h5>
-                                    <p class="card-text text-muted"><i class="bi bi-building me-1"></i> Department: <%= s.department %></p>
-                                    <span class="badge bg-warning text-dark">$<%= s.fee %></span>
-                                </div>
-<!--                                <a href="/admin/services/<%= s.id %>/edit" class="btn btn-sm btn-outline-warning mt-3 w-100">Edit Service</a>-->
-                            </div>
-                        </div>
-                    </div>
-                <% }) %>
+            <div class="col-md-2">
+                <select name="status" class="form-select">
+                    <option value="">All statuses</option>
+                    <option value="submitted" <%= status === 'submitted' ? 'selected' : '' %>>Submitted</option>
+                    <option value="under_review" <%= status === 'under_review' ? 'selected' : '' %>>Under Review
+                    </option>
+                    <option value="approved" <%= status === 'approved' ? 'selected' : '' %>>Approved</option>
+                    <option value="rejected" <%= status === 'rejected' ? 'selected' : '' %>>Rejected</option>
+                </select>
             </div>
-        <% } else { %>
-            <p class="text-muted">No services found</p>
-        <% } %>
-    </div>
 
-    <!-- Requests Section -->
-    <div class="mb-5">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="text-secondary"><i class="bi bi-file-earmark-text me-2"></i> Requests</h4>
-            <span class="badge bg-success text-dark"><%= requests.length %></span>
-        </div>
-        <% if (requests.length > 0) { %>
-            <div class="table-responsive shadow-sm rounded">
-                <table class="table table-hover align-middle">
-                    <thead class="table-dark">
-                    <tr>
-                        <th>ID</th>
-                        <th>Citizen</th>
-                        <th>Service</th>
-                        <th>Status</th>
-                        <th>Submitted At</th>
-                        <th>Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <% requests.forEach(r => { %>
-                        <tr>
-                            <td><%= r.id %></td>
-                            <td><%= r.citizen_name %></td>
-                            <td><%= r.service_name %></td>
-                            <td>
-                                <% if(r.status === 'approved') { %>
-                                    <span class="badge bg-success"><%= r.status %></span>
-                                <% } else if(r.status === 'rejected') { %>
-                                    <span class="badge bg-danger"><%= r.status %></span>
-                                <% } else { %>
-                                    <span class="badge bg-warning text-dark"><%= r.status %></span>
-                                <% } %>
-                            </td>
-                            <td><%= new Date(r.created_at).toLocaleDateString() %></td>
-                            <td>
-                                <a href="/admin/requests/<%= r.id %>" class="btn btn-sm btn-outline-primary">View</a>
-                            </td>
-                        </tr>
-                    <% }) %>
-                    </tbody>
-                </table>
+            <div class="col-md-3">
+                <input type="date" name="from" class="form-control" placeholder="From" value="<%= fromDate || '' %>">
             </div>
-        <% } else { %>
-            <p class="text-muted">No requests found</p>
-        <% } %>
-    </div>
+            <div class="col-md-3">
+                <input type="date" name="to" class="form-control" placeholder="To" value="<%= toDate || '' %>">
+            </div>
 
+            <div class="col-md-1">
+                <button type="submit" class="btn btn-primary w-100 d-flex align-items-center justify-content-center">
+                    <i class="bi bi-funnel me-1"></i>
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
 
-<style>
-    .hover-card {
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .hover-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-    }
-    .badge {
-        font-size: 0.85em;
-    }
-</style>
+<div class="card shadow-sm border-0">
+    <div class="table-responsive">
+        <% if (requests.length === 0) { %>
+            <div class="text-center py-5">
+                <i class="bi bi-inbox fs-2 d-block mb-3 text-muted"></i>
+                <h5 class="text-muted mb-2">No requests found yet</h5>
+                <% if (services && services.length > 0) { %>
+                    <p class="text-secondary">Your department offers these services:</p>
+                    <ul class="list-group list-group-flush mx-auto" style="max-width: 400px;">
+                        <% services.forEach(s => { %>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <%= s.name %>
+                                <% if(s.fee && s.fee > 0) { %>
+                                    <span class="badge bg-info text-dark">$<%= s.fee %></span>
+                                <% } %>
+                            </li>
+                        <% }) %>
+                    </ul>
+                <% } %>
+            </div>
+        <% } else { %>
+            <table class="table table-hover table-striped align-middle mb-0">
+                <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th>Service</th>
+                    <th>Citizen</th>
+                    <th>Status</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <% requests.forEach(r => { %>
+                    <tr>
+                        <td><%= r.id %></td>
+                        <td><%= r.service_name %></td>
+                        <td><%= r.citizen_name %></td>
+                        <td>
+                            <% let badgeClass = {
+                                submitted: "secondary",
+                                under_review: "warning",
+                                approved: "success",
+                                rejected: "danger"
+                            }[r.status]; %>
+                            <span class="badge bg-<%= badgeClass %> text-uppercase px-3 py-2">
+                                        <%= r.status.replace('_', ' ') %>
+                                    </span>
+                        </td>
+                        <td class="text-center">
+                            <a href="/officer/requests/<%= r.id %>" class="btn btn-sm btn-outline-primary"
+                               data-bs-toggle="tooltip" title="View Details">
+                                <i class="bi bi-folder2-open"></i>
+                            </a>
+                        </td>
+                    </tr>
+                <% }) %>
+                </tbody>
+            </table>
+        <% } %>
+    </div>
+</div>
+
+<script>
+    let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+</script>

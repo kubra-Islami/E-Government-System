@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= title %> | Admin Portal</title>
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
@@ -12,12 +13,12 @@
 </head>
 <body>
 
-<%- include('../partials/admin_header') %>
+<%- include('../partials/admin/admin_header') %>
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-3 col-lg-2 p-0 bg-light">
-            <%- include('../partials/admin_sidebar') %>
+            <%- include('../partials/admin/admin_sidebar') %>
         </div>
         <main class="col-md-9 col-lg-10 px-4 py-3">
             <%- body %>

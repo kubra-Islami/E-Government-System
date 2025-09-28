@@ -28,7 +28,7 @@
                     </div>
 
                     <!-- Password -->
-                    <div class="mb-3">
+                    <div class="mb-3 position-relative">
                         <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
                         <input
                                 type="password"
@@ -38,8 +38,14 @@
                                 placeholder="Enter your password"
                                 required
                         >
-                        <div class="invalid-feedback">Please enter your password .</div>
+                        <i class="bi bi-eye position-absolute end-0 translate-middle-y me-3"
+                           id="togglePassword"
+                           style="cursor: pointer; font-size: 1.2rem; color: #6c757d;top: 75%"></i>
+                        <div class="invalid-feedback">Please enter your password.</div>
                     </div>
+
+
+
 
                     <!-- Submit -->
                     <div class="d-grid">
@@ -59,6 +65,10 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const form = document.getElementById("login-form");
+        const togglePassword = document.getElementById("togglePassword");
+        const passwordInput = document.getElementById("password");
+
+        // Form validation
         form.addEventListener("submit", function (event) {
             if (!form.checkValidity()) {
                 event.preventDefault();
@@ -66,5 +76,16 @@
             }
             form.classList.add("was-validated");
         }, false);
-    })
+
+        // Toggle password visibility
+        togglePassword.addEventListener("click", function () {
+            const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+            passwordInput.setAttribute("type", type);
+
+            // Switch icon
+            this.classList.toggle("bi-eye");
+            this.classList.toggle("bi-eye-slash");
+        });
+    });
 </script>
+

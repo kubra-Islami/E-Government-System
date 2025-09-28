@@ -1,6 +1,7 @@
 import * as ServiceOfService from "../services/service.service.js"
 import {addService, editService} from "../services/service.service.js";
 import * as DepartmentService from "../services/department.service.js";
+import * as profileService from "../dao/profile.dao.js";
 
 export async function addServiceController(req, res) {
     try {
@@ -58,5 +59,4 @@ export const deleteServiceController = async (req, res) => {
     await ServiceOfService.removeService(id);
     res.redirect("/admin/services");
 };
-
 

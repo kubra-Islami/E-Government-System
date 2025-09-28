@@ -1,16 +1,17 @@
 <div class="container py-5">
-    <%- include('../breadcrumb', {
-    breadcrumbs: [
-    { label: "Dashboard", url: "/admin/dashboard" },
-    { label: "profile" }
-    ]
-    }) %>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-light p-3 rounded-3">
+            <li class="breadcrumb-item"><a href="/admin/dashboard"
+                                           class="text-decoration-none text-secondary">Dashboard</a></li>
+            <li class="breadcrumb-item active text-primary" aria-current="page">profile</li>
+        </ol>
+    </nav>
     <div class="row g-4  my-5">
         <!-- Left Column: Avatar -->
         <div class="col-lg-4">
             <div class="card border-0 shadow-sm rounded-4 p-3 text-center">
                 <div class="mb-3">
-                    <img src="<%= user.avatar || '/images/default-avatar.png' %>"
+                    <img src="<%= user.avatar || '../../images/default-avatar.jpg' %>"
                          alt="Profile Picture"
                          class="rounded-circle mb-3"
                          width="130" height="130">
@@ -32,73 +33,52 @@
         <div class="col-lg-8">
             <div class="card border-0 shadow-sm rounded-4">
                 <div class="card-body p-4">
-                    <ul class="nav nav-tabs mb-4" id="profileTab" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="info-tab" data-bs-toggle="tab" data-bs-target="#info" type="button" role="tab">Profile Info</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="activity-tab" data-bs-toggle="tab" data-bs-target="#activity" type="button" role="tab">Recent Activity</button>
-                        </li>
-                    </ul>
-
-                    <div class="tab-content" id="profileTabContent">
-                        <!-- Profile Info Tab -->
-                        <div class="tab-pane fade show active" id="info" role="tabpanel">
-                            <form action="/admin/profile/update" method="POST" class="row g-3">
-                                <div class="col-md-6">
-                                    <label class="form-label fw-semibold">Full Name</label>
-                                    <input type="text" class="form-control rounded" name="name" value="<%= user.name || 'Guest' %>" readonly>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label fw-semibold">National ID</label>
-                                    <input type="text" class="form-control rounded" name="national_id" value="<%= user.national_id %>" readonly>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label fw-semibold">Date of Birth</label>
-                                    <input type="date" class="form-control rounded" name="date_of_birth"
-                                           value="<%= user.date_of_birth ? user.date_of_birth.toISOString().split('T')[0] : '' %>" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label fw-semibold">Email</label>
-                                    <input type="email" class="form-control rounded" name="email" value="<%= user.email %>">
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label fw-semibold">Phone Number</label>
-                                    <input type="text" class="form-control rounded" name="phone" value="<%= user.phone %>">
-                                </div>
-                                <div class="col-12 text-end mt-2">
-                                    <button class="btn btn-success rounded-pill px-4">
-                                        <i class="bi bi-save me-1"></i> Save Changes
-                                    </button>
-                                </div>
-                            </form>
+                    <form action="/admin/profile/update" method="POST" class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Full Name</label>
+                            <input type="text" class="form-control rounded" name="name"
+                                   value="<%= user.name || 'Guest' %>">
                         </div>
-
-                        <!-- Recent Activity Tab -->
-                        <div class="tab-pane fade" id="activity" role="tabpanel">
-                            <% if (recentActivities && recentActivities.length > 0) { %>
-                                <ul class="list-group list-group-flush">
-                                    <% recentActivities.forEach(activity => { %>
-                                        <li class="list-group-item d-flex justify-content-between align-items-center rounded mb-2 shadow-sm">
-                                            <div class="d-flex align-items-center">
-                                                <i class="bi bi-check2-circle text-success me-2"></i>
-                                                <span><%= activity.description %></span>
-                                            </div>
-                                            <small class="text-muted"><%= activity.date %></small>
-                                        </li>
-                                    <% }) %>
-                                </ul>
-                            <% } else { %>
-                                <p class="text-muted">No recent activities found.</p>
-                            <% } %>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">National ID</label>
+                            <input type="text" class="form-control rounded" name="national_id"
+                                   value="<%= user.national_id %>">
                         </div>
-                    </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Date of Birth</label>
+                            <input type="date" class="form-control rounded" name="date_of_birth"
+                                   value="<%= user.date_of_birth ? user.date_of_birth.toISOString().split('T')[0] : '' %>">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Email</label>
+                            <input type="email" class="form-control rounded" name="email" value="<%= user.email %>">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="phone" class="form-label">Phone Number </label>
+                            <input
+                                    type="tel"
+                                    class="form-control"
+                                    id="phone"
+                                    name="phone"
+                                    placeholder="Enter your phone number"
+                                    pattern="^\d{11}$"
+                                    maxlength="11"
+                                    minlength="11"
+                                    value="<%= user.phone %>">
+                            <div class="invalid-feedback">Phone number must be exactly 11 digits.</div>
+                        </div>
+                        <div class="col-12 text-end mt-2">
+                            <button class="btn btn-success rounded-pill px-4">
+                                <i class="bi bi-save me-1"></i> Save Changes
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-
     </div>
 </div>
+
 
 <style>
     /* Card hover effect */

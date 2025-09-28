@@ -72,9 +72,9 @@ export async function searchUsers(query) {
 // Search Services
 export async function searchServices(query) {
     const { rows } = await pool.query(
-        `SELECT s.id, s.name, d.name AS department
+        `SELECT s.id, s.name, s.fee, d.name AS department
          FROM services s
-         JOIN departments d ON s.department_id = d.id
+                  JOIN departments d ON s.department_id = d.id
          WHERE s.name ILIKE $1
          ORDER BY s.name ASC`,
         [`%${query}%`]

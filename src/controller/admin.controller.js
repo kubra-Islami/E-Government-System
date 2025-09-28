@@ -12,6 +12,8 @@ import {getAllDepartments} from "../services/department.service.js";
 import pool from "../config/db.js";
 import * as profileService from "../services/profile.service.js";
 import {getNotificationsByUserId} from "../services/notification.service.js";
+import * as OfficerService from "../services/officer.service.js";
+import {getServicesByDepartmentId} from "../dao/service.dao.js";
 
 // Admin Dashboard
 export const getAdminDashboard = async (req, res, next) => {
@@ -102,25 +104,28 @@ export async function showDepartments(req, res) {
 
 export const showGlobalSearch = async (req, res) => {
     try {
-        const searchQuery = req.query.q ? req.query.q.trim() : "";
+        const { q = "", status = "", from = "", to = "" } = req.query;
 
-        let users = [];
-        let services = [];
-        let requests = [];
+        // Fetch requests for officer's department
+        const requests = await OfficerService.getRequests(req.user.department_id);
 
-        if (searchQuery) {
-            users = await globalSearchUsers(searchQuery);
-            services = await globalSearchServices(searchQuery);
-            requests = await globalSearchRequests(searchQuery);
-        }
+        // Fetch notifications for this officer
+        const notifications = await getNotificationsByUserId(req.user.id);
+        const services = getServicesByDepartmentId(req.user.id);
+
 
         res.render("admin/search", {
-            title: "Global Search",
             layout: "layouts/admin_layout",
-            users,
-            services,
+            title: "Search & Filter",
             requests,
-            searchQuery
+            services,
+            q,
+            status,
+            activePage: "dashboard",
+            fromDate: from,
+            toDate: to,
+            user: req.user,
+            notifications
         });
     } catch (err) {
         console.error(err);
@@ -133,18 +138,30 @@ export const getAdminProfile = async (req, res,next) => {
     try {
         const userId = req.user.id;
         const profileData = await profileService.getProfileById(userId);
-        const recentActivities = await profileService.getRecentActivities(userId);
 
         const notifications = await getNotificationsByUserId(req.user.id);
 
-        res.render("citizen/profile", {
+        res.render("admin/profile", {
             title: "My Profile",
             user: profileData,
             layout: "layouts/admin_layout",
-            recentActivities: recentActivities,
             notifications
         });
     } catch (err) {
         next(err);
     }
 }
+
+
+// POST update profile
+export const updateAdminProfile = async (req, res, next) => {
+    try {
+        const userId = req.user.id;
+        let { name, email ,date_of_birth, phone,national_id } = req.body;
+
+        await profileService.updateProfile(userId, { name, email,date_of_birth, phone,national_id });
+        res.redirect("/admin/profile");
+    } catch (err) {
+        next(err);
+    }
+};
