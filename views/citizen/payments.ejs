@@ -31,9 +31,8 @@
                     </ul>
 
                     <!-- Payment Form -->
-                    <form action="/citizen/success/1" method="POST">
+                    <form action="/citizen/payments/<%= request.id %>" method="POST">
                         <input type="hidden" name="amount" value="<%= service.fee %>">
-
                         <!-- Payment Method -->
                         <h5 class="fw-bold mb-3">Choose Payment Method</h5>
                         <div class="mb-4">

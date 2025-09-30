@@ -1,10 +1,12 @@
-<%- include('../breadcrumb', {
-breadcrumbs: [
-{ label: "Dashboard", url: "/admin/dashboard" },
-{ label: "Manage Users" }
-]
-}) %>
 <h2>Manage Users</h2>
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb bg-light p-3 rounded-3">
+        <li class="breadcrumb-item"><a href="/admin/dashboard"
+                                       class="text-decoration-none text-secondary">Dashboard</a></li>
+        <li class="breadcrumb-item active text-primary" aria-current="page">Manage Users</li>
+    </ol>
+</nav>
 <table class="table table-striped">
     <thead>
     <tr>

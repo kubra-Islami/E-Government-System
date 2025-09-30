@@ -4,12 +4,13 @@ export const addPaymentDao = async ({ request_id, amount, status }) => {
     const sql = `
         INSERT INTO payments (request_id, amount, status)
         VALUES ($1, $2, $3)
-        RETURNING *
+            RETURNING *
     `;
     const params = [request_id, amount, status];
     const { rows } = await pool.query(sql, params);
     return rows[0];
 };
+
 
 export const getPaymentByIdDB = async (paymentId) => {
     const result = await pool.query(

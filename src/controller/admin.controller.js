@@ -123,6 +123,7 @@ export const showGlobalSearch = async (req, res) => {
 export async function showReports(req, res) {
     try {
         const reports = await getReportsAdmin();
+        const stats = await getDashboardStats();
         res.render("admin/reports", {
             title: "Reports & Stats",
             layout: "layouts/admin_layout",

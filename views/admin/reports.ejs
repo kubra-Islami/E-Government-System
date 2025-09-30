@@ -27,12 +27,12 @@
     <% if (reports && reports.length > 0) { %>
         <%
             const totals = {
-                total: reports.reduce((s, r) => s + r.total, 0),
-                submitted: reports.reduce((s, r) => s + r.submitted, 0),
-                under_review: reports.reduce((s, r) => s + r.under_review, 0),
-                approved: reports.reduce((s, r) => s + r.approved, 0),
-                rejected: reports.reduce((s, r) => s + r.rejected, 0),
-                fees: reports.reduce((s, r) => s + parseFloat(r.fees || 0), 0).toFixed(2)
+                total: reports.reduce((s, r) => s + Number(r.total || 0), 0),
+                submitted: reports.reduce((s, r) => s + Number(r.submitted || 0), 0),
+                under_review: reports.reduce((s, r) => s + Number(r.under_review || 0), 0),
+                approved: reports.reduce((s, r) => s + Number(r.approved || 0), 0),
+                rejected: reports.reduce((s, r) => s + Number(r.rejected || 0), 0),
+                fees: reports.reduce((s, r) => s + Number(r.fees || 0), 0).toFixed(2)
             };
         %>
 
@@ -142,10 +142,10 @@
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         const chartTotals = <%- JSON.stringify({
-            submitted: reports.reduce((s, r) => s + r.submitted, 0),
-            under_review: reports.reduce((s, r) => s + r.under_review, 0),
-            approved: reports.reduce((s,r) => s + r.approved,0),
-            rejected: reports.reduce((s,r) => s + r.rejected,0)
+            submitted: reports.reduce((s, r) => s + Number(r.submitted || 0), 0),
+            under_review: reports.reduce((s, r) => s + Number(r.under_review || 0), 0),
+            approved: reports.reduce((s,r) => s + Number(r.approved || 0),0),
+            rejected: reports.reduce((s,r) => s + Number(r.rejected || 0),0)
         }) %>;
 
         const ctx = document.getElementById('summaryChart');
@@ -185,7 +185,7 @@
         let csv = 'Department,Submitted,Under Review,Approved,Rejected,Fees\n';
         const reports = <%- JSON.stringify(reports) %>;
         reports.forEach(r => {
-            csv += `${r.department},${r.submitted},${r.under_review},${r.approved},${r.rejected},${r.fees}\n`;
+            csv += `${r.department},${Number(r.submitted||0)},${Number(r.under_review||0)},${Number(r.approved||0)},${Number(r.rejected||0)},${Number(r.fees||0)}\n`;
         });
         const blob = new Blob([csv], { type: 'text/csv' });
         const url = URL.createObjectURL(blob);

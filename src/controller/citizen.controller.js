@@ -8,6 +8,7 @@ import * as profileService from "../services/profile.service.js";
 import { getNotificationsByUserId } from "../services/notification.service.js";
 import {getAllServices} from "../services/service.service.js";
 import {getRecentActivities} from "../services/profile.service.js";
+import db from "../config/db.js";
 
 
 export const getCitizenDashboard = async (req, res, next) => {
@@ -162,8 +163,6 @@ export const submitApplication = async (req, res, next) => {
             });
         }
 
-
-
         res.redirect("/citizen/requests");
     } catch (err) {
         console.error("Error submitting application:", err);
@@ -203,9 +202,15 @@ export const getPaymentPage = async (req, res, next) => {
     try {
         const { requestId } = req.params;
         const request = await getRequestById(requestId);
+        if (!request) {
+            console.error("Request not found:", requestId);
+            return res.status(404).send("Request not found");
+        }
+
+
+
         const notifications = await getNotificationsByUserId(req.user.id);
 
-        if (!request) return res.status(404).send("Request not found");
 
         res.render("citizen/payments", {
             title: "Payments",
@@ -220,29 +225,39 @@ export const getPaymentPage = async (req, res, next) => {
     }
 };
 
+
 export const submitPayment = async (req, res, next) => {
     try {
-        const { requestId } = req.params;
-        const { paymentMethod } = req.body;
+        const requestIdNum = parseInt(req.params.requestId, 10);
+        if (isNaN(requestIdNum)) return res.status(400).send("Invalid request ID");
 
-        // Simulate payment processing
-        const paymentStatus = "success";
+        const request = await getRequestById(requestIdNum);
+        if (!request) return res.status(404).send("Request not found");
 
-        // Insert payment record
-        await addPayment({
-            request_id: requestId,
-            amount: req.body.amount,
-            status: paymentStatus
+        const { paymentMethod, amount } = req.body;
+
+        const payment = await addPayment({
+            request_id: requestIdNum,
+            amount: amount,
+            status: "success"
         });
 
-        // Optionally, update request status
-        // await updateRequestStatus(requestId, "paid");
-        res.render("citizen/payment-success", {layout: "layouts/citizen_layout"});
-        // res.redirect("/citizen/");
+        await db.query(
+            "UPDATE requests SET status = $1, updated_at = NOW() WHERE id = $2",
+            ["paid", requestIdNum]
+        );
+
+        res.redirect(`/citizen/success/${payment.id}`);
     } catch (err) {
+        console.error("submitPayment error:", err);
         next(err);
     }
 };
+
+
+
+
+
 
 
 // GET profile page

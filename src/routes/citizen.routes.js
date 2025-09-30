@@ -8,7 +8,7 @@ import {
     getPaymentPage,
     getCitizenProfile,
     updateCitizenProfile,
-     getDepartments, applicationForm, submitApplication
+    getDepartments, applicationForm, submitApplication, submitPayment
 } from "../controller/citizen.controller.js";
 import { getRequestsByCitizenId } from "../services/requests.service.js";
 
@@ -42,7 +42,10 @@ router.post(
     submitApplication
 );
 
-router.get("/payments", authMiddleware, async (req, res, next) => {
+// Handle payment submission
+router.post("/payments/:requestId", authMiddleware, submitPayment);
+
+router.get("/pending-payments", authMiddleware, async (req, res, next) => {
     try {
         const notifications = await getNotificationsByUserId(req.user.id);
         const requests = await getRequestsByCitizenId(req.user.id);
@@ -58,7 +61,7 @@ router.get("/payments", authMiddleware, async (req, res, next) => {
     }
 });
 
-router.post("/success/:paymentId", getPaymentSuccess);
+router.get("/success/:paymentId",authMiddleware, getPaymentSuccess);
 
 // Get profile page
 router.get("/profile", authMiddleware, getCitizenProfile);

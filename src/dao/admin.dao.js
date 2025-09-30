@@ -96,6 +96,7 @@ export async function searchRequests(query) {
     return rows;
 }
 
+// dao/admin.dao.js (replace getAdminReports)
 export async function getAdminReports() {
     const query = `
         SELECT d.id AS department_id, d.name AS department,
@@ -115,7 +116,15 @@ export async function getAdminReports() {
 
     const { rows } = await pool.query(query);
 
+    // Ensure numeric types for JS
     for (let row of rows) {
+        row.total = parseInt(row.total, 10) || 0;
+        row.submitted = parseInt(row.submitted, 10) || 0;
+        row.under_review = parseInt(row.under_review, 10) || 0;
+        row.approved = parseInt(row.approved, 10) || 0;
+        row.rejected = parseInt(row.rejected, 10) || 0;
+        row.fees = parseFloat(row.fees) || 0;
+
         const serviceQuery = `
             SELECT s.id, s.name, COUNT(r.id) AS total
             FROM services s
@@ -125,7 +134,13 @@ export async function getAdminReports() {
             ORDER BY s.name;
         `;
         const { rows: serviceRows } = await pool.query(serviceQuery, [row.department_id]);
-        row.services = serviceRows;
+
+        // convert service totals to numbers
+        row.services = serviceRows.map(s => ({
+            id: s.id,
+            name: s.name,
+            total: parseInt(s.total, 10) || 0
+        }));
     }
 
     return rows;

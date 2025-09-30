@@ -114,7 +114,6 @@ export const postReview = async (req, res) => {
     else if (action === "reject") status = "rejected";
     else status = "submitted";
 
-    console.log(req.body)
     await OfficerService.reviewRequest(req.params.id, status, req.user, comment);
     res.redirect(`/officer/requests/${req.params.id}`);
 };

@@ -43,30 +43,32 @@ CREATE TABLE services
     updated_at         TIMESTAMP      DEFAULT NOW()
 );
 
-
 -- 4. Requests   ===>   درخواست ها
 CREATE TABLE requests
 (
     id                   SERIAL PRIMARY KEY,
     citizen_id           INT NOT NULL REFERENCES users (id) ON DELETE CASCADE,
     service_id           INT NOT NULL REFERENCES services (id) ON DELETE CASCADE,
-    request_number       VARCHAR(20) UNIQUE,
+    request_number       VARCHAR(20) NOT NULL UNIQUE,
+
     -- First review
-    first_reviewer_id    INT REFERENCES users (id),
+    first_reviewer_id    INT REFERENCES users (id) ON DELETE SET NULL,
     first_review_comment TEXT,
     first_reviewed_at    TIMESTAMP,
 
     -- Final decision
-    final_reviewer_id    INT REFERENCES users (id),
+    final_reviewer_id    INT REFERENCES users (id) ON DELETE SET NULL,
     final_comment        TEXT,
     form_data            JSONB,
     final_reviewed_at    TIMESTAMP,
-    status               VARCHAR(20) CHECK (
-        status IN ('submitted', 'under_review', 'approved', 'rejected')
-        )                          DEFAULT 'submitted',
-    created_at           TIMESTAMP DEFAULT NOW(),
-    updated_at           TIMESTAMP DEFAULT NOW()
+
+    status               VARCHAR(20) NOT NULL DEFAULT 'submitted'
+        CHECK (status IN ('submitted', 'under_review', 'approved', 'rejected','paid')),
+
+    created_at           TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at           TIMESTAMP NOT NULL DEFAULT NOW()
 );
+
 
 
 -- 5. Documents    ===> اسناد و مدارک
@@ -128,3 +130,18 @@ CREATE TABLE activities
     target_id   INT,
     created_at  TIMESTAMP DEFAULT NOW()
 );
+
+
+
+CREATE OR REPLACE FUNCTION set_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+   NEW.updated_at = NOW();
+RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_set_updated_at
+    BEFORE UPDATE ON requests
+    FOR EACH ROW
+    EXECUTE FUNCTION set_updated_at();
