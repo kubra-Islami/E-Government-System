@@ -31,7 +31,7 @@
                     </ul>
 
                     <!-- Payment Form -->
-                    <form action="/citizen/payments/<%= request.id %>" method="POST">
+                    <form action="/citizen/payments/<%= request.id %>" method="POST" id="payment-form" class="needs-validation" novalidate>
                         <input type="hidden" name="amount" value="<%= service.fee %>">
                         <!-- Payment Method -->
                         <h5 class="fw-bold mb-3">Choose Payment Method</h5>
@@ -59,16 +59,21 @@
                         <!-- Fake Card Form -->
                         <div class="mb-4">
                             <label class="form-label fw-semibold">Card Number</label>
-                            <input type="text" class="form-control form-control-lg rounded-3" placeholder="1234 5678 9012 3456">
+                            <input type="text" class="form-control form-control-lg rounded-3" placeholder="1234 5678 9012 3456"  maxlength="16"
+                                   minlength="16"
+                                   required>
+                            <div class="invalid-feedback">Please enter a valid Card Number.</div>
 
                             <div class="row mt-3">
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold">Expiry Date</label>
-                                    <input type="text" class="form-control rounded-3" placeholder="MM/YY">
+                                    <input type="date" class="form-control rounded-3" placeholder="MM/YY" required>
+                                    <div class="invalid-feedback">Please enter Expiry Date.</div>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold">CVV</label>
-                                    <input type="password" class="form-control rounded-3" placeholder="***">
+                                    <input type="password" class="form-control rounded-3" placeholder="***" required>
+                                    <div class="invalid-feedback">Please enter CVV.</div>
                                 </div>
                             </div>
                         </div>
@@ -86,3 +91,18 @@
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("payment-form");
+
+        // Form validation
+        form.addEventListener("submit", function (event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add("was-validated");
+        }, false);
+
+    });
+</script>
