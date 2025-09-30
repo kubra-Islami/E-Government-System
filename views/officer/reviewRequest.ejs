@@ -1,11 +1,10 @@
 <div class="container py-5">
-
-    <%- include('../breadcrumb', {
-    breadcrumbs: [
-    { label: "Dashboard", url: "/officer/dashboard" },
-    { label: "Review Request" }
-    ]
-    }) %>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-light p-3 rounded-3">
+            <li class="breadcrumb-item"><a href="/officer/dashboard" class="text-decoration-none text-secondary">Dashboard</a></li>
+            <li class="breadcrumb-item active text-primary" aria-current="page">Review Request</li>
+        </ol>
+    </nav>
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold text-primary">Review Request <span class="text-secondary">#<%= request.id %></span></h2>

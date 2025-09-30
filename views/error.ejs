@@ -1,7 +1,10 @@
-<% layout('./layouts/layout') %>
-
-<div class="text-center py-5">
-    <h1 class="display-4">Oops!</h1>
-    <p class="lead"><%= message %> (Error <%= status %>)</p>
-    <a href="/" class="btn btn-primary">Go Home</a>
+<div class="d-flex flex-column justify-content-center align-items-center text-center vh-100 bg-light">
+    <h1 class="display-1 fw-bold text-warning">500</h1>
+    <p class="lead text-muted mb-3">
+        <%= typeof message !== "undefined" ? message : "Something went wrong on our end. Please try again later." %>
+    </p>
+    <a href="/<%= user.role%>/dashboard" class="btn btn-secondary">
+        <i class="bi bi-arrow-left-circle me-2"></i>Go Dashboard
+    </a>
 </div>
+

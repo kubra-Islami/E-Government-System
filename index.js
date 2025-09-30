@@ -19,19 +19,11 @@ import { requireAdmin } from "./src/middlewares/auth.requireAdmin.js";
 import { getUserByIdDao } from "./src/dao/user.dao.js";
 import { fetchNotificationsByUserId } from "./src/dao/notification.dao.js";
 
-import { createServer } from "http";
-import { Server } from "socket.io";
-
 const app = express();
-const server = createServer(app);
-const io = new Server(server);
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const PORT = process.env.PORT || 3000;
 
-// Make io available in routes/services
-app.set("io", io);
 
 // --------------------
 // Middleware: attach user from token
@@ -46,7 +38,7 @@ app.use(async (req, res, next) => {
             res.locals.user = fullUser;
             req.user = fullUser;
 
-            // 🔔 fetch notifications globally
+            // fetch notifications globally
             if (fullUser) {
                 res.locals.notifications = await fetchNotificationsByUserId(fullUser.id);
             } else {
@@ -116,8 +108,6 @@ app.get("/notifications", (req, res) => {
     switch (req.user.role) {
         case "citizen":
             return res.redirect("/citizen/notifications");
-        case "officer":
-            return res.redirect("/officer/notifications");
         case "department_head":
             return res.redirect("/department_head/notifications");
         case "admin":
@@ -138,26 +128,27 @@ app.use("/logout", async (req, res) => {
     res.redirect("/api/users/login");
 });
 
-// --------------------
-// Socket.io
-// --------------------
-io.on("connection", (socket) => {
-    console.log("User connected:", socket.id);
-
-    // Each user joins a private room
-    socket.on("registerUser", (userId) => {
-        socket.join(`user_${userId}`);
-        console.log(`User ${userId} joined room user_${userId}`);
-    });
-
-    socket.on("disconnect", () => {
-        console.log("User disconnected:", socket.id);
+app.use((req, res) => {
+    res.status(404).render("not-found", {
+        layout: "layouts/layout",
+        title: "Page Not Found"
     });
 });
+
+
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).render("error", {
+        layout: "layouts/layout",
+        title: "Server Error",
+        message: "Something went wrong!"
+    });
+});
+
 
 // --------------------
 // Start server
 // --------------------
-server.listen(PORT, () => {
+app.listen(PORT, () => {
     console.log(`Server started on port ${PORT}`);
 });

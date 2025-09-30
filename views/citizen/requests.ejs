@@ -1,10 +1,10 @@
 <div class="container my-5">
-    <%- include('../breadcrumb', {
-    breadcrumbs: [
-    { label: "Dashboard", url: "/citizen/dashboard" },
-    { label: "My Requests" }
-    ]
-    }) %>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-light p-3 rounded-3">
+            <li class="breadcrumb-item"><a href="/citizen/dashboard" class="text-decoration-none text-secondary">Dashboard</a></li>
+            <li class="breadcrumb-item active text-primary" aria-current="page"> My Requests</li>
+        </ol>
+    </nav>
     <h2 class="fw-bold mb-4 text-success">
         <i class="bi bi-list-check me-2"></i> My Requests
     </h2>
