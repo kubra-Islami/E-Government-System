@@ -128,17 +128,6 @@ export const createTables = async () => {
           );
     `);
 
-        // 9. Activities
-        await pool.query(`
-          CREATE TABLE IF NOT EXISTS activities (
-            id SERIAL PRIMARY KEY,
-            user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-            description TEXT NOT NULL,
-            target_type VARCHAR(50),
-            target_id INT,
-            created_at TIMESTAMP DEFAULT NOW()
-          );
-    `);
 
         // Trigger for updated_at in requests
         await pool.query(`

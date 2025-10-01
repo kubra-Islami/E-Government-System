@@ -120,17 +120,6 @@ CREATE TABLE request_notes
 );
 
 
--- 8. activities  ===> فعالیت ها
-CREATE TABLE activities
-(
-    id          SERIAL PRIMARY KEY,
-    user_id     INT  NOT NULL REFERENCES users (id) ON DELETE CASCADE,
-    description TEXT NOT NULL,
-    target_type VARCHAR(50),
-    target_id   INT,
-    created_at  TIMESTAMP DEFAULT NOW()
-);
-
 
 
 CREATE OR REPLACE FUNCTION set_updated_at()
