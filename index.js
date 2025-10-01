@@ -149,16 +149,6 @@ app.use((err, req, res, next) => {
     });
 });
 
-app.get("/init-tables", async (req, res) => {
-    try {
-        await createTables();
-        res.send("Tables created successfully!");
-    } catch (err) {
-        res.status(500).send("Error creating tables: " + err.message);
-    }
-});
-
-
 // --------------------
 // Start server
 // --------------------
