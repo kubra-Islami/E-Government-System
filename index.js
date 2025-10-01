@@ -18,7 +18,6 @@ import notificationsRouter from "./src/routes/notifications.routes.js";
 import { requireAdmin } from "./src/middlewares/auth.requireAdmin.js";
 import { getUserByIdDao } from "./src/dao/user.dao.js";
 import { fetchNotificationsByUserId } from "./src/dao/notification.dao.js";
-import { createTables } from "./initTables.js";
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
