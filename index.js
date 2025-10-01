@@ -18,6 +18,7 @@ import notificationsRouter from "./src/routes/notifications.routes.js";
 import { requireAdmin } from "./src/middlewares/auth.requireAdmin.js";
 import { getUserByIdDao } from "./src/dao/user.dao.js";
 import { fetchNotificationsByUserId } from "./src/dao/notification.dao.js";
+import { createTables } from "./initTables.js";
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
@@ -146,6 +147,15 @@ app.use((err, req, res, next) => {
         title: "Server Error",
         message: "Something went wrong!"
     });
+});
+
+app.get("/init-tables", async (req, res) => {
+    try {
+        await createTables();
+        res.send("Tables created successfully!");
+    } catch (err) {
+        res.status(500).send("Error creating tables: " + err.message);
+    }
 });
 
 

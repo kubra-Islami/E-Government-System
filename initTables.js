@@ -1,6 +1,6 @@
 import pool from './src/config/db.js';
 
-const createTables = async () => {
+export const createTables = async () => {
     try {
         console.log('Creating tables...');
 
