@@ -77,6 +77,9 @@ app.set("views", path.join(__dirname, "views"));
 // Routes
 // --------------------
 
+app.get("/", (req, res) => {
+    res.redirect("/api/users/register");
+});
 
 // Citizen
 app.use("/citizen/notifications", (req, res, next) => {
